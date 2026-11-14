@@ -7,7 +7,8 @@ import pytest
 
 import ingest
 from agents.nodes.assemble import build_methodology, remove_tags
-from agents.nodes.collect_findings import collect_findings, direction, resolve
+from agents.finding_check import resolve
+from agents.nodes.collect_findings import collect_findings, direction
 from agents.nodes.normalizer import apply_confidence_threshold
 from agents.nodes.synthesizer import check_outline
 from agents.state import FindingDraft, NormalizedFinding, Outline, OUTLINE_SECTIONS

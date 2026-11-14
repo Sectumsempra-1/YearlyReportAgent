@@ -54,12 +54,12 @@ class Source(Model):
         description="value name -> dotted path into the tool result, e.g. 'value.rows.0.share_pct'")
 
 
-class FindingDraft(Model):
-    """What an analyst returns. Code turns it into a Finding."""
-    product: str = Field(description="Product name, or 'ALL' for cross-product findings")
+class FindingOutput(Model):
+    """One finding as the analyst model writes it (no product, id or direction)."""
     statement: str = Field(min_length=1)
     values: dict[str, Value] = Field(description="Values copied from the tool result")
     source: Source
+    caveats: list[str] = Field(default=[], description="The cited result's caveats, copied")
     data_gap: bool = False
 
     @model_validator(mode="after")
@@ -71,11 +71,21 @@ class FindingDraft(Model):
         return self
 
 
+class AnalystOutput(Model):
+    """The analyst model's final answer."""
+    findings: list[FindingOutput]
+
+
+class FindingDraft(FindingOutput):
+    """An analyst finding after code has set the product. Code turns it into a Finding."""
+    product: str = Field(description="Product name, or 'ALL' for cross-product findings")
+
+
 class Finding(FindingDraft):
-    """A draft plus the fields set by code: id, direction, caveats."""
+    """A draft plus the fields set by code: id and direction. Code also replaces
+    caveats with the cited result's exact caveats."""
     id: str = Field(pattern=FINDING_ID)
     direction: Direction
-    caveats: list[str] = []
 
 
 class TechniqueMapping(Model):

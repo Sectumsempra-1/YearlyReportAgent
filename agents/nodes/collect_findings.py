@@ -10,20 +10,11 @@
 
 import json
 
-import report_tools
+from agents.finding_check import FUNCTIONS, resolve
 from agents.runs import save
 from agents.state import Finding, FindingDraft
 
 FLAT_BAND = 1.0
-FUNCTIONS = {f.__name__: f for f in report_tools.TOOLS}
-
-
-def resolve(result: dict, path: str):
-    """Follow a dotted key path ('value.rows.0.share_pct') into a tool result."""
-    node = result
-    for part in path.split("."):
-        node = node[int(part)] if isinstance(node, list) else node[part]
-    return node
 
 
 def direction(result: dict, key_paths: dict[str, str]) -> str:
@@ -62,10 +53,9 @@ def collect_findings(state: dict) -> dict:
             dropped.append({"draft": draft, "reason": f"{type(exc).__name__}: {exc}"})
             continue
         findings.append(Finding(
-            **draft.model_dump(),
+            **{**draft.model_dump(), "caveats": result["caveats"]},  # the tool's exact caveats
             id=f"F-{len(findings) + 1:03d}",
             direction=direction(result, draft.source.key_paths),
-            caveats=result["caveats"],
         ))
     save(state["run_dir"], "findings.json", findings)
     if dropped:

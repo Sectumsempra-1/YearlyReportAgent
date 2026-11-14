@@ -19,6 +19,18 @@ pip install -r requirements.txt
 cp .env.example .env            # then set LLM_MODEL to a model you have pulled in Ollama
 ```
 
+**Ollama context size.** The agents need a larger context than Ollama's
+default of 4096 tokens: with the default, tool results overflow it, Ollama
+silently drops the oldest messages, and the agents loop and return empty
+answers. Set it once for your user and restart Ollama (quit it from the tray
+and start it again):
+
+```powershell
+[Environment]::SetEnvironmentVariable('OLLAMA_CONTEXT_LENGTH', '32768', 'User')
+```
+
+`ollama ps` shows the context in use (`CONTEXT` column) once a model is loaded.
+
 Check that the model is reachable and supports tool calls:
 
 ```bash
