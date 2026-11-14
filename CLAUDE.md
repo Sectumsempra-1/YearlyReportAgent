@@ -17,7 +17,7 @@ data/exports/*.csv -> ingest.py (validation, no AI) -> data/report.db (SQLite)
   -> agents (read-only, through report_tools.py only):
      product analysts (one per product) + cross-product analyst, in parallel
        -> normalizer -> synthesizer -> [human approves outline]
-       -> section writers (parallel) -> verifier (retry loop, max 3)
+       -> section writers (parallel) -> verifier (retry loop, max 4 attempts)
        -> executive summary -> verifier -> [human approves] -> report
 ```
 

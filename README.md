@@ -52,10 +52,30 @@ the database from `ingest.py`):
 python report_tools.py
 ```
 
+Run the report pipeline:
+
+```bash
+python run_report.py --year 2026
+```
+
+The pipeline pauses twice for approval: after the outline and before the
+report is published. At each pause, answer `a` (approve), `r` (reject with a
+comment, which sends the outline or the executive summary back to be
+rewritten) or `b` (abort). Each section gets up to 4 attempts at passing
+verification; if one still fails, the run stops and lists the failures.
+
+Every run writes all of its outputs to `runs/<run_id>/` (findings, outline
+versions, each section attempt and its verification result, approvals,
+`report.md` with finding tags and `report_clean.md` without). The exit code
+is 0 when the report is written, 1 when a section failed verification and 3
+when the run was aborted.
+
+> **Status:** the analysts, normalizer, synthesizer, section writers,
+> verifier and executive summary are still stubs that return fixed fake data
+> (marked `STUB`). They are replaced with real agents step by step.
+
 Run the tests:
 
 ```bash
 pytest
 ```
-
-More commands (ingestion, the pipeline) will be added as each part is built.

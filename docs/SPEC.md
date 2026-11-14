@@ -263,9 +263,10 @@ Caveats from the cited tool results are copied into the finding by code.
 Code first, then a small LLM check. See section 9.
 
 - **On failure:** the section goes back to its writer with the error list.
-  After 3 failed attempts, the run stops and reports which sections failed.
-  *(Clarified 2026-11-12: 3 attempts in total, and a wording-check failure
-  counts as a failed attempt.)*
+  After 4 failed attempts, the run stops and reports which sections failed.
+  *(Clarified 2026-11-12: a wording-check failure counts as a failed attempt.
+  Changed 2026-11-14: 4 attempts in total, the first write plus up to 3
+  rewrites; was 3.)*
 
 ### 7.6 Executive summary
 
@@ -363,3 +364,6 @@ its finding, and from the finding to the exact query that produced it.
   verified (7.7).
 - Verification: number grammar, matching, conflicts, executive summary
   scope, recommendations (9.1).
+
+**2026-11-14:** section writing and verification get 4 attempts in total
+(was 3) (7.5).
