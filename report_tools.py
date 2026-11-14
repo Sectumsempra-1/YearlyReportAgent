@@ -229,7 +229,13 @@ def _compare(conn, year, product=None, attack_type=None) -> tuple[dict, list[str
 # --- query functions ----------------------------------------------------------------------
 
 def list_products() -> dict:
-    """Registry rows plus the attack types each product reports and the years loaded."""
+    """List the products in the registry. Call this first.
+
+    Returns value = list of products, each with product (the exact name to pass
+    to other tools), category, owner, description, attack_types (the attack
+    types it reports) and years_loaded (years with data; a missing year is a
+    data gap).
+    """
     with _connect() as conn:
         loaded = _loaded(conn)
         types: dict[str, list[str]] = {}
@@ -246,7 +252,11 @@ def list_products() -> dict:
 
 
 def attacks_blocked(year: int, product: str | None = None, attack_type: str | None = None) -> dict:
-    """Sum of count where action = 'blocked'."""
+    """Total number of attacks blocked (action = blocked) in a year.
+
+    Returns value = one whole number. Filter by product and/or attack_type, or
+    leave them out to sum over all products and attack types.
+    """
     _check_year(year)
     _check_attack_type(attack_type)
     with _connect() as conn:
@@ -258,7 +268,13 @@ def attacks_blocked(year: int, product: str | None = None, attack_type: str | No
 
 
 def compare_years(year: int, product: str | None = None, attack_type: str | None = None) -> dict:
-    """Blocked attacks this year vs. the previous year: current, previous, change, pct_change."""
+    """Attacks blocked this year compared with last year.
+
+    Returns value = {"current", "previous", "change", "pct_change"}. change is
+    current - previous and pct_change is the change in percent (1 decimal).
+    previous is null if last year's data is not loaded; pct_change is null if
+    previous is 0 or null. Filter by product and/or attack_type.
+    """
     _check_year(year)
     _check_attack_type(attack_type)
     with _connect() as conn:
@@ -270,9 +286,14 @@ def compare_years(year: int, product: str | None = None, attack_type: str | None
 
 
 def product_summary(year: int, product: str) -> dict:
-    """Per attack type: blocked, detected_only, block_rate_pct, yoy_blocked, by_severity.
+    """Per-attack-type overview of one product for a year.
 
-    Covers every attack type the product reported this year or last year.
+    Returns value = {<attack_type>: {...}} for every attack type the product
+    reported this year or last year. Each has blocked, detected_only,
+    block_rate_pct (blocked as a percent of blocked + detected_only; null if
+    the product reports only blocked events), yoy_blocked (the compare_years
+    result for that attack type) and by_severity (count per severity, all
+    actions).
     """
     _check_year(year)
     if product is None:
@@ -308,9 +329,12 @@ def product_summary(year: int, product: str) -> dict:
 
 
 def attack_type_changes(year: int, product: str | None = None) -> dict:
-    """compare_years for every attack type, ranked from largest rise to largest fall.
+    """Year-over-year change of attacks blocked for every attack type, ranked.
 
-    Attack types whose pct_change is None are listed last, with rank None.
+    Returns value = {"rows": [...]}, ordered from the largest percent rise to
+    the largest fall. Each row has rank, attack_type, current, previous, change
+    and pct_change. Rows whose pct_change is null (previous is 0, or last
+    year's data is not loaded) come last with rank null.
     """
     _check_year(year)
     with _connect() as conn:
@@ -333,9 +357,17 @@ def attack_type_changes(year: int, product: str | None = None) -> dict:
 
 
 def top_malware(year: int, n: int = 10, product: str | None = None) -> dict:
-    """Malware families ranked by detections (all actions), using canonical_family.
+    """Malware families ranked by detections (all actions) in a year.
 
-    Names with no mapping appear as UNMAPPED:<vendor name>.
+    Vendor names are mapped to a common family name. A name with no mapping
+    appears as "UNMAPPED:<vendor name>" and is a data gap; see
+    unmapped_malware(). Only events with a malware name are counted.
+
+    Returns value = {"total": <sum over all families>, "rows": [...]}. Each row has
+    rank (1 = highest; ties share a rank), family, volume, share_pct (share of
+    the total), previous_volume and pct_change (vs. last year), previous_rank
+    (null if absent last year) and new_this_year (true if absent last year).
+    The last-year fields are null if last year's data is not loaded.
     """
     _check_year(year)
     _check_n(n)
@@ -362,7 +394,11 @@ def _unmapped(conn, year, product) -> list[dict]:
 
 
 def unmapped_malware(year: int, product: str | None = None) -> dict:
-    """Product, vendor name and detections for every malware name with no family mapping."""
+    """Malware names that have no common family mapping (a data gap).
+
+    Returns value = {"rows": [...]}, largest first. Each row has product,
+    vendor_name and detections (all actions).
+    """
     _check_year(year)
     with _connect() as conn:
         _check_product(conn, product)
@@ -372,7 +408,16 @@ def unmapped_malware(year: int, product: str | None = None) -> dict:
 
 
 def top_countries(year: int, n: int = 10, product: str | None = None) -> dict:
-    """Source countries ranked by attack volume (all actions)."""
+    """Source countries of attacks ranked by volume (all actions) in a year.
+
+    Countries are two-letter ISO codes from IP geolocation.
+
+    Returns value = {"total": <sum over all countries>, "rows": [...]}. Each row has
+    rank (1 = highest; ties share a rank), country, volume, share_pct (share of
+    the total), previous_volume and pct_change (vs. last year), previous_rank
+    (null if absent last year) and new_this_year (true if absent last year).
+    The last-year fields are null if last year's data is not loaded.
+    """
     _check_year(year)
     _check_n(n)
     with _connect() as conn:
@@ -385,7 +430,14 @@ def top_countries(year: int, n: int = 10, product: str | None = None) -> dict:
 
 
 def sector_breakdown(year: int, product: str | None = None) -> dict:
-    """Attack volume by client sector (all actions), ranked."""
+    """Client sectors ranked by attack volume (all actions) in a year.
+
+    Returns value = {"total": <sum over all sectors>, "rows": [...]}. Each row has
+    rank (1 = highest; ties share a rank), sector, volume, share_pct (share of
+    the total), previous_volume and pct_change (vs. last year), previous_rank
+    (null if absent last year) and new_this_year (true if absent last year).
+    The last-year fields are null if last year's data is not loaded.
+    """
     _check_year(year)
     with _connect() as conn:
         _check_product(conn, product)
@@ -396,7 +448,14 @@ def sector_breakdown(year: int, product: str | None = None) -> dict:
 
 
 def severity_breakdown(year: int, product: str | None = None) -> dict:
-    """Attack volume by severity (all actions), ranked."""
+    """Severity levels ranked by attack volume (all actions) in a year.
+
+    Returns value = {"total": <sum over all severity levels>, "rows": [...]}. Each row has
+    rank (1 = highest; ties share a rank), severity, volume, share_pct (share of
+    the total), previous_volume and pct_change (vs. last year), previous_rank
+    (null if absent last year) and new_this_year (true if absent last year).
+    The last-year fields are null if last year's data is not loaded.
+    """
     _check_year(year)
     with _connect() as conn:
         _check_product(conn, product)
@@ -408,9 +467,17 @@ def severity_breakdown(year: int, product: str | None = None) -> dict:
 
 def monthly_series(year: int, product: str | None = None, attack_type: str | None = None,
                    spike_factor: float = 1.5) -> dict:
-    """Blocked count per month, with month-on-month change, same month last year,
-    peak and low month (earliest on ties), median, and spike months (blocked at
-    least spike_factor times the median)."""
+    """Attacks blocked per month of a year, with patterns already computed.
+
+    Returns value with:
+    - months: 12 rows, each with month (YYYY-MM), blocked, mom_change and
+      mom_pct_change (vs. the previous month; null for the first month) and
+      previous_year_blocked (same month last year; null if not loaded)
+    - total, median
+    - peak_month and low_month (earliest month on ties)
+    - spike_months: months with blocked at least spike_factor times the median
+    Filter by product and/or attack_type.
+    """
     _check_year(year)
     _check_attack_type(attack_type)
     if not isinstance(spike_factor, (int, float)) or isinstance(spike_factor, bool) or spike_factor <= 0:
