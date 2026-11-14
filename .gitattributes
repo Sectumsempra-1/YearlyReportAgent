@@ -1,0 +1,2 @@
+# Product deliveries are stored byte-for-byte as delivered (rule 9).
+data/** -text
