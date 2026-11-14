@@ -31,6 +31,22 @@ with 0 only if both pass.
 
 ## Run
 
+Load the product deliveries into `data/report.db` (set `REPORT_DB` to use
+another path):
+
+```bash
+python ingest.py                     # loads data/exports
+python ingest.py data/exports_bad    # the broken delivery: must be rejected
+```
+
+Each file is printed as `LOADED`, `SKIPPED` (identical file already loaded) or
+`REJECTED` (with its errors). A file with any error loads nothing.
+Rejections are also appended to `ingest_errors.log`. The exit code is 0 if
+nothing was rejected, 1 if a file was rejected, and 2 on a usage or reference
+data error.
+
+Run the tests:
+
 ```bash
 pytest
 ```
