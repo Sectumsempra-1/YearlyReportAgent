@@ -1,0 +1,6 @@
+product,month,attack_type,action,malware_name,source_country,client_sector,severity,count
+EDR,2026-05,ransomware,blocked,Win32/Akira.gen,BR,Energy,critical,12
+EDR,2026-13,ransomware,blocked,Win32/Akira.gen,CN,Energy,critical,9
+EDR,2026-06,malware_execution,quarantined,Win32/Remcos.gen,RU,Finance,high,40
+EDR,2026-06,malware_execution,blocked,Win32/Remcos.gen,Brazil,Finance,high,33
+EDR,2026-07,credential_theft,blocked,,US,Government,high,-5

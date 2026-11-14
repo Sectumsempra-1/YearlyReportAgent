@@ -1,0 +1,4 @@
+product,category,owner,description
+Firewall,Network,Network Security Team,"Next-generation firewall: intrusion prevention, malware and C2 blocking"
+Email Gateway,Email,Messaging Security Team,"Secure email gateway: phishing, malicious attachments, BEC"
+EDR,Endpoint,Endpoint Security Team,Endpoint detection and response

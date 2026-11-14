@@ -1,0 +1,14 @@
+# Generated data (rule 10: real data never goes in this repository)
+data/report.db
+data/report.db-*
+ingest_errors.log
+runs/
+
+# Local configuration
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
