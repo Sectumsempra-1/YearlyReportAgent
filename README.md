@@ -45,6 +45,13 @@ Rejections are also appended to `ingest_errors.log`. The exit code is 0 if
 nothing was rejected, 1 if a file was rejected, and 2 on a usage or reference
 data error.
 
+Print a demo of every query function in `report_tools.py` for 2026 (needs
+the database from `ingest.py`):
+
+```bash
+python report_tools.py
+```
+
 Run the tests:
 
 ```bash
