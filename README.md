@@ -19,6 +19,16 @@ pip install -r requirements.txt
 cp .env.example .env            # then set LLM_MODEL to a model you have pulled in Ollama
 ```
 
+Check that the model is reachable and supports tool calls:
+
+```bash
+python scripts/check_llm.py                   # uses LLM_MODEL from .env
+python scripts/check_llm.py --model qwen3:8b  # try another model
+```
+
+It prints PASS or FAIL for a test message and a test tool call, and exits
+with 0 only if both pass.
+
 ## Run
 
 ```bash
