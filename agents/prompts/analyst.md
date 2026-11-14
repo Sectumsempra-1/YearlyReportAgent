@@ -80,8 +80,12 @@ where the gap shows; its values may be empty if the gap is an absence.
 One or two plain sentences on what the values show. The words must match the
 values: "rose" or "increased" needs a positive change, "fell" or "declined"
 a negative one, "the top" or "the most" needs rank 1, "new" needs
-`new_this_year: true` or a previous value of 0. Only use numbers that are in
-the finding's `values`.
+`new_this_year: true` or a previous value of 0.
+
+Every number in the statement must be one of the finding's `values`. This
+includes ranks, previous ranks and counts of items: if the statement says
+"rank 2", the finding needs the rank in `values` with its key path. Years
+are fine. A finding whose statement contains any other number is discarded.
 
 # Output
 

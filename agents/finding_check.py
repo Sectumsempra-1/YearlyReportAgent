@@ -2,12 +2,14 @@
 
 Re-runs the tool call a finding cites and checks that every value in the
 finding is exactly the value at its key path in that result. Also enforces
-the analyst's scope: a product analyst may only cite calls for its own
+the analyst's scope, and that every number in the statement is one of the
+finding's values (text_numbers.py). A product analyst may only cite calls for its own
 product, the cross-product analyst only calls with product=None
 (list_products() is allowed for both).
 """
 
 import report_tools
+from text_numbers import unmatched
 
 FUNCTIONS = {f.__name__: f for f in report_tools.TOOLS}
 UNSCOPED = {"list_products"}
@@ -67,4 +69,10 @@ def check_finding(finding, scope_product: str | None) -> list[str]:
             continue
         if not same_value(finding.values[name], actual):
             problems.append(f"{name}: finding says {finding.values[name]!r} but {path} is {actual!r}")
+
+    # Every number in the statement must be one of the finding's values (or a
+    # numeric argument of the call, like the 10 in "top 10"). Years are allowed.
+    allowed = [*finding.values.values(), *params.values()]
+    for number in unmatched(finding.statement, allowed):
+        problems.append(f"statement: {number.text!r} is not one of the finding's values")
     return problems

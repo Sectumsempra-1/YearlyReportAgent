@@ -126,6 +126,42 @@ def test_failing_call_fails():
     assert "failed" in problem and "ddos" in problem
 
 
+def summary_finding(statement):
+    cy = rt.compare_years(2026, product="EDR")["value"]
+    f = finding("compare_years", {"year": 2026, "product": "EDR"},
+                {"pct": "value.pct_change", "cur": "value.current"},
+                {"pct": cy["pct_change"], "cur": cy["current"]})
+    return f.model_copy(update={"statement": statement}), cy
+
+
+def test_statement_numbers_from_values_pass():
+    f, cy = summary_finding("")
+    f = f.model_copy(update={"statement": f"Blocked attacks changed {cy['pct_change']}% to "
+                                          f"{cy['current']:,} in 2026 compared with 2025."})
+    assert check_finding(f, "EDR") == []
+
+
+def test_statement_number_not_in_values_fails():
+    f, cy = summary_finding("")
+    f = f.model_copy(update={"statement": f"Blocked attacks changed {cy['pct_change']}%, rank 4 overall."})
+    assert check_finding(f, "EDR") == ["statement: '4' is not one of the finding's values"]
+
+
+def test_statement_may_use_call_arguments():
+    rows = rt.top_countries(2026, n=5, product="EDR")["value"]["rows"]
+    f = finding("top_countries", {"year": 2026, "n": 5, "product": "EDR"},
+                {"share": "value.rows.0.share_pct"}, {"share": rows[0]["share_pct"]})
+    f = f.model_copy(update={"statement": f"Among the top 5 countries, the first has {rows[0]['share_pct']}%."})
+    assert check_finding(f, "EDR") == []
+
+
+def test_statement_with_a_calculated_number_fails():
+    f, cy = summary_finding("")
+    invented = cy["current"] // 12   # a monthly average nobody returned
+    f = f.model_copy(update={"statement": f"About {invented} attacks were blocked per month."})
+    assert check_finding(f, "EDR") == [f"statement: '{invented}' is not one of the finding's values"]
+
+
 def test_collect_findings_replaces_caveats_with_the_tools(tmp_path):
     total = rt.attacks_blocked(2026)["value"]
     f = finding("attacks_blocked", {"year": 2026}, {"t": "value"}, {"t": total}, product="ALL",
