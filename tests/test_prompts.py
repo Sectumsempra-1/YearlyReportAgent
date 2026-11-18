@@ -45,5 +45,16 @@ def test_prompt_does_not_describe_the_data(path):
     assert not re.search(r"\b\d+(\.\d+)?%", text), "no percentages"
     for month in MONTHS:
         assert month not in text, month
-    # no country codes or names as examples (two capital letters on their own)
-    assert not re.search(r"\b(?:country|countries)\b[^.\n]*\b[A-Z]{2}\b", text)
+    for code in COUNTRIES:   # country codes that occur in the data, as standalone words
+        assert not re.search(rf"\b{code}\b", text), code
+
+
+def data_countries() -> set[str]:
+    codes = set()
+    for path in (ROOT / "data" / "exports").glob("*.csv"):
+        with open(path, encoding="utf-8") as f:
+            codes |= {r["source_country"] for r in csv.DictReader(f)}
+    return codes
+
+
+COUNTRIES = sorted(data_countries())

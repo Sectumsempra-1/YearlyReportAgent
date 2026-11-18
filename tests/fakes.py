@@ -92,3 +92,13 @@ def stub_synthesizer(state: dict) -> dict:
     )
     save(state["run_dir"], f"outline_{next_version(state['run_dir'], 'outline')}.json", outline)
     return {"outline": outline}
+
+
+def stub_section_writer(state: dict) -> dict:
+    """The former writer stub: fixed Markdown quoting the first assigned finding."""
+    from agents.state import Section
+    finding = state["findings"][0]
+    key, value = next(iter(finding.values.items()), ("", ""))
+    markdown = f"STUB {state['title']} (attempt {state['attempt']}). {key}: {value} [{finding.id}]."
+    return {"draft": Section(id=state["section_id"], title=state["title"], markdown=markdown,
+                             finding_ids_used=[finding.id])}

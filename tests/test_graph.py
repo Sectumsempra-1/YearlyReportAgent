@@ -13,9 +13,8 @@ import report_tools
 import run_report
 from agents import graph as graph_module
 from agents.graph import MAX_ATTEMPTS, build_graph, build_loop, checkpoint_serializer, decide_after_verify
-from agents.nodes.section_writer import section_writer
 from agents.state import OUTLINE_SECTIONS, VerificationError, VerificationResult
-from tests.fakes import stub_analyst, stub_normalizer, stub_synthesizer
+from tests.fakes import stub_analyst, stub_normalizer, stub_section_writer, stub_synthesizer
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -36,6 +35,7 @@ def db(real_db, monkeypatch):
     monkeypatch.setitem(graph_module.DEFAULT_NODES, "analyst", stub_analyst)
     monkeypatch.setitem(graph_module.DEFAULT_NODES, "normalizer", stub_normalizer)
     monkeypatch.setitem(graph_module.DEFAULT_NODES, "synthesizer", stub_synthesizer)
+    monkeypatch.setitem(graph_module.DEFAULT_NODES, "section_writer", stub_section_writer)
 
 
 def failing_verifier(fail_until: dict[str, int]):
@@ -108,7 +108,7 @@ def test_loop(tmp_path, failures, attempts, passed):
 
     def writer(state):
         calls.append(state)
-        return section_writer(state)
+        return stub_section_writer(state)
 
     final = build_loop(writer, failing_verifier({"trends": failures})).invoke(loop_payload(tmp_path))
     assert final["attempt"] == attempts
@@ -124,7 +124,7 @@ def test_rewrite_receives_the_errors(tmp_path):
 
     def writer(state):
         seen.append(state.get("verification"))
-        return section_writer(state)
+        return stub_section_writer(state)
 
     build_loop(writer, failing_verifier({"trends": 1})).invoke(loop_payload(tmp_path))
     assert seen[0] is None
@@ -279,3 +279,21 @@ def test_ask_approval_validates_answers():
         "decision": "reject", "comment": "why"}
     assert "Please answer a, r or b." in out.getvalue()
     assert "A rejection needs a comment." in out.getvalue()
+
+
+def test_writers_run_in_parallel_with_only_their_findings(tmp_path):
+    import threading
+    barrier = threading.Barrier(len(OUTLINE_SECTIONS), timeout=10)   # breaks unless all 5 run at once
+    seen = {}
+
+    def writer(state):
+        if state["attempt"] == 1 and state["section_id"] != "executive_summary":
+            barrier.wait()
+            seen[state["section_id"]] = [f.id for f in state["findings"]]
+        return stub_section_writer(state)
+
+    state, _ = run_pipeline(tmp_path, ["approve", "approve"], section_writer=writer)
+    assert state["status"] == "completed"
+    assert set(seen) == set(OUTLINE_SECTIONS)
+    for section in state["outline"].sections:
+        assert seen[section.id] == section.finding_ids
