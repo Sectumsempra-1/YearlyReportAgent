@@ -72,3 +72,23 @@ def stub_normalizer(state: dict) -> dict:
     save(state["run_dir"], "normalized.json", normalized)
     save(state["run_dir"], "review.json", review)
     return {"normalized": normalized}
+
+
+def stub_synthesizer(state: dict) -> dict:
+    """The former synthesizer stub: a fixed outline spreading findings over the sections."""
+    from agents.runs import next_version
+    from agents.state import OUTLINE_SECTIONS, SECTION_TITLES, Outline
+    ids = [f.id for f in state["normalized"]]
+    thesis = "STUB thesis."
+    if state.get("outline_feedback"):
+        thesis += f" Revised after review: {state['outline_feedback']}"
+    outline = Outline(
+        thesis=thesis,
+        signature_metric={"finding_id": ids[0], "value_key": next(iter(state["normalized"][0].values), "")},
+        themes=[{"title": f"STUB theme {n}", "summary": "STUB summary.", "finding_ids": [ids[n % len(ids)]]}
+                for n in range(3)],
+        sections=[{"id": sid, "title": SECTION_TITLES[sid], "goal": "STUB goal.",
+                   "finding_ids": [ids[n % len(ids)]]} for n, sid in enumerate(OUTLINE_SECTIONS)],
+    )
+    save(state["run_dir"], f"outline_{next_version(state['run_dir'], 'outline')}.json", outline)
+    return {"outline": outline}

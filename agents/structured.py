@@ -5,6 +5,7 @@ Convention (CLAUDE.md): retry once on invalid JSON, then fail with a clear error
 
 import json
 import re
+from typing import Callable
 
 from langchain_core.messages import AIMessage, HumanMessage
 from pydantic import BaseModel, ValidationError
@@ -36,16 +37,29 @@ def parse(text: str, model: type[BaseModel]) -> BaseModel:
     return model.model_validate(data)
 
 
-def complete(llm, messages: list, model: type[BaseModel], reply: AIMessage | None = None) -> BaseModel:
+def complete(llm, messages: list, model: type[BaseModel], reply: AIMessage | None = None,
+             check: Callable[[BaseModel], list[str]] | None = None) -> BaseModel:
     """Parse `reply` (or a new model reply) into `model`, retrying once with the error.
+
+    `check`, if given, runs code checks on the parsed answer and returns a list
+    of problems; any problem counts as an error, so the model gets one retry
+    with the problems listed.
 
     `messages` is extended with the retry exchange, so the transcript stays complete.
     """
+
+    def accept(message) -> BaseModel:
+        output = parse(text_of(message), model)
+        problems = check(output) if check else []
+        if problems:
+            raise ValueError("the answer failed these checks:\n" + "\n".join(f"- {p}" for p in problems))
+        return output
+
     if reply is None:
         reply = llm.invoke(messages)
         messages.append(reply)
     try:
-        return parse(text_of(reply), model)
+        return accept(reply)
     except (ValueError, ValidationError) as first:
         messages.append(HumanMessage(
             "Your answer could not be used:\n"
@@ -54,7 +68,7 @@ def complete(llm, messages: list, model: type[BaseModel], reply: AIMessage | Non
         retry = llm.invoke(messages)
         messages.append(retry)
         try:
-            return parse(text_of(retry), model)
+            return accept(retry)
         except (ValueError, ValidationError) as second:
             raise StructuredOutputError(
                 f"{model.__name__}: invalid output after one retry.\n"

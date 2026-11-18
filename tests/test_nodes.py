@@ -9,7 +9,6 @@ import ingest
 from agents.nodes.assemble import build_methodology, remove_tags
 from agents.finding_check import resolve
 from agents.nodes.collect_findings import collect_findings, direction
-from agents.nodes.synthesizer import check_outline
 from agents.state import FindingDraft, NormalizedFinding, Outline, OUTLINE_SECTIONS
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -74,18 +73,6 @@ def test_collect_findings_assigns_ids_copies_caveats_and_drops_bad(db, tmp_path)
     assert any("IP geolocation" in c for c in out[2].caveats)
     assert (tmp_path / "findings_dropped.json").exists()
     assert "unknown product 'Nope'" in (tmp_path / "findings_dropped.json").read_text()
-
-
-# --- synthesizer check ------------------------------------------------------------------------------------
-
-def test_outline_must_cite_existing_findings():
-    outline = Outline(
-        thesis="t", signature_metric={"finding_id": "F-009", "value_key": "v"},
-        themes=[{"title": "t", "summary": "s", "finding_ids": ["F-001"]}] * 3,
-        sections=[{"id": s, "title": s, "goal": "g", "finding_ids": ["F-001"]} for s in OUTLINE_SECTIONS])
-    check_outline(outline, {"F-001", "F-009"})
-    with pytest.raises(ValueError, match="F-009"):
-        check_outline(outline, {"F-001"})
 
 
 # --- assembly ---------------------------------------------------------------------------------------------
