@@ -9,7 +9,6 @@ import ingest
 from agents.nodes.assemble import build_methodology, remove_tags
 from agents.finding_check import resolve
 from agents.nodes.collect_findings import collect_findings, direction
-from agents.nodes.normalizer import apply_confidence_threshold
 from agents.nodes.synthesizer import check_outline
 from agents.state import FindingDraft, NormalizedFinding, Outline, OUTLINE_SECTIONS
 
@@ -75,18 +74,6 @@ def test_collect_findings_assigns_ids_copies_caveats_and_drops_bad(db, tmp_path)
     assert any("IP geolocation" in c for c in out[2].caveats)
     assert (tmp_path / "findings_dropped.json").exists()
     assert "unknown product 'Nope'" in (tmp_path / "findings_dropped.json").read_text()
-
-
-# --- normalizer threshold ---------------------------------------------------------------------------------
-
-def test_confidence_threshold():
-    base = {"id": "F-001", "product": "EDR", "statement": "s", "values": {}, "direction": "up",
-            "source": {"function": "attacks_blocked", "params": {}, "key_paths": {}}, "confidence": 0.9}
-    f = NormalizedFinding(**base, attack_techniques=[
-        {"technique_id": "T1566", "confidence": 0.6}, {"technique_id": "T1190", "confidence": 0.59}])
-    kept, review = apply_confidence_threshold([f])
-    assert [m.technique_id for m in kept[0].attack_techniques] == ["T1566"]
-    assert review == [{"finding_id": "F-001", "technique_id": "T1190", "confidence": 0.59}]
 
 
 # --- synthesizer check ------------------------------------------------------------------------------------

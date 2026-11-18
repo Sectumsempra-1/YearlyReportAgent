@@ -5,7 +5,7 @@ import json
 from langchain_core.messages import AIMessage
 
 from agents.runs import save, slug
-from agents.state import FindingDraft, Source
+from agents.state import FindingDraft, NormalizedFinding, Source, TechniqueMapping
 
 
 class FakeChatModel:
@@ -57,3 +57,18 @@ def stub_analyst(payload: dict) -> dict:
     ]
     save(payload["run_dir"], f"analyst_{slug(product)}.json", drafts)
     return {"drafts": drafts}
+
+
+def stub_normalizer(state: dict) -> dict:
+    """The former normalizer stub: fixed mappings, one below the review threshold."""
+    from agents.nodes.normalizer import apply_confidence_threshold
+    stub = []
+    for i, f in enumerate(state["findings"]):
+        mappings = [TechniqueMapping(technique_id="T1190", name="stub", confidence=0.9)]
+        if i == 0:
+            mappings.append(TechniqueMapping(technique_id="T1566", name="stub", confidence=0.5))
+        stub.append(NormalizedFinding(**f.model_dump(), attack_techniques=mappings, confidence=0.8))
+    normalized, review = apply_confidence_threshold(stub)
+    save(state["run_dir"], "normalized.json", normalized)
+    save(state["run_dir"], "review.json", review)
+    return {"normalized": normalized}

@@ -90,7 +90,9 @@ class Finding(FindingDraft):
 
 class TechniqueMapping(Model):
     technique_id: str = Field(pattern=TECHNIQUE_ID)
+    name: str = Field(default="", description="Set by code from the ATT&CK dataset")
     confidence: float = Field(ge=0, le=1)
+    rationale: str = ""
 
 
 class NormalizedFinding(Finding):
@@ -107,6 +109,28 @@ class NormalizedFinding(Finding):
         if bad:
             raise ValueError(f"not finding IDs: {bad}")
         return ids
+
+
+class TechniqueOutput(Model):
+    """A technique mapping as the normalizer model writes it; code validates the ID."""
+    technique_id: str
+    confidence: float = Field(ge=0, le=1)
+    rationale: str = Field(default="", description="What in the finding points to this technique")
+
+
+class FindingNormalization(Model):
+    """The normalizer model's answer for one finding. Strings are checked by code,
+    so one bad value is corrected and logged instead of failing the whole answer."""
+    finding_id: str
+    attack_techniques: list[TechniqueOutput] = []
+    sector: str = "unspecified"
+    severity: str = "unspecified"
+    related_findings: list[str] = []
+    confidence: float = Field(ge=0, le=1)
+
+
+class NormalizerOutput(Model):
+    findings: list[FindingNormalization]
 
 
 # --- outline, sections, verification -----------------------------------------------------------

@@ -19,6 +19,15 @@ pip install -r requirements.txt
 cp .env.example .env            # then set LLM_MODEL to a model you have pulled in Ollama
 ```
 
+Download the MITRE ATT&CK dataset the normalizer checks technique IDs
+against (a pinned version, about 55 MB, saved to `data/reference/attack/`,
+which is gitignored). This is a one-time setup step; the pipeline itself never
+downloads anything and stops with a clear error if the file is missing:
+
+```bash
+python scripts/fetch_attack.py
+```
+
 **Ollama context size.** The agents need a larger context than Ollama's
 default of 4096 tokens: with the default, tool results overflow it, Ollama
 silently drops the oldest messages, and the agents loop and return empty

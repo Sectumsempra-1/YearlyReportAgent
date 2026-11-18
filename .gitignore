@@ -12,3 +12,6 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
+
+# MITRE ATT&CK bundle, downloaded by scripts/fetch_attack.py
+data/reference/attack/

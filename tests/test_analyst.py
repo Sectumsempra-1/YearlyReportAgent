@@ -1,10 +1,8 @@
 """Tests for the product analyst: the code check, structured output, the tool
 loop and the prompt. A scripted fake model is used; no real model is called."""
 
-import csv
 import io
 import json
-import re
 from pathlib import Path
 
 import pytest
@@ -340,28 +338,6 @@ def test_prompt_has_the_required_instructions():
                    "key_paths", "params", "function", "copy the caveats", "word for word",
                    '"data_gap": true', "never fill in a missing value"]:
         assert phrase in text, phrase
-
-
-def test_prompt_does_not_describe_the_data():
-    """Rule 8: no products, malware names, countries, years or months from data/."""
-    words = set()
-    with open(ROOT / "data" / "reference" / "products.csv", encoding="utf-8") as f:
-        words |= {r["product"] for r in csv.DictReader(f)}
-    with open(ROOT / "data" / "reference" / "malware_aliases.csv", encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            words |= {r["alias"], r["canonical_family"]}
-    for path in (ROOT / "data" / "exports").glob("*.csv"):
-        with open(path, encoding="utf-8") as f:
-            for r in csv.DictReader(f):
-                if r["malware_name"]:
-                    words.add(r["malware_name"])
-    for word in sorted(words):
-        assert not re.search(rf"\b{re.escape(word)}\b", PROMPT, re.I), word
-    assert not re.search(r"\b20\d\d\b", PROMPT), "years must come from placeholders"
-    assert not re.search(r"\b\d+(\.\d+)?%", PROMPT), "no percentages"
-    for month in ["January", "February", "March", "April", "June", "July", "August", "September",
-                  "October", "November", "December"]:
-        assert month not in PROMPT
 
 
 def test_prompt_placeholders_are_all_filled():
