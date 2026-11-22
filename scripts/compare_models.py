@@ -102,8 +102,8 @@ SCORER = ROOT / "eval" / "score.py"
 
 def load_scorer():
     if not SCORER.is_file():
-        raise FileNotFoundError(f"{SCORER} not found. The evaluation material is not in the repository "
-                                "(eval/ is gitignored); copy it into eval/ first.")
+        raise FileNotFoundError(f"{SCORER} not found. Restore the eval/ folder from the repository "
+                                "(git checkout -- eval).")
     spec = importlib.util.spec_from_file_location("score", SCORER)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

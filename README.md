@@ -206,12 +206,27 @@ traced to its finding and the query behind it:
 ## Evaluation
 
 `eval/` holds the evaluation material: the answer key with the patterns
-planted in the dummy data, and the scorer. The agents never see it (rule 8).
-It is gitignored and never committed, so that neither coding agents nor
-people tuning prompts can see what the agents are tested on. A fresh clone
-therefore has no `eval/` folder: get the evaluation kit (`answer_key.md`,
-`score.py`, `judge_prompt.md`, `test_score.py`) from the project owner
-outside git and copy it into `eval/`. Everything else works without it.
+planted in the dummy data (`answer_key.md`), the scorer (`score.py`), the
+LLM judge's prompt and the scorer's tests. The agents never see it (rule 8).
+
+> **The answer key is public, so treat this as a practice test.**
+>
+> The score shows whether the system finds patterns that someone planted in
+> the data. That is only a fair measure if whoever builds the system does not
+> know the patterns, like an exam whose answers are secret. Here the answers
+> are in the repository, so:
+>
+> - Anyone changing prompts can see what the test checks and, even without
+>   meaning to, steer the prompts toward those patterns. The score would then
+>   go up without the system getting better at what matters: patterns in real
+>   data, which come with no answer key.
+> - AI coding tools working in this repository can read it too. `CLAUDE.md`
+>   asks them not to (rule 8), but that is a request, not a lock.
+>
+> Use the score to catch things that break (a change that makes the score
+> drop is a real warning), not to prove the system is good. To measure it
+> fairly, make new dummy data with new planted patterns and keep that answer
+> key private, outside this repository.
 
 Score a finished run against the answer key:
 
@@ -280,9 +295,7 @@ This section is for whoever takes over the project.
 The model finds most facts, but often states them one by one instead of
 **connecting** them (explaining what causes a change, or which findings
 belong together), and it sometimes misses a finding altogether. The details
-are in the run's `score.json`. They are deliberately not written here,
-because this README is in git and the patterns the agents are tested on
-must stay out of it (rule 8).
+are in the run's `score.json`; compare them with `eval/answer_key.md`.
 
 ### Known problems
 
@@ -310,10 +323,12 @@ must stay out of it (rule 8).
    so one score can be luck. Judge a change by two or three runs, not one.
 3. **Speed and reliability:** fewer rewrites, shorter prompts, a faster
    setup. These are safe to work on at any time.
-4. **Report quality:** prompt changes must stay general (rule 8). Whoever has
-   read `eval/answer_key.md` should not write prompt changes alone: have
-   someone else review them, and check that the score improves on the
-   patterns the report already found too, not only on the missed ones.
+4. **Report quality:** prompt changes must stay general (rule 8). Because the
+   answer key is public (see [Evaluation](#evaluation)), have someone review
+   each prompt change, and check that the score holds on the patterns the
+   report already found too, not only on the missed ones.
+5. **A fair test:** new dummy data with new planted patterns, and an answer
+   key kept private, would give a score that means something.
 
 ### How to work on it
 
@@ -347,7 +362,7 @@ When a run stops or the report looks wrong, the run folder tells you why
 | Why is a finding missing? | `analyst_<product>_dropped.json` |
 | Why was a section rewritten? | `verify_<id>_attempt<n>.json` |
 | Did the wording check ignore a problem? | `wording_dropped_<id>_attempt<n>.json` |
-| What did the score count? | `score.json` (only with the evaluation kit) |
+| What did the score count? | `score.json` (written by `eval/score.py --json`) |
 
 ### Lessons learned
 
@@ -374,7 +389,6 @@ These cost time once; they are already handled, but don't undo them:
 | Problem | Cause and fix |
 |---|---|
 | `.venv\Scripts\activate` fails: "running scripts is disabled on this system" | Windows blocks PowerShell scripts by default. Run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` once, or skip activation and call `.venv\Scripts\python` directly. |
-| `pytest eval` fails: "file or directory not found" | The evaluation kit is not in git; see [Evaluation](#evaluation). |
 | Agents repeat the same tool calls, or reply with nothing | Ollama's context is too small. Set `OLLAMA_CONTEXT_LENGTH` (step 3) and restart Ollama. |
 | `Request timed out` | A request took over 15 minutes. Keep `LLM_MAX_PARALLEL=1` for Ollama. Check that `LLM_REASONING_EFFORT` is `low` or `none` and `LLM_TEMPERATURE` is unset; try a smaller model. |
 | `invalid output after one retry` | The model returned unusable JSON twice. Re-run; if it repeats, try another model with `scripts/check_llm.py`. |
@@ -404,6 +418,6 @@ agents/
   nodes/              one module per node
   prompts/            one system prompt per agent
 scripts/              check_llm.py, fetch_attack.py, compare_models.py
-eval/                 evaluation only, not in git: answer key, scorer and its tests
+eval/                 evaluation only (rule 8): answer key, scorer and its tests
 tests/                one test file per module; fakes.py has the fake model and stub nodes
 ```

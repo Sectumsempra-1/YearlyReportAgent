@@ -399,3 +399,8 @@ turns (`LLM_MAX_PARALLEL`, default 1); each analyst finding is validated on
 its own, so an invalid one is dropped and logged instead of failing the run
 (7.1); the wording check ignores an issue whose words only state a direction
 that matches the cited findings (9.1).
+
+**2026-11-23:** `eval/` (answer key and scorer) is committed. The answer key
+is public, so the score is a practice test: useful to catch regressions, not
+proof of quality. A fair score needs new dummy data with a private answer
+key (README, Evaluation).

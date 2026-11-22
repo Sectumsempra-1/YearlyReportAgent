@@ -101,4 +101,4 @@ def test_missing_scorer_is_explained(tmp_path, monkeypatch, capsys):
     monkeypatch.setenv("EVAL_MODELS", "m")
     monkeypatch.setattr("dotenv.load_dotenv", lambda *a, **k: None)
     assert cm.main(["--year", "2026"]) == 2
-    assert "eval/ is gitignored" in capsys.readouterr().out
+    assert "Restore the eval/ folder" in capsys.readouterr().out
