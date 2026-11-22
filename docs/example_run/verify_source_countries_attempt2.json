@@ -1,0 +1,81 @@
+{
+  "section_id": "source_countries",
+  "passed": false,
+  "errors": [
+    {
+      "sentence": "In aggregate data covering all products, Brazil rose from rank `10` [F-024] to rank `3` [F-024] with a `246.4%` [F-024] increase in attack volume.",
+      "problem": "the number 10 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "In aggregate data covering all products, Brazil rose from rank `10` [F-024] to rank `3` [F-024] with a `246.4%` [F-024] increase in attack volume.",
+      "problem": "the number 3 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "In aggregate data covering all products, Brazil rose from rank `10` [F-024] to rank `3` [F-024] with a `246.4%` [F-024] increase in attack volume.",
+      "problem": "the number 246.4% has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "For firewall traffic, China was the top source country of attacks in 2026, accounting for `895,100` [F-017] volume and `20.0%` [F-017] of all attack volume.",
+      "problem": "the number 895,100 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "For firewall traffic, China was the top source country of attacks in 2026, accounting for `895,100` [F-017] volume and `20.0%` [F-017] of all attack volume.",
+      "problem": "the number 20.0% has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "Brazil emerged as the second-largest source country of attacks with a `211.6%` [F-016] increase from the previous year.",
+      "problem": "the number 211.6% has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "This volume reached `668,293` [F-016], representing `14.9%` [F-016] of firewall traffic.",
+      "problem": "the number 668,293 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "This volume reached `668,293` [F-016], representing `14.9%` [F-016] of firewall traffic.",
+      "problem": "the number 14.9% has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "For email gateway products, Chinese-origin attacks increased by `55.7%` [F-010] to become the top attacking country with `205,490` [F-010] blocked incidents.",
+      "problem": "the number 55.7% has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "For email gateway products, Chinese-origin attacks increased by `55.7%` [F-010] to become the top attacking country with `205,490` [F-010] blocked incidents.",
+      "problem": "the number 205,490 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "Brazil became the third-largest attacking country in 2026, jumping from rank `10` [F-009] to rank `3` [F-009] with a `549.0%` [F-009] increase in attacks.",
+      "problem": "the number 10 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "Brazil became the third-largest attacking country in 2026, jumping from rank `10` [F-009] to rank `3` [F-009] with a `549.0%` [F-009] increase in attacks.",
+      "problem": "the number 3 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "Brazil became the third-largest attacking country in 2026, jumping from rank `10` [F-009] to rank `3` [F-009] with a `549.0%` [F-009] increase in attacks.",
+      "problem": "the number 549.0% has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "This product saw `154,209` [F-009] incidents and a share of `15.0%` [F-009].",
+      "problem": "the number 154,209 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "This product saw `154,209` [F-009] incidents and a share of `15.0%` [F-009].",
+      "problem": "the number 15.0% has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    }
+  ]
+}

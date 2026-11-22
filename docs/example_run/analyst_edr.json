@@ -1,0 +1,141 @@
+[
+  {
+    "statement": "credential_theft attacks increased by 80.4% year-over-year to 11663 blocked in 2026, the largest increase among all attack types.",
+    "values": {
+      "pct_change": 80.4,
+      "current": 11663,
+      "previous": 6464
+    },
+    "source": {
+      "function": "attack_type_changes",
+      "params": {
+        "year": 2026,
+        "product": "EDR"
+      },
+      "key_paths": {
+        "pct_change": "value.rows.0.pct_change",
+        "current": "value.rows.0.current",
+        "previous": "value.rows.0.previous"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "EDR"
+  },
+  {
+    "statement": "ransomware is the only attack type to decline, with a 9.2% decrease year-over-year.",
+    "values": {
+      "pct_change": -9.2,
+      "current": 1940,
+      "previous": 2137
+    },
+    "source": {
+      "function": "attack_type_changes",
+      "params": {
+        "year": 2026,
+        "product": "EDR"
+      },
+      "key_paths": {
+        "pct_change": "value.rows.2.pct_change",
+        "current": "value.rows.2.current",
+        "previous": "value.rows.2.previous"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "EDR"
+  },
+  {
+    "statement": "LummaStealer is a new malware family in 2026, now rank 1 with 10544 detections and 23.1% share of all malware.",
+    "values": {
+      "family": "LummaStealer",
+      "rank": 1,
+      "volume": 10544,
+      "share_pct": 23.1
+    },
+    "source": {
+      "function": "top_malware",
+      "params": {
+        "year": 2026,
+        "product": "EDR",
+        "n": 15
+      },
+      "key_paths": {
+        "family": "value.rows.0.family",
+        "rank": "value.rows.0.rank",
+        "volume": "value.rows.0.volume",
+        "share_pct": "value.rows.0.share_pct"
+      }
+    },
+    "caveats": [
+      "Some vendor malware names have no common family mapping; see unmapped_malware()."
+    ],
+    "data_gap": false,
+    "product": "EDR"
+  },
+  {
+    "statement": "The Energy sector became the largest target with 20350 attacks, up 39.9% year-over-year.",
+    "values": {
+      "sector": "Energy",
+      "volume": 20350,
+      "pct_change": 39.9
+    },
+    "source": {
+      "function": "sector_breakdown",
+      "params": {
+        "year": 2026,
+        "product": "EDR"
+      },
+      "key_paths": {
+        "sector": "value.rows.0.sector",
+        "volume": "value.rows.0.volume",
+        "pct_change": "value.rows.0.pct_change"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "EDR"
+  },
+  {
+    "statement": "March was the peak month and October was the lowest month for 2026.",
+    "values": {
+      "peak_month": "2026-03",
+      "low_month": "2026-10"
+    },
+    "source": {
+      "function": "monthly_series",
+      "params": {
+        "year": 2026,
+        "product": "EDR"
+      },
+      "key_paths": {
+        "peak_month": "value.peak_month",
+        "low_month": "value.low_month"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "EDR"
+  },
+  {
+    "statement": "Win32/Kryptik.gen is a new unmapped malware family with 3204 detections, showing no previous year data.",
+    "values": {
+      "vendor_name": "Win32/Kryptik.gen",
+      "detections": 3204
+    },
+    "source": {
+      "function": "unmapped_malware",
+      "params": {
+        "year": 2026,
+        "product": "EDR"
+      },
+      "key_paths": {
+        "vendor_name": "value.rows.0.vendor_name",
+        "detections": "value.rows.0.detections"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "EDR"
+  }
+]

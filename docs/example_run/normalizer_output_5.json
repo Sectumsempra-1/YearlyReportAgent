@@ -1,0 +1,49 @@
+{
+  "findings": [
+    {
+      "finding_id": "F-013",
+      "attack_techniques": [
+        {
+          "technique_id": "T1110",
+          "confidence": 0.95,
+          "rationale": "The finding explicitly mentions 'Brute force attacks' decreasing."
+        }
+      ],
+      "sector": "unspecified",
+      "severity": "medium",
+      "related_findings": [
+        "F-019"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "finding_id": "F-014",
+      "attack_techniques": [],
+      "sector": "Energy",
+      "severity": "unspecified",
+      "related_findings": [
+        "F-022",
+        "F-004",
+        "F-008"
+      ],
+      "confidence": 1.0
+    },
+    {
+      "finding_id": "F-015",
+      "attack_techniques": [
+        {
+          "technique_id": "T1110",
+          "confidence": 0.6,
+          "rationale": "The statement mentions offsetting the decline in brute force volume, implying T1110 activity is present in the dataset, but this specific finding only tracks high severity counts."
+        }
+      ],
+      "sector": "unspecified",
+      "severity": "high",
+      "related_findings": [
+        "F-023",
+        "F-013"
+      ],
+      "confidence": 0.6
+    }
+  ]
+}

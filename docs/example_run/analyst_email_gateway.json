@@ -1,0 +1,142 @@
+[
+  {
+    "statement": "LummaStealer emerged as a new malware family in 2026, blocking 32,587 instances which accounted for 26.0% of all blocked malware.",
+    "values": {
+      "family": "LummaStealer",
+      "volume": 32587,
+      "share_pct": 26.0,
+      "new_this_year": true
+    },
+    "source": {
+      "function": "top_malware",
+      "params": {
+        "year": 2026,
+        "n": 10,
+        "product": "Email Gateway"
+      },
+      "key_paths": {
+        "family": "value.rows.0.family",
+        "volume": "value.rows.0.volume",
+        "share_pct": "value.rows.0.share_pct",
+        "new_this_year": "value.rows.0.new_this_year"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "Email Gateway"
+  },
+  {
+    "statement": "Brazil became the third-largest attacking country in 2026, jumping from rank 10 to rank 3 with a 549.0% increase in attacks.",
+    "values": {
+      "country": "BR",
+      "rank": 3,
+      "volume": 154209,
+      "share_pct": 15.0,
+      "previous_rank": 10,
+      "pct_change": 549.0
+    },
+    "source": {
+      "function": "top_countries",
+      "params": {
+        "year": 2026,
+        "n": 10,
+        "product": "Email Gateway"
+      },
+      "key_paths": {
+        "country": "value.rows.2.country",
+        "rank": "value.rows.2.rank",
+        "volume": "value.rows.2.volume",
+        "share_pct": "value.rows.2.share_pct",
+        "previous_rank": "value.rows.2.previous_rank",
+        "pct_change": "value.rows.2.pct_change"
+      }
+    },
+    "caveats": [
+      "Based on IP geolocation of the attacking infrastructure, not attribution of the attacker. VPNs, proxies and compromised hosts are common."
+    ],
+    "data_gap": false,
+    "product": "Email Gateway"
+  },
+  {
+    "statement": "March 2026 showed a significant spike with 185,566 blocked attacks, up 135.2% from February.",
+    "values": {
+      "month": "2026-03",
+      "blocked": 185566,
+      "mom_change": 106670,
+      "mom_pct_change": 135.2
+    },
+    "source": {
+      "function": "monthly_series",
+      "params": {
+        "year": 2026,
+        "product": "Email Gateway",
+        "attack_type": null,
+        "spike_factor": 1.5
+      },
+      "key_paths": {
+        "month": "value.months.2.month",
+        "blocked": "value.months.2.blocked",
+        "mom_change": "value.months.2.mom_change",
+        "mom_pct_change": "value.months.2.mom_pct_change"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "Email Gateway"
+  },
+  {
+    "statement": "Energy sector attacks surged by 98.1% year-over-year, remaining the top targeted industry with 350,582 blocked incidents.",
+    "values": {
+      "sector": "Energy",
+      "volume": 350582,
+      "share_pct": 34.2,
+      "pct_change": 98.1
+    },
+    "source": {
+      "function": "sector_breakdown",
+      "params": {
+        "year": 2026,
+        "product": "Email Gateway"
+      },
+      "key_paths": {
+        "sector": "value.rows.0.sector",
+        "volume": "value.rows.0.volume",
+        "share_pct": "value.rows.0.share_pct",
+        "pct_change": "value.rows.0.pct_change"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "Email Gateway"
+  },
+  {
+    "statement": "Chinese-origin attacks increased by 55.7% to become the top attacking country with 205,490 blocked incidents.",
+    "values": {
+      "country": "CN",
+      "rank": 1,
+      "volume": 205490,
+      "share_pct": 20.0,
+      "pct_change": 55.7
+    },
+    "source": {
+      "function": "top_countries",
+      "params": {
+        "year": 2026,
+        "n": 10,
+        "product": "Email Gateway"
+      },
+      "key_paths": {
+        "country": "value.rows.0.country",
+        "rank": "value.rows.0.rank",
+        "volume": "value.rows.0.volume",
+        "share_pct": "value.rows.0.share_pct",
+        "pct_change": "value.rows.0.pct_change"
+      }
+    },
+    "caveats": [
+      "Based on IP geolocation of the attacking infrastructure, not attribution of the attacker. VPNs, proxies and compromised hosts are common."
+    ],
+    "data_gap": false,
+    "product": "Email Gateway"
+  }
+]

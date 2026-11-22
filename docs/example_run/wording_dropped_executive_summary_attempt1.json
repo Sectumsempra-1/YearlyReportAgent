@@ -1,0 +1,18 @@
+[
+  {
+    "sentence": "**Credential theft incidents surged significantly while high severity attacks rose**, marking a shift from traditional ransomware threats to more acute credential-focused risks targeting the energy sector.",
+    "words": "high severity attacks rose",
+    "contradiction": true,
+    "problem": "The text says high severity attacks 'rose', but Finding F-023 shows a direction of 'up' with a value increase; however, the context implies 'rose' is correct for an increase. Wait, let me re-read the rule: 'Direction: rose... need a positive change'. The finding has pct_change 16.4 and direction 'up'. So 'rose' matches. Let me check other sentences.",
+    "expected": "",
+    "dropped_because": "reported in run 1 only, not by every one of 2 runs"
+  },
+  {
+    "sentence": "- Ransomware attacks fell by 9.2% [F-002] to 1,940 [F-002], the only attack type to decline.",
+    "words": "fell by 9.2%",
+    "contradiction": true,
+    "problem": "The phrase 'fell by' combined with a negative percentage change (-9.2%) is redundant and contradictory; the value is negative, so the direction is down, but 'by 9.2%' usually implies magnitude without the sign, while the finding specifies -9.2%. However, looking closer at the rule: 'Double signs: a direction word combined with a negative number, such as ",
+    "expected": "",
+    "dropped_because": "reported in run 1 only, not by every one of 2 runs"
+  }
+]

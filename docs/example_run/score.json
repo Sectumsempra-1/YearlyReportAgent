@@ -1,0 +1,155 @@
+{
+  "run": "runs\\20261122T101150Z",
+  "year": 2026,
+  "points": 18,
+  "max_points": 24,
+  "score_pct": 75.0,
+  "patterns": [
+    {
+      "number": 1,
+      "title": "Total blocked fell while most types rose; brute force drove the drop",
+      "found": true,
+      "correct": false,
+      "caveat": false,
+      "points": 1,
+      "max_points": 3,
+      "notes": [
+        "total decline stated: False",
+        "brute force decline stated: True",
+        "judge: False"
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Phishing up sharply, with a spike in one month",
+      "found": true,
+      "correct": false,
+      "caveat": null,
+      "points": 1,
+      "max_points": 2,
+      "notes": [
+        "rise stated: True",
+        "March spike mentioned: False"
+      ]
+    },
+    {
+      "number": 3,
+      "title": "LummaStealer new in 2026 and the #1 family",
+      "found": true,
+      "correct": true,
+      "caveat": true,
+      "points": 3,
+      "max_points": 3,
+      "notes": [
+        "new: True",
+        "#1: True",
+        "compared with AgentTesla: False"
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Akira new and ahead of LockBit; ransomware fell overall",
+      "found": false,
+      "correct": false,
+      "caveat": null,
+      "points": 0,
+      "max_points": 2,
+      "notes": [
+        "new: False",
+        "compared with LockBit: False",
+        "ransomware decline stated: True"
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Credential theft up sharply, consistent with the new info stealer",
+      "found": true,
+      "correct": false,
+      "caveat": null,
+      "points": 1,
+      "max_points": 2,
+      "notes": [
+        "rise stated: True",
+        "linked to the info stealer: False (judge: False)"
+      ]
+    },
+    {
+      "number": 6,
+      "title": "Brazil rose from #10 to #3 among source countries",
+      "found": true,
+      "correct": true,
+      "caveat": true,
+      "points": 3,
+      "max_points": 3,
+      "notes": [
+        "rank 3 stated: True",
+        "rise from rank 10 stated: True"
+      ]
+    },
+    {
+      "number": 7,
+      "title": "Energy is the most targeted sector, with a growing share",
+      "found": true,
+      "correct": true,
+      "caveat": true,
+      "points": 3,
+      "max_points": 3,
+      "notes": [
+        "most targeted: True",
+        "share 34.0% stated: True"
+      ]
+    },
+    {
+      "number": 8,
+      "title": "Data gap: Win32/Kryptik.gen flagged as unmapped",
+      "found": true,
+      "correct": true,
+      "caveat": null,
+      "points": 2,
+      "max_points": 2,
+      "notes": [
+        "flagged as unmapped: True",
+        "mentioned outside the methodology: True"
+      ]
+    },
+    {
+      "number": 9,
+      "title": "Trap: summing across products overstates attacks",
+      "found": true,
+      "correct": true,
+      "caveat": null,
+      "points": 2,
+      "max_points": 2,
+      "notes": [
+        "sections quoting summed figures: 5",
+        "of those without the caveat: none",
+        "reports per product only: False"
+      ]
+    },
+    {
+      "number": 10,
+      "title": "Ingestion rejects the broken delivery as a whole",
+      "found": true,
+      "correct": true,
+      "caveat": null,
+      "points": 2,
+      "max_points": 2,
+      "notes": [
+        "errors found: month=True, action=True, source_country=True, count=True"
+      ]
+    }
+  ],
+  "judge": [
+    {
+      "question": "Does the report explain that the overall number of blocked attacks fell mainly because of a drop in brute-force attempts, while most other attack types rose (rather than only saying that attacks went down)?",
+      "answer": false,
+      "reason": "The excerpt states 'other attack types showed varying levels of decline or growth' and lists specific trends without confirming that overall blocked attacks fell mainly because of a drop in brute-force attempts."
+    },
+    {
+      "question": "Does the report connect the rise in credential theft to the rise of an information-stealing malware family?",
+      "answer": false,
+      "reason": "The excerpt lists credential theft incidents and LummaStealer detections as separate statistics without explicitly linking the rise in one to the rise of the other."
+    }
+  ],
+  "llm_judge": true
+}

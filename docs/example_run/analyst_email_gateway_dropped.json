@@ -1,0 +1,56 @@
+[
+  {
+    "finding": {
+      "statement": "Phishing attacks increased by 385,912 from 2025 to 2026, representing an 83.2% year-over-year rise.",
+      "values": {
+        "blocked": 849597,
+        "pct_change": 83.2
+      },
+      "source": {
+        "function": "product_summary",
+        "params": {
+          "year": 2026,
+          "product": "Email Gateway"
+        },
+        "key_paths": {
+          "blocked": "value.phishing.blocked",
+          "pct_change": "value.phishing.yoy_blocked.pct_change"
+        }
+      },
+      "caveats": [],
+      "data_gap": false,
+      "product": "Email Gateway"
+    },
+    "problems": [
+      "statement: '385,912' is not one of the finding's values"
+    ]
+  },
+  {
+    "finding": {
+      "statement": "Medium severity attacks comprise 85.4% of all blocked incidents, with high severity accounting for 14.6%.",
+      "values": {
+        "severity": "medium",
+        "volume": 875887,
+        "share_pct": 85.4
+      },
+      "source": {
+        "function": "severity_breakdown",
+        "params": {
+          "year": 2026,
+          "product": "Email Gateway"
+        },
+        "key_paths": {
+          "severity": "value.rows.0.severity",
+          "volume": "value.rows.0.volume",
+          "share_pct": "value.rows.0.share_pct"
+        }
+      },
+      "caveats": [],
+      "data_gap": false,
+      "product": "Email Gateway"
+    },
+    "problems": [
+      "statement: '14.6%' is not one of the finding's values"
+    ]
+  }
+]

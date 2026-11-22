@@ -1,0 +1,695 @@
+[
+  {
+    "statement": "credential_theft attacks increased by 80.4% year-over-year to 11663 blocked in 2026, the largest increase among all attack types.",
+    "values": {
+      "pct_change": 80.4,
+      "current": 11663,
+      "previous": 6464
+    },
+    "source": {
+      "function": "attack_type_changes",
+      "params": {
+        "year": 2026,
+        "product": "EDR"
+      },
+      "key_paths": {
+        "pct_change": "value.rows.0.pct_change",
+        "current": "value.rows.0.current",
+        "previous": "value.rows.0.previous"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "EDR",
+    "id": "F-001",
+    "direction": "up"
+  },
+  {
+    "statement": "ransomware is the only attack type to decline, with a 9.2% decrease year-over-year.",
+    "values": {
+      "pct_change": -9.2,
+      "current": 1940,
+      "previous": 2137
+    },
+    "source": {
+      "function": "attack_type_changes",
+      "params": {
+        "year": 2026,
+        "product": "EDR"
+      },
+      "key_paths": {
+        "pct_change": "value.rows.2.pct_change",
+        "current": "value.rows.2.current",
+        "previous": "value.rows.2.previous"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "EDR",
+    "id": "F-002",
+    "direction": "down"
+  },
+  {
+    "statement": "March was the peak month and October was the lowest month for 2026.",
+    "values": {
+      "peak_month": "2026-03",
+      "low_month": "2026-10"
+    },
+    "source": {
+      "function": "monthly_series",
+      "params": {
+        "year": 2026,
+        "product": "EDR"
+      },
+      "key_paths": {
+        "peak_month": "value.peak_month",
+        "low_month": "value.low_month"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "EDR",
+    "id": "F-003",
+    "direction": "flat"
+  },
+  {
+    "statement": "The Energy sector became the largest target with 20350 attacks, up 39.9% year-over-year.",
+    "values": {
+      "sector": "Energy",
+      "volume": 20350,
+      "pct_change": 39.9
+    },
+    "source": {
+      "function": "sector_breakdown",
+      "params": {
+        "year": 2026,
+        "product": "EDR"
+      },
+      "key_paths": {
+        "sector": "value.rows.0.sector",
+        "volume": "value.rows.0.volume",
+        "pct_change": "value.rows.0.pct_change"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "EDR",
+    "id": "F-004",
+    "direction": "up"
+  },
+  {
+    "statement": "LummaStealer is a new malware family in 2026, now rank 1 with 10544 detections and 23.1% share of all malware.",
+    "values": {
+      "family": "LummaStealer",
+      "rank": 1,
+      "volume": 10544,
+      "share_pct": 23.1
+    },
+    "source": {
+      "function": "top_malware",
+      "params": {
+        "year": 2026,
+        "product": "EDR",
+        "n": 15
+      },
+      "key_paths": {
+        "family": "value.rows.0.family",
+        "rank": "value.rows.0.rank",
+        "volume": "value.rows.0.volume",
+        "share_pct": "value.rows.0.share_pct"
+      }
+    },
+    "caveats": [
+      "Some vendor malware names have no common family mapping; see unmapped_malware()."
+    ],
+    "data_gap": false,
+    "product": "EDR",
+    "id": "F-005",
+    "direction": "new"
+  },
+  {
+    "statement": "Win32/Kryptik.gen is a new unmapped malware family with 3204 detections, showing no previous year data.",
+    "values": {
+      "vendor_name": "Win32/Kryptik.gen",
+      "detections": 3204
+    },
+    "source": {
+      "function": "unmapped_malware",
+      "params": {
+        "year": 2026,
+        "product": "EDR"
+      },
+      "key_paths": {
+        "vendor_name": "value.rows.0.vendor_name",
+        "detections": "value.rows.0.detections"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "EDR",
+    "id": "F-006",
+    "direction": "flat"
+  },
+  {
+    "statement": "March 2026 showed a significant spike with 185,566 blocked attacks, up 135.2% from February.",
+    "values": {
+      "month": "2026-03",
+      "blocked": 185566,
+      "mom_change": 106670,
+      "mom_pct_change": 135.2
+    },
+    "source": {
+      "function": "monthly_series",
+      "params": {
+        "year": 2026,
+        "product": "Email Gateway",
+        "attack_type": null,
+        "spike_factor": 1.5
+      },
+      "key_paths": {
+        "month": "value.months.2.month",
+        "blocked": "value.months.2.blocked",
+        "mom_change": "value.months.2.mom_change",
+        "mom_pct_change": "value.months.2.mom_pct_change"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "Email Gateway",
+    "id": "F-007",
+    "direction": "flat"
+  },
+  {
+    "statement": "Energy sector attacks surged by 98.1% year-over-year, remaining the top targeted industry with 350,582 blocked incidents.",
+    "values": {
+      "sector": "Energy",
+      "volume": 350582,
+      "share_pct": 34.2,
+      "pct_change": 98.1
+    },
+    "source": {
+      "function": "sector_breakdown",
+      "params": {
+        "year": 2026,
+        "product": "Email Gateway"
+      },
+      "key_paths": {
+        "sector": "value.rows.0.sector",
+        "volume": "value.rows.0.volume",
+        "share_pct": "value.rows.0.share_pct",
+        "pct_change": "value.rows.0.pct_change"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "Email Gateway",
+    "id": "F-008",
+    "direction": "up"
+  },
+  {
+    "statement": "Brazil became the third-largest attacking country in 2026, jumping from rank 10 to rank 3 with a 549.0% increase in attacks.",
+    "values": {
+      "country": "BR",
+      "rank": 3,
+      "volume": 154209,
+      "share_pct": 15.0,
+      "previous_rank": 10,
+      "pct_change": 549.0
+    },
+    "source": {
+      "function": "top_countries",
+      "params": {
+        "year": 2026,
+        "n": 10,
+        "product": "Email Gateway"
+      },
+      "key_paths": {
+        "country": "value.rows.2.country",
+        "rank": "value.rows.2.rank",
+        "volume": "value.rows.2.volume",
+        "share_pct": "value.rows.2.share_pct",
+        "previous_rank": "value.rows.2.previous_rank",
+        "pct_change": "value.rows.2.pct_change"
+      }
+    },
+    "caveats": [
+      "Based on IP geolocation of the attacking infrastructure, not attribution of the attacker. VPNs, proxies and compromised hosts are common."
+    ],
+    "data_gap": false,
+    "product": "Email Gateway",
+    "id": "F-009",
+    "direction": "up"
+  },
+  {
+    "statement": "Chinese-origin attacks increased by 55.7% to become the top attacking country with 205,490 blocked incidents.",
+    "values": {
+      "country": "CN",
+      "rank": 1,
+      "volume": 205490,
+      "share_pct": 20.0,
+      "pct_change": 55.7
+    },
+    "source": {
+      "function": "top_countries",
+      "params": {
+        "year": 2026,
+        "n": 10,
+        "product": "Email Gateway"
+      },
+      "key_paths": {
+        "country": "value.rows.0.country",
+        "rank": "value.rows.0.rank",
+        "volume": "value.rows.0.volume",
+        "share_pct": "value.rows.0.share_pct",
+        "pct_change": "value.rows.0.pct_change"
+      }
+    },
+    "caveats": [
+      "Based on IP geolocation of the attacking infrastructure, not attribution of the attacker. VPNs, proxies and compromised hosts are common."
+    ],
+    "data_gap": false,
+    "product": "Email Gateway",
+    "id": "F-010",
+    "direction": "up"
+  },
+  {
+    "statement": "LummaStealer emerged as a new malware family in 2026, blocking 32,587 instances which accounted for 26.0% of all blocked malware.",
+    "values": {
+      "family": "LummaStealer",
+      "volume": 32587,
+      "share_pct": 26.0,
+      "new_this_year": true
+    },
+    "source": {
+      "function": "top_malware",
+      "params": {
+        "year": 2026,
+        "n": 10,
+        "product": "Email Gateway"
+      },
+      "key_paths": {
+        "family": "value.rows.0.family",
+        "volume": "value.rows.0.volume",
+        "share_pct": "value.rows.0.share_pct",
+        "new_this_year": "value.rows.0.new_this_year"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "Email Gateway",
+    "id": "F-011",
+    "direction": "new"
+  },
+  {
+    "statement": "Malware download attacks increased by 24.1%, the largest year-over-year change among all attack types.",
+    "values": {
+      "current": 223501,
+      "previous": 180156,
+      "change": 43345,
+      "pct_change": 24.1
+    },
+    "source": {
+      "function": "attack_type_changes",
+      "params": {
+        "year": 2026,
+        "product": "Firewall"
+      },
+      "key_paths": {
+        "current": "value.rows.0.current",
+        "previous": "value.rows.0.previous",
+        "change": "value.rows.0.change",
+        "pct_change": "value.rows.0.pct_change"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "Firewall",
+    "id": "F-012",
+    "direction": "up"
+  },
+  {
+    "statement": "Brute force attacks decreased significantly, dropping by 29.3% compared to the previous year.",
+    "values": {
+      "current": 2539855,
+      "previous": 3591554,
+      "change": -1051699,
+      "pct_change": -29.3
+    },
+    "source": {
+      "function": "product_summary",
+      "params": {
+        "year": 2026,
+        "product": "Firewall"
+      },
+      "key_paths": {
+        "current": "value.brute_force.yoy_blocked.current",
+        "previous": "value.brute_force.yoy_blocked.previous",
+        "change": "value.brute_force.yoy_blocked.change",
+        "pct_change": "value.brute_force.yoy_blocked.pct_change"
+      }
+    },
+    "caveats": [
+      "This product reports only blocked events, so a block rate cannot be calculated."
+    ],
+    "data_gap": false,
+    "product": "Firewall",
+    "id": "F-013",
+    "direction": "down"
+  },
+  {
+    "statement": "The Energy sector remained the top client sector with attacks targeting 34.0% of all events in 2026.",
+    "values": {
+      "sector": "Energy",
+      "volume": 1519768,
+      "share_pct": 34.0
+    },
+    "source": {
+      "function": "sector_breakdown",
+      "params": {
+        "year": 2026,
+        "product": "Firewall"
+      },
+      "key_paths": {
+        "sector": "value.rows.0.sector",
+        "volume": "value.rows.0.volume",
+        "share_pct": "value.rows.0.share_pct"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "Firewall",
+    "id": "F-014",
+    "direction": "down"
+  },
+  {
+    "statement": "High severity attacks increased by 15.0%, offsetting the overall decline in brute force attack volume.",
+    "values": {
+      "severity": "high",
+      "volume": 1864751,
+      "share_pct": 41.7,
+      "previous_volume": 1621564,
+      "pct_change": 15.0
+    },
+    "source": {
+      "function": "severity_breakdown",
+      "params": {
+        "year": 2026,
+        "product": "Firewall"
+      },
+      "key_paths": {
+        "severity": "value.rows.1.severity",
+        "volume": "value.rows.1.volume",
+        "share_pct": "value.rows.1.share_pct",
+        "previous_volume": "value.rows.1.previous_volume",
+        "pct_change": "value.rows.1.pct_change"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "Firewall",
+    "id": "F-015",
+    "direction": "up"
+  },
+  {
+    "statement": "Brazil emerged as the second-largest source country of attacks with a 211.6% increase from the previous year.",
+    "values": {
+      "country": "BR",
+      "volume": 668293,
+      "share_pct": 14.9,
+      "previous_volume": 214440,
+      "pct_change": 211.6
+    },
+    "source": {
+      "function": "top_countries",
+      "params": {
+        "year": 2026,
+        "product": "Firewall"
+      },
+      "key_paths": {
+        "country": "value.rows.1.country",
+        "volume": "value.rows.1.volume",
+        "share_pct": "value.rows.1.share_pct",
+        "previous_volume": "value.rows.1.previous_volume",
+        "pct_change": "value.rows.1.pct_change"
+      }
+    },
+    "caveats": [
+      "Based on IP geolocation of the attacking infrastructure, not attribution of the attacker. VPNs, proxies and compromised hosts are common."
+    ],
+    "data_gap": false,
+    "product": "Firewall",
+    "id": "F-016",
+    "direction": "up"
+  },
+  {
+    "statement": "China remained the top source country of attacks in 2026, accounting for 20.0% of all attack volume.",
+    "values": {
+      "country": "CN",
+      "volume": 895100,
+      "share_pct": 20.0
+    },
+    "source": {
+      "function": "top_countries",
+      "params": {
+        "year": 2026,
+        "product": "Firewall"
+      },
+      "key_paths": {
+        "country": "value.rows.0.country",
+        "volume": "value.rows.0.volume",
+        "share_pct": "value.rows.0.share_pct"
+      }
+    },
+    "caveats": [
+      "Based on IP geolocation of the attacking infrastructure, not attribution of the attacker. VPNs, proxies and compromised hosts are common."
+    ],
+    "data_gap": false,
+    "product": "Firewall",
+    "id": "F-017",
+    "direction": "down"
+  },
+  {
+    "statement": "LummaStealer is a new malware family detected in 2026, accounting for 25.8% of all malware detections.",
+    "values": {
+      "family": "LummaStealer",
+      "volume": 74700,
+      "share_pct": 25.8,
+      "previous_volume": 0
+    },
+    "source": {
+      "function": "top_malware",
+      "params": {
+        "year": 2026,
+        "product": "Firewall"
+      },
+      "key_paths": {
+        "family": "value.rows.0.family",
+        "volume": "value.rows.0.volume",
+        "share_pct": "value.rows.0.share_pct",
+        "previous_volume": "value.rows.0.previous_volume"
+      }
+    },
+    "caveats": [],
+    "data_gap": false,
+    "product": "Firewall",
+    "id": "F-018",
+    "direction": "new"
+  },
+  {
+    "statement": "Brute force attacks declined 29.3% year-over-year to 2,539,855 blocks.",
+    "values": {
+      "current": 2539855,
+      "change": -1051699,
+      "pct_change": -29.3
+    },
+    "source": {
+      "function": "attack_type_changes",
+      "params": {
+        "year": 2026,
+        "product": null
+      },
+      "key_paths": {
+        "current": "value.rows.9.current",
+        "change": "value.rows.9.change",
+        "pct_change": "value.rows.9.pct_change"
+      }
+    },
+    "caveats": [
+      "Summed across products. One attack can be seen by more than one product (e.g. email gateway and EDR), so this may overcount attacks."
+    ],
+    "data_gap": false,
+    "product": "ALL",
+    "id": "F-019",
+    "direction": "down"
+  },
+  {
+    "statement": "Credential theft incidents increased 80.4% year-over-year to 11,663 blocks.",
+    "values": {
+      "current": 11663,
+      "change": 5199,
+      "pct_change": 80.4
+    },
+    "source": {
+      "function": "attack_type_changes",
+      "params": {
+        "year": 2026,
+        "product": null
+      },
+      "key_paths": {
+        "current": "value.rows.1.current",
+        "change": "value.rows.1.change",
+        "pct_change": "value.rows.1.pct_change"
+      }
+    },
+    "caveats": [
+      "Summed across products. One attack can be seen by more than one product (e.g. email gateway and EDR), so this may overcount attacks."
+    ],
+    "data_gap": false,
+    "product": "ALL",
+    "id": "F-020",
+    "direction": "up"
+  },
+  {
+    "statement": "Phishing attacks surged by 83.2% in 2026, representing the largest increase among all attack types.",
+    "values": {
+      "current": 849597,
+      "change": 385912,
+      "pct_change": 83.2
+    },
+    "source": {
+      "function": "attack_type_changes",
+      "params": {
+        "year": 2026,
+        "product": null
+      },
+      "key_paths": {
+        "current": "value.rows.0.current",
+        "change": "value.rows.0.change",
+        "pct_change": "value.rows.0.pct_change"
+      }
+    },
+    "caveats": [
+      "Summed across products. One attack can be seen by more than one product (e.g. email gateway and EDR), so this may overcount attacks."
+    ],
+    "data_gap": false,
+    "product": "ALL",
+    "id": "F-021",
+    "direction": "up"
+  },
+  {
+    "statement": "The Energy sector remained the most targeted industry with 1,890,700 blocked attacks (34.0% share).",
+    "values": {
+      "sector": "Energy",
+      "volume": 1890700,
+      "share_pct": 34.0
+    },
+    "source": {
+      "function": "sector_breakdown",
+      "params": {
+        "year": 2026,
+        "product": null
+      },
+      "key_paths": {
+        "sector": "value.rows.0.sector",
+        "volume": "value.rows.0.volume",
+        "share_pct": "value.rows.0.share_pct"
+      }
+    },
+    "caveats": [
+      "Summed across products. One attack can be seen by more than one product (e.g. email gateway and EDR), so this may overcount attacks."
+    ],
+    "data_gap": false,
+    "product": "ALL",
+    "id": "F-022",
+    "direction": "up"
+  },
+  {
+    "statement": "High severity incidents increased 16.4% to account for 37.3% of all blocked attacks in 2026.",
+    "values": {
+      "severity": "high",
+      "volume": 2071373,
+      "share_pct": 37.3,
+      "pct_change": 16.4
+    },
+    "source": {
+      "function": "severity_breakdown",
+      "params": {
+        "year": 2026,
+        "product": null
+      },
+      "key_paths": {
+        "severity": "value.rows.1.severity",
+        "volume": "value.rows.1.volume",
+        "share_pct": "value.rows.1.share_pct",
+        "pct_change": "value.rows.1.pct_change"
+      }
+    },
+    "caveats": [
+      "Summed across products. One attack can be seen by more than one product (e.g. email gateway and EDR), so this may overcount attacks."
+    ],
+    "data_gap": false,
+    "product": "ALL",
+    "id": "F-023",
+    "direction": "up"
+  },
+  {
+    "statement": "Brazil rose from rank 10 to rank 3 among source countries with a dramatic 246.4% year-over-year increase in attack volume.",
+    "values": {
+      "country": "BR",
+      "current_rank": 3,
+      "previous_rank": 10,
+      "pct_change": 246.4
+    },
+    "source": {
+      "function": "top_countries",
+      "params": {
+        "year": 2026,
+        "n": 15,
+        "product": null
+      },
+      "key_paths": {
+        "country": "value.rows.2.country",
+        "current_rank": "value.rows.2.rank",
+        "previous_rank": "value.rows.2.previous_rank",
+        "pct_change": "value.rows.2.pct_change"
+      }
+    },
+    "caveats": [
+      "Based on IP geolocation of the attacking infrastructure, not attribution of the attacker. VPNs, proxies and compromised hosts are common.",
+      "Summed across products. One attack can be seen by more than one product (e.g. email gateway and EDR), so this may overcount attacks."
+    ],
+    "data_gap": false,
+    "product": "ALL",
+    "id": "F-024",
+    "direction": "up"
+  },
+  {
+    "statement": "LummaStealer emerged as the most prevalent malware family in 2026 with 117,831 detections (25.6% share).",
+    "values": {
+      "family": "LummaStealer",
+      "volume": 117831,
+      "share_pct": 25.6
+    },
+    "source": {
+      "function": "top_malware",
+      "params": {
+        "year": 2026,
+        "n": 15,
+        "product": null
+      },
+      "key_paths": {
+        "family": "value.rows.0.family",
+        "volume": "value.rows.0.volume",
+        "share_pct": "value.rows.0.share_pct"
+      }
+    },
+    "caveats": [
+      "Summed across products. One attack can be seen by more than one product (e.g. email gateway and EDR), so this may overcount attacks.",
+      "Some vendor malware names have no common family mapping; see unmapped_malware()."
+    ],
+    "data_gap": false,
+    "product": "ALL",
+    "id": "F-025",
+    "direction": "new"
+  }
+]

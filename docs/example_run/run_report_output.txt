@@ -1,0 +1,153 @@
+Run 20261122T101150Z: runs\20261122T101150Z
+
+====================================================================================================
+OUTLINE FOR APPROVAL
+====================================================================================================
+
+Thesis: Credential theft incidents surged significantly while high severity attacks rose, marking a
+shift from traditional ransomware threats to more acute credential-focused risks targeting the
+energy sector.
+
+Signature metric: pct_change = 80.4  (F-020: Credential theft incidents increased 80.4% year-over-
+year to 11,663 blocks.)
+
+THEMES (most important first)
+
+  1. Credential Theft Emerges as Primary Risk
+     Incidents of credential theft rose sharply compared to last year, indicating a critical shift
+     in attacker tactics that requires immediate monitoring.
+     Findings: F-001, F-020
+
+  2. New Malware Dominates the Threat Landscape
+     A new malware family became the leading threat detected, while other attack types showed
+     varying levels of decline or growth.
+     Findings: F-005, F-006, F-011, F-018, F-025
+
+  3. Energy Sector Faces Intensified Geographic Attacks
+     The energy sector absorbed the highest volume of attack traffic while new sources like Brazil
+     emerged as major contributors to malicious traffic.
+     Findings: F-004, F-008, F-014, F-022, F-009, F-016, F-024
+
+SECTIONS
+
+  Product performance
+     Goal: Review how specific security products blocked various attack types and their year-over-
+     year volume changes.
+     - F-001  credential_theft attacks increased by 80.4% year-over-year to 11663 blocked in 2026,
+              the largest increase among all attack types.
+     - F-002  ransomware is the only attack type to decline, with a 9.2% decrease year-over-year.
+     - F-012  Malware download attacks increased by 24.1%, the largest year-over-year change among
+              all attack types.
+     - F-013  Brute force attacks decreased significantly, dropping by 29.3% compared to the
+              previous year.
+
+  Top malware
+     Goal: Identify the ranking of most detected malware families and note which new families
+     entered the threat catalog.
+     - F-005  LummaStealer is a new malware family in 2026, now rank 1 with 10544 detections and
+              23.1% share of all malware.
+     - F-006  Win32/Kryptik.gen is a new unmapped malware family with 3204 detections, showing no
+              previous year data.
+     - F-011  LummaStealer emerged as a new malware family in 2026, blocking 32,587 instances which
+              accounted for 26.0% of all blocked malware.
+     - F-018  LummaStealer is a new malware family detected in 2026, accounting for 25.8% of all
+              malware detections.
+     - F-025  LummaStealer emerged as the most prevalent malware family in 2026 with 117,831
+              detections (25.6% share).
+
+  Source countries
+     Goal: Analyze the geographic origins of attack traffic and observe how country rankings shifted
+     during the reporting period.
+     - F-009  Brazil became the third-largest attacking country in 2026, jumping from rank 10 to
+              rank 3 with a 549.0% increase in attacks.
+     - F-010  Chinese-origin attacks increased by 55.7% to become the top attacking country with
+              205,490 blocked incidents.
+     - F-016  Brazil emerged as the second-largest source country of attacks with a 211.6% increase
+              from the previous year.
+     - F-017  China remained the top source country of attacks in 2026, accounting for 20.0% of all
+              attack volume.
+     - F-024  Brazil rose from rank 10 to rank 3 among source countries with a dramatic 246.4% year-
+              over-year increase in attack volume.
+
+  Trends
+     Goal: Examine monthly patterns, changes in attack type popularity across products, and the
+     industries most targeted by threats.
+     - F-003  March was the peak month and October was the lowest month for 2026.
+     - F-007  March 2026 showed a significant spike with 185,566 blocked attacks, up 135.2% from
+              February.
+     - F-019  Brute force attacks declined 29.3% year-over-year to 2,539,855 blocks.
+     - F-021  Phishing attacks surged by 83.2% in 2026, representing the largest increase among all
+              attack types.
+
+  Recommendations
+     Goal: Review specific security actions to take against rising high severity threats, new
+     malware families, and targeted sectors.
+     - F-023  High severity incidents increased 16.4% to account for 37.3% of all blocked attacks in
+              2026.
+     - F-025  LummaStealer emerged as the most prevalent malware family in 2026 with 117,831
+              detections (25.6% share).
+     - F-001  credential_theft attacks increased by 80.4% year-over-year to 11663 blocked in 2026,
+              the largest increase among all attack types.
+     - F-020  Credential theft incidents increased 80.4% year-over-year to 11,663 blocks.
+     - F-022  The Energy sector remained the most targeted industry with 1,890,700 blocked attacks
+              (34.0% share).
+
+NOT USED IN ANY SECTION (will not appear in the report)
+     - F-004  The Energy sector became the largest target with 20350 attacks, up 39.9% year-over-
+              year.
+     - F-008  Energy sector attacks surged by 98.1% year-over-year, remaining the top targeted
+              industry with 350,582 blocked incidents.
+     - F-014  The Energy sector remained the top client sector with attacks targeting 34.0% of all
+              events in 2026.
+     - F-015  High severity attacks increased by 15.0%, offsetting the overall decline in brute
+              force attack volume.
+
+DATA GAPS (also listed under Methodology and data gaps)
+     (none)
+
+====================================================================================================
+
+[a]pprove, [r]eject with comment, a[b]ort: 
+REPORT FOR APPROVAL
+
+## Executive summary
+
+**Credential theft incidents surged significantly while high severity attacks rose, marking a shift from traditional ransomware threats to more acute credential-focused risks targeting the energy sector.**
+
+### Headline numbers
+
+- Credential theft incidents increased by 80.4% [F-001] to 11,663 [F-001] attacks in 2026.
+- Ransomware attacks fell by 9.2% [F-002] to 1,940 [F-002], the only attack type to decline.
+- LummaStealer detections reached 117,831 [F-025], representing 25.6% [F-025] of all malware traffic with potential overcounting due to product summation.
+- High severity incidents increased by 16.4% [F-023] and account for 37.3% [F-023] of all blocked attacks in 2026, though totals may be summed across products.
+- The Energy sector absorbed 1,890,700 [F-022] blocked attacks with a 34.0% [F-022] share of total volume and potential overcounting issues across products.
+- Brazil rose to rank 3 [F-024] in aggregate data covering all products with a 246.4% [F-024] increase based on IP geolocation not attacker attribution.
+
+### Credential Theft Emerges as Primary Risk
+
+Incidents of credential theft rose sharply compared to last year, indicating a critical shift in attacker tactics that requires immediate monitoring.
+
+### New Malware Dominates the Threat Landscape
+
+A new malware family became the leading threat detected, while other attack types showed varying levels of decline or growth.
+
+### Energy Sector Faces Intensified Geographic Attacks
+
+The energy sector absorbed the highest volume of attack traffic while new sources like Brazil emerged as major contributors to malicious traffic.
+
+### Top recommendations
+
+- Monitor the Energy sector as it remained the most targeted industry with 1,890,700 [F-022] blocked attacks representing a 34.0% [F-022] share of total volume, where totals may be summed across products.
+- Prioritize defenses against high severity incidents as they increased 16.4% [F-023] to account for 2,071,373 [F-023] blocked attacks in 2026 and now make up 37.3% [F-023] of all blocked attacks.
+- Defend against LummaStealer malware as it emerged as the most prevalent malware family in 2026 with 117,831 [F-025] detections accounting for a 25.6% [F-025] share.
+
+Verified sections:
+  - Product performance
+  - Top malware
+  - Source countries
+  - Trends
+  - Recommendations
+
+[a]pprove, [r]eject with comment, a[b]ort: 
+Status: completed
+Report: runs\20261122T101150Z\report.md

@@ -1,0 +1,66 @@
+{
+  "section_id": "product_performance",
+  "passed": false,
+  "errors": [
+    {
+      "sentence": "The EDR product blocked credential_theft attacks 11,663 times in 2026, an increase of 80.4% from 6,464 in the previous year.",
+      "problem": "the number 11,663 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "The EDR product blocked credential_theft attacks 11,663 times in 2026, an increase of 80.4% from 6,464 in the previous year.",
+      "problem": "the number 80.4% has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "The EDR product blocked credential_theft attacks 11,663 times in 2026, an increase of 80.4% from 6,464 in the previous year.",
+      "problem": "the number 6,464 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "Ransomware attacks fell by 9.2%, dropping from 2,137 to 1,940.",
+      "problem": "the number 9.2% has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "Ransomware attacks fell by 9.2%, dropping from 2,137 to 1,940.",
+      "problem": "the number 2,137 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "Ransomware attacks fell by 9.2%, dropping from 2,137 to 1,940.",
+      "problem": "the number 1,940 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "The Firewall product blocked Malware download attacks at 223,501 times, an increase of 24.1% from 180,156.",
+      "problem": "the number 223,501 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "The Firewall product blocked Malware download attacks at 223,501 times, an increase of 24.1% from 180,156.",
+      "problem": "the number 24.1% has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "The Firewall product blocked Malware download attacks at 223,501 times, an increase of 24.1% from 180,156.",
+      "problem": "the number 180,156 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "Brute force attacks decreased by 29.3%, falling from 3,591,554 to 2,539,855.",
+      "problem": "the number 29.3% has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "Brute force attacks decreased by 29.3%, falling from 3,591,554 to 2,539,855.",
+      "problem": "the number 3,591,554 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "Brute force attacks decreased by 29.3%, falling from 3,591,554 to 2,539,855.",
+      "problem": "the number 2,539,855 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    }
+  ]
+}

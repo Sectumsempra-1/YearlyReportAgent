@@ -1,0 +1,38 @@
+{
+  "findings": [
+    {
+      "finding_id": "F-004",
+      "attack_techniques": [],
+      "sector": "Energy",
+      "severity": "unspecified",
+      "related_findings": [
+        "F-008",
+        "F-014",
+        "F-022"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "finding_id": "F-005",
+      "attack_techniques": [],
+      "sector": "multiple",
+      "severity": "unspecified",
+      "related_findings": [
+        "F-011",
+        "F-018",
+        "F-025"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "finding_id": "F-006",
+      "attack_techniques": [],
+      "sector": "multiple",
+      "severity": "unspecified",
+      "related_findings": [
+        "F-012"
+      ],
+      "confidence": 0.95
+    }
+  ]
+}

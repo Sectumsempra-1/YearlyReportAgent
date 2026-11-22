@@ -1,0 +1,55 @@
+{
+  "findings": [
+    {
+      "finding_id": "F-019",
+      "attack_techniques": [
+        {
+          "technique_id": "T1110",
+          "confidence": 0.85,
+          "rationale": "Finding explicitly mentions 'Brute force attacks', which directly corresponds to the Brute Force technique."
+        }
+      ],
+      "sector": "unspecified",
+      "severity": "low",
+      "related_findings": [
+        "F-013",
+        "F-024",
+        "F-025"
+      ],
+      "confidence": 0.85
+    },
+    {
+      "finding_id": "F-020",
+      "attack_techniques": [
+        {
+          "technique_id": "T1003",
+          "confidence": 0.6,
+          "rationale": "Finding mentions 'Credential theft', which maps to OS Credential Dumping (T1003) as a method of credential access."
+        }
+      ],
+      "sector": "multiple",
+      "severity": "high",
+      "related_findings": [
+        "F-001",
+        "F-019"
+      ],
+      "confidence": 0.75
+    },
+    {
+      "finding_id": "F-021",
+      "attack_techniques": [
+        {
+          "technique_id": "T1566",
+          "confidence": 0.9,
+          "rationale": "Finding explicitly states 'Phishing attacks', which corresponds to the Phishing technique."
+        }
+      ],
+      "sector": "multiple",
+      "severity": "high",
+      "related_findings": [
+        "F-001"
+      ],
+      "confidence": 0.95
+    }
+  ]
+}

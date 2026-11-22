@@ -1,0 +1,22 @@
+{
+  "findings": [
+    {
+      "finding_id": "F-025",
+      "attack_techniques": [
+        {
+          "technique_id": "T1078",
+          "confidence": 0.8,
+          "rationale": "LummaStealer is a credential stealer; its prevalence implies the use of 'Valid Accounts' (T1078) as it harvests and uses credentials."
+        }
+      ],
+      "sector": "multiple",
+      "severity": "unspecified",
+      "related_findings": [
+        "F-005",
+        "F-011",
+        "F-018"
+      ],
+      "confidence": 0.75
+    }
+  ]
+}

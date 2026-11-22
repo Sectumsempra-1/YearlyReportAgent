@@ -1,0 +1,11 @@
+{
+  "id": "product_performance",
+  "title": "Product performance",
+  "markdown": "### EDR Performance\n\nThe EDR product blocked credential_theft attacks 11,663 [F-001] times in 2026. This represented an increase of 80.4% [F-001] from 6,464 [F-001]. Ransomware is the only attack type to decline, with a decrease of 9.2% [F-002], dropping from 2,137 [F-002] to 1,940 [F-002].\n\n### Firewall Performance\n\nMalware download attacks increased by 24.1% [F-012], the largest year-over-year change among all attack types. The count was 223,501 [F-012] in 2026, up from 180,156 [F-012]. Brute force attacks decreased by 29.3% [F-013], falling from 3,591,554 [F-013] to 2,539,855 [F-013]. This product reports only blocked events, so a block rate cannot be calculated.",
+  "finding_ids_used": [
+    "F-001",
+    "F-002",
+    "F-012",
+    "F-013"
+  ]
+}

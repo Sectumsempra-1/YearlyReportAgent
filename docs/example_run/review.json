@@ -1,0 +1,16 @@
+[
+  {
+    "finding_id": "F-010",
+    "kind": "finding",
+    "confidence": 0.4,
+    "statement": "Chinese-origin attacks increased by 55.7% to become the top attacking country with 205,490 blocked incidents."
+  },
+  {
+    "finding_id": "F-012",
+    "kind": "technique",
+    "technique_id": "T1069",
+    "name": "Permission Groups Discovery",
+    "confidence": 0.5,
+    "rationale": "Malware download attacks often involve scanning for specific services or permissions to find vulnerable hosts (e.g., SMB enumeration)."
+  }
+]

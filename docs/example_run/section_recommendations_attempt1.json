@@ -1,0 +1,10 @@
+{
+  "id": "recommendations",
+  "title": "Recommendations",
+  "markdown": "- Monitor the Energy sector as it remained the most targeted industry with 1,890,700 [F-022] blocked attacks representing a 34.0% [F-022] share of total volume. These figures are summed across products so one attack can be seen by more than one product such as an email gateway or EDR which may overcount attacks.\n- Prioritize defenses against high severity incidents as they increased 16.4% [F-023] to account for 2,071,373 [F-023] blocked attacks in 2026 and now make up 37.3% [F-023] of all blocked attacks.\n- Defend against LummaStealer malware as it emerged as the most prevalent malware family in 2026 with 117,831 [F-025] detections accounting for a 25.6% [F-025] share. Note that these figures are summed across products and some vendor malware names have no common family mapping so classification may be incomplete.",
+  "finding_ids_used": [
+    "F-022",
+    "F-023",
+    "F-025"
+  ]
+}

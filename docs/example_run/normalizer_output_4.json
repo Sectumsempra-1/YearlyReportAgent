@@ -1,0 +1,66 @@
+{
+  "findings": [
+    {
+      "finding_id": "F-010",
+      "attack_techniques": [],
+      "sector": "unspecified",
+      "severity": "unspecified",
+      "related_findings": [],
+      "confidence": 0.4
+    },
+    {
+      "finding_id": "F-011",
+      "attack_techniques": [
+        {
+          "technique_id": "T1071",
+          "confidence": 0.8,
+          "rationale": "The statement mentions blocking 'LummaStealer' instances via an 'Email Gateway'. Stealer malware typically harvests credentials or personal data via forms on web pages (phishing sites), utilizing HTTP/HTTPS traffic which T1071 covers."
+        },
+        {
+          "technique_id": "T1566",
+          "confidence": 0.8,
+          "rationale": "Email Gateways block phishing campaigns often delivered by stealers (which frequently arrive via compromised documents or malicious links in emails). The volume of blocked instances implies a phishing delivery mechanism."
+        },
+        {
+          "technique_id": "T1059",
+          "confidence": 0.6,
+          "rationale": "Stealer malware operates by executing scripts to harvest data from browsers or local systems."
+        }
+      ],
+      "sector": "unspecified",
+      "severity": "medium",
+      "related_findings": [
+        "F-005",
+        "F-018",
+        "F-025"
+      ],
+      "confidence": 0.7
+    },
+    {
+      "finding_id": "F-012",
+      "attack_techniques": [
+        {
+          "technique_id": "T1069",
+          "confidence": 0.5,
+          "rationale": "Malware download attacks often involve scanning for specific services or permissions to find vulnerable hosts (e.g., SMB enumeration)."
+        },
+        {
+          "technique_id": "T1074",
+          "confidence": 0.7,
+          "rationale": "The statement explicitly refers to 'Malware download' attacks being blocked, indicating the transfer of tools/data."
+        },
+        {
+          "technique_id": "T1569",
+          "confidence": 0.6,
+          "rationale": "Downloaded malware often attempts privilege escalation immediately upon execution, though the finding only mentions the download event itself."
+        }
+      ],
+      "sector": "unspecified",
+      "severity": "medium",
+      "related_findings": [
+        "F-019"
+      ],
+      "confidence": 0.7
+    }
+  ]
+}

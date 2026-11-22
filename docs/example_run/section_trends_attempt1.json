@@ -1,0 +1,11 @@
+{
+  "id": "trends",
+  "title": "Trends",
+  "markdown": "### Monthly Activity Patterns\n\nEDR metrics peaked in 2026-03 [F-003] and were lowest in 2026-10 [F-003]. The email gateway blocked 185,566 attacks in 2026-03 [F-007], with an increase of 106,670 from the previous month and a change of 135.2% [F-007].\n\n### Changes in Attack Type Popularity\n\nBrute force attacks declined 29.3% year-over-year to 2,539,855 blocks [F-019]. Phishing attacks surged by 83.2% to 849,597 blocks [F-021], representing the largest increase among all attack types. These totals are summed across products, so one attack can be seen by more than one product (e.g., email gateway and EDR), which may overcount attacks.",
+  "finding_ids_used": [
+    "F-003",
+    "F-007",
+    "F-019",
+    "F-021"
+  ]
+}

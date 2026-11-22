@@ -1,0 +1,101 @@
+{
+  "thesis": "Credential theft incidents surged significantly while high severity attacks rose, marking a shift from traditional ransomware threats to more acute credential-focused risks targeting the energy sector.",
+  "signature_metric": {
+    "finding_id": "F-020",
+    "value_key": "pct_change"
+  },
+  "themes": [
+    {
+      "title": "Credential Theft Emerges as Primary Risk",
+      "summary": "Incidents of credential theft rose sharply compared to last year, indicating a critical shift in attacker tactics that requires immediate monitoring.",
+      "finding_ids": [
+        "F-001",
+        "F-020"
+      ]
+    },
+    {
+      "title": "New Malware Dominates the Threat Landscape",
+      "summary": "A new malware family became the leading threat detected, while other attack types showed varying levels of decline or growth.",
+      "finding_ids": [
+        "F-005",
+        "F-006",
+        "F-011",
+        "F-018",
+        "F-025"
+      ]
+    },
+    {
+      "title": "Energy Sector Faces Intensified Geographic Attacks",
+      "summary": "The energy sector absorbed the highest volume of attack traffic while new sources like Brazil emerged as major contributors to malicious traffic.",
+      "finding_ids": [
+        "F-004",
+        "F-008",
+        "F-014",
+        "F-022",
+        "F-009",
+        "F-016",
+        "F-024"
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "product_performance",
+      "title": "Product performance",
+      "goal": "Review how specific security products blocked various attack types and their year-over-year volume changes.",
+      "finding_ids": [
+        "F-001",
+        "F-002",
+        "F-012",
+        "F-013"
+      ]
+    },
+    {
+      "id": "top_malware",
+      "title": "Top malware",
+      "goal": "Identify the ranking of most detected malware families and note which new families entered the threat catalog.",
+      "finding_ids": [
+        "F-005",
+        "F-006",
+        "F-011",
+        "F-018",
+        "F-025"
+      ]
+    },
+    {
+      "id": "source_countries",
+      "title": "Source countries",
+      "goal": "Analyze the geographic origins of attack traffic and observe how country rankings shifted during the reporting period.",
+      "finding_ids": [
+        "F-009",
+        "F-010",
+        "F-016",
+        "F-017",
+        "F-024"
+      ]
+    },
+    {
+      "id": "trends",
+      "title": "Trends",
+      "goal": "Examine monthly patterns, changes in attack type popularity across products, and the industries most targeted by threats.",
+      "finding_ids": [
+        "F-003",
+        "F-007",
+        "F-019",
+        "F-021"
+      ]
+    },
+    {
+      "id": "recommendations",
+      "title": "Recommendations",
+      "goal": "Review specific security actions to take against rising high severity threats, new malware families, and targeted sectors.",
+      "finding_ids": [
+        "F-023",
+        "F-025",
+        "F-001",
+        "F-020",
+        "F-022"
+      ]
+    }
+  ]
+}

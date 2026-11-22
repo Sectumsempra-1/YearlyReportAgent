@@ -1,0 +1,707 @@
+{
+  "tool_calls": [
+    {
+      "tool": "list_products",
+      "args": {},
+      "result": {
+        "value": [
+          {
+            "product": "EDR",
+            "category": "Endpoint",
+            "owner": "Endpoint Security Team",
+            "description": "Endpoint detection and response",
+            "attack_types": [
+              "credential_theft",
+              "malware_execution",
+              "ransomware"
+            ],
+            "years_loaded": [
+              2025,
+              2026
+            ]
+          },
+          {
+            "product": "Email Gateway",
+            "category": "Email",
+            "owner": "Messaging Security Team",
+            "description": "Secure email gateway: phishing, malicious attachments, BEC",
+            "attack_types": [
+              "bec",
+              "malware_attachment",
+              "phishing"
+            ],
+            "years_loaded": [
+              2025,
+              2026
+            ]
+          },
+          {
+            "product": "Firewall",
+            "category": "Network",
+            "owner": "Network Security Team",
+            "description": "Next-generation firewall: intrusion prevention, malware and C2 blocking",
+            "attack_types": [
+              "brute_force",
+              "c2_traffic",
+              "intrusion_attempt",
+              "malware_download"
+            ],
+            "years_loaded": [
+              2025,
+              2026
+            ]
+          }
+        ],
+        "source": {
+          "function": "list_products",
+          "params": {}
+        },
+        "caveats": []
+      }
+    },
+    {
+      "tool": "product_summary",
+      "args": {
+        "year": 2026,
+        "product": "EDR"
+      },
+      "result": {
+        "value": {
+          "credential_theft": {
+            "blocked": 11663,
+            "detected_only": 1344,
+            "block_rate_pct": 89.7,
+            "yoy_blocked": {
+              "current": 11663,
+              "previous": 6464,
+              "change": 5199,
+              "pct_change": 80.4
+            },
+            "by_severity": {
+              "low": 0,
+              "medium": 0,
+              "high": 13007,
+              "critical": 0
+            }
+          },
+          "malware_execution": {
+            "blocked": 39148,
+            "detected_only": 4335,
+            "block_rate_pct": 90.0,
+            "yoy_blocked": {
+              "current": 39148,
+              "previous": 32620,
+              "change": 6528,
+              "pct_change": 20.0
+            },
+            "by_severity": {
+              "low": 0,
+              "medium": 0,
+              "high": 43483,
+              "critical": 0
+            }
+          },
+          "ransomware": {
+            "blocked": 1940,
+            "detected_only": 211,
+            "block_rate_pct": 90.2,
+            "yoy_blocked": {
+              "current": 1940,
+              "previous": 2137,
+              "change": -197,
+              "pct_change": -9.2
+            },
+            "by_severity": {
+              "low": 0,
+              "medium": 0,
+              "high": 0,
+              "critical": 2151
+            }
+          }
+        },
+        "source": {
+          "function": "product_summary",
+          "params": {
+            "year": 2026,
+            "product": "EDR"
+          }
+        },
+        "caveats": []
+      }
+    },
+    {
+      "tool": "attack_type_changes",
+      "args": {
+        "year": 2026,
+        "product": "EDR"
+      },
+      "result": {
+        "value": {
+          "rows": [
+            {
+              "rank": 1,
+              "attack_type": "credential_theft",
+              "current": 11663,
+              "previous": 6464,
+              "change": 5199,
+              "pct_change": 80.4
+            },
+            {
+              "rank": 2,
+              "attack_type": "malware_execution",
+              "current": 39148,
+              "previous": 32620,
+              "change": 6528,
+              "pct_change": 20.0
+            },
+            {
+              "rank": 3,
+              "attack_type": "ransomware",
+              "current": 1940,
+              "previous": 2137,
+              "change": -197,
+              "pct_change": -9.2
+            }
+          ]
+        },
+        "source": {
+          "function": "attack_type_changes",
+          "params": {
+            "year": 2026,
+            "product": "EDR"
+          }
+        },
+        "caveats": []
+      }
+    },
+    {
+      "tool": "top_malware",
+      "args": {
+        "year": 2026,
+        "product": "EDR",
+        "n": 15
+      },
+      "result": {
+        "value": {
+          "total": 45634,
+          "rows": [
+            {
+              "rank": 1,
+              "family": "LummaStealer",
+              "volume": 10544,
+              "share_pct": 23.1,
+              "previous_volume": 0,
+              "pct_change": null,
+              "previous_rank": null,
+              "new_this_year": true
+            },
+            {
+              "rank": 2,
+              "family": "AgentTesla",
+              "volume": 7649,
+              "share_pct": 16.8,
+              "previous_volume": 9015,
+              "pct_change": -15.2,
+              "previous_rank": 1,
+              "new_this_year": false
+            },
+            {
+              "rank": 3,
+              "family": "FormBook",
+              "volume": 5942,
+              "share_pct": 13.0,
+              "previous_volume": 7302,
+              "pct_change": -18.6,
+              "previous_rank": 2,
+              "new_this_year": false
+            },
+            {
+              "rank": 4,
+              "family": "Remcos",
+              "volume": 5654,
+              "share_pct": 12.4,
+              "previous_volume": 5415,
+              "pct_change": 4.4,
+              "previous_rank": 5,
+              "new_this_year": false
+            },
+            {
+              "rank": 5,
+              "family": "RedLine",
+              "volume": 4830,
+              "share_pct": 10.6,
+              "previous_volume": 5458,
+              "pct_change": -11.5,
+              "previous_rank": 3,
+              "new_this_year": false
+            },
+            {
+              "rank": 6,
+              "family": "Emotet",
+              "volume": 3230,
+              "share_pct": 7.1,
+              "previous_volume": 5452,
+              "pct_change": -40.8,
+              "previous_rank": 4,
+              "new_this_year": false
+            },
+            {
+              "rank": 7,
+              "family": "UNMAPPED:Win32/Kryptik.gen",
+              "volume": 3204,
+              "share_pct": 7.0,
+              "previous_volume": 0,
+              "pct_change": null,
+              "previous_rank": null,
+              "new_this_year": true
+            },
+            {
+              "rank": 8,
+              "family": "Qakbot",
+              "volume": 2430,
+              "share_pct": 5.3,
+              "previous_volume": 3612,
+              "pct_change": -32.7,
+              "previous_rank": 6,
+              "new_this_year": false
+            },
+            {
+              "rank": 9,
+              "family": "Akira",
+              "volume": 979,
+              "share_pct": 2.1,
+              "previous_volume": 0,
+              "pct_change": null,
+              "previous_rank": null,
+              "new_this_year": true
+            },
+            {
+              "rank": 10,
+              "family": "LockBit",
+              "volume": 744,
+              "share_pct": 1.6,
+              "previous_volume": 1447,
+              "pct_change": -48.6,
+              "previous_rank": 7,
+              "new_this_year": false
+            },
+            {
+              "rank": 11,
+              "family": "BlackCat",
+              "volume": 428,
+              "share_pct": 0.9,
+              "previous_volume": 964,
+              "pct_change": -55.6,
+              "previous_rank": 8,
+              "new_this_year": false
+            }
+          ]
+        },
+        "source": {
+          "function": "top_malware",
+          "params": {
+            "year": 2026,
+            "n": 15,
+            "product": "EDR"
+          }
+        },
+        "caveats": [
+          "Some vendor malware names have no common family mapping; see unmapped_malware()."
+        ]
+      }
+    },
+    {
+      "tool": "top_countries",
+      "args": {
+        "year": 2026,
+        "product": "EDR",
+        "n": 15
+      },
+      "result": {
+        "value": {
+          "total": 58641,
+          "rows": [
+            {
+              "rank": 1,
+              "country": "CN",
+              "volume": 11772,
+              "share_pct": 20.1,
+              "previous_volume": 10174,
+              "pct_change": 15.7,
+              "previous_rank": 1,
+              "new_this_year": false
+            },
+            {
+              "rank": 2,
+              "country": "BR",
+              "volume": 8901,
+              "share_pct": 15.2,
+              "previous_volume": 1817,
+              "pct_change": 389.9,
+              "previous_rank": 10,
+              "new_this_year": false
+            },
+            {
+              "rank": 3,
+              "country": "RU",
+              "volume": 8753,
+              "share_pct": 14.9,
+              "previous_volume": 8273,
+              "pct_change": 5.8,
+              "previous_rank": 2,
+              "new_this_year": false
+            },
+            {
+              "rank": 4,
+              "country": "US",
+              "volume": 7022,
+              "share_pct": 12.0,
+              "previous_volume": 6358,
+              "pct_change": 10.4,
+              "previous_rank": 3,
+              "new_this_year": false
+            },
+            {
+              "rank": 5,
+              "country": "NL",
+              "volume": 4683,
+              "share_pct": 8.0,
+              "previous_volume": 4131,
+              "pct_change": 13.4,
+              "previous_rank": 4,
+              "new_this_year": false
+            },
+            {
+              "rank": 6,
+              "country": "IR",
+              "volume": 4091,
+              "share_pct": 7.0,
+              "previous_volume": 3179,
+              "pct_change": 28.7,
+              "previous_rank": 6,
+              "new_this_year": false
+            },
+            {
+              "rank": 7,
+              "country": "DE",
+              "volume": 4062,
+              "share_pct": 6.9,
+              "previous_volume": 3671,
+              "pct_change": 10.7,
+              "previous_rank": 5,
+              "new_this_year": false
+            },
+            {
+              "rank": 8,
+              "country": "VN",
+              "volume": 3479,
+              "share_pct": 5.9,
+              "previous_volume": 2748,
+              "pct_change": 26.6,
+              "previous_rank": 8,
+              "new_this_year": false
+            },
+            {
+              "rank": 9,
+              "country": "TR",
+              "volume": 2947,
+              "share_pct": 5.0,
+              "previous_volume": 2752,
+              "pct_change": 7.1,
+              "previous_rank": 7,
+              "new_this_year": false
+            },
+            {
+              "rank": 10,
+              "country": "IN",
+              "volume": 2931,
+              "share_pct": 5.0,
+              "previous_volume": 2748,
+              "pct_change": 6.7,
+              "previous_rank": 8,
+              "new_this_year": false
+            }
+          ]
+        },
+        "source": {
+          "function": "top_countries",
+          "params": {
+            "year": 2026,
+            "n": 15,
+            "product": "EDR"
+          }
+        },
+        "caveats": [
+          "Based on IP geolocation of the attacking infrastructure, not attribution of the attacker. VPNs, proxies and compromised hosts are common."
+        ]
+      }
+    },
+    {
+      "tool": "sector_breakdown",
+      "args": {
+        "year": 2026,
+        "product": "EDR"
+      },
+      "result": {
+        "value": {
+          "total": 58641,
+          "rows": [
+            {
+              "rank": 1,
+              "sector": "Energy",
+              "volume": 20350,
+              "share_pct": 34.7,
+              "previous_volume": 14543,
+              "pct_change": 39.9,
+              "previous_rank": 1,
+              "new_this_year": false
+            },
+            {
+              "rank": 2,
+              "sector": "Finance",
+              "volume": 11247,
+              "share_pct": 19.2,
+              "previous_volume": 8173,
+              "pct_change": 37.6,
+              "previous_rank": 2,
+              "new_this_year": false
+            },
+            {
+              "rank": 3,
+              "sector": "Government",
+              "volume": 9834,
+              "share_pct": 16.8,
+              "previous_volume": 8092,
+              "pct_change": 21.5,
+              "previous_rank": 3,
+              "new_this_year": false
+            },
+            {
+              "rank": 4,
+              "sector": "Healthcare",
+              "volume": 6193,
+              "share_pct": 10.6,
+              "previous_volume": 4619,
+              "pct_change": 34.1,
+              "previous_rank": 6,
+              "new_this_year": false
+            },
+            {
+              "rank": 5,
+              "sector": "Manufacturing",
+              "volume": 5654,
+              "share_pct": 9.6,
+              "previous_volume": 5357,
+              "pct_change": 5.5,
+              "previous_rank": 4,
+              "new_this_year": false
+            },
+            {
+              "rank": 6,
+              "sector": "Telecom",
+              "volume": 5363,
+              "share_pct": 9.1,
+              "previous_volume": 5067,
+              "pct_change": 5.8,
+              "previous_rank": 5,
+              "new_this_year": false
+            }
+          ]
+        },
+        "source": {
+          "function": "sector_breakdown",
+          "params": {
+            "year": 2026,
+            "product": "EDR"
+          }
+        },
+        "caveats": []
+      }
+    },
+    {
+      "tool": "severity_breakdown",
+      "args": {
+        "year": 2026,
+        "product": "EDR"
+      },
+      "result": {
+        "value": {
+          "total": 58641,
+          "rows": [
+            {
+              "rank": 1,
+              "severity": "high",
+              "volume": 56490,
+              "share_pct": 96.3,
+              "previous_volume": 43440,
+              "pct_change": 30.0,
+              "previous_rank": 1,
+              "new_this_year": false
+            },
+            {
+              "rank": 2,
+              "severity": "critical",
+              "volume": 2151,
+              "share_pct": 3.7,
+              "previous_volume": 2411,
+              "pct_change": -10.8,
+              "previous_rank": 2,
+              "new_this_year": false
+            }
+          ]
+        },
+        "source": {
+          "function": "severity_breakdown",
+          "params": {
+            "year": 2026,
+            "product": "EDR"
+          }
+        },
+        "caveats": []
+      }
+    },
+    {
+      "tool": "unmapped_malware",
+      "args": {
+        "year": 2026,
+        "product": "EDR"
+      },
+      "result": {
+        "value": {
+          "rows": [
+            {
+              "product": "EDR",
+              "vendor_name": "Win32/Kryptik.gen",
+              "detections": 3204
+            }
+          ]
+        },
+        "source": {
+          "function": "unmapped_malware",
+          "params": {
+            "year": 2026,
+            "product": "EDR"
+          }
+        },
+        "caveats": []
+      }
+    },
+    {
+      "tool": "monthly_series",
+      "args": {
+        "year": 2026,
+        "product": "EDR"
+      },
+      "result": {
+        "value": {
+          "months": [
+            {
+              "month": "2026-01",
+              "blocked": 4379,
+              "mom_change": null,
+              "mom_pct_change": null,
+              "previous_year_blocked": 3498
+            },
+            {
+              "month": "2026-02",
+              "blocked": 4659,
+              "mom_change": 280,
+              "mom_pct_change": 6.4,
+              "previous_year_blocked": 3611
+            },
+            {
+              "month": "2026-03",
+              "blocked": 4941,
+              "mom_change": 282,
+              "mom_pct_change": 6.1,
+              "previous_year_blocked": 3861
+            },
+            {
+              "month": "2026-04",
+              "blocked": 4928,
+              "mom_change": -13,
+              "mom_pct_change": -0.3,
+              "previous_year_blocked": 3815
+            },
+            {
+              "month": "2026-05",
+              "blocked": 4870,
+              "mom_change": -58,
+              "mom_pct_change": -1.2,
+              "previous_year_blocked": 3854
+            },
+            {
+              "month": "2026-06",
+              "blocked": 4620,
+              "mom_change": -250,
+              "mom_pct_change": -5.1,
+              "previous_year_blocked": 3590
+            },
+            {
+              "month": "2026-07",
+              "blocked": 4416,
+              "mom_change": -204,
+              "mom_pct_change": -4.4,
+              "previous_year_blocked": 3419
+            },
+            {
+              "month": "2026-08",
+              "blocked": 4165,
+              "mom_change": -251,
+              "mom_pct_change": -5.7,
+              "previous_year_blocked": 3215
+            },
+            {
+              "month": "2026-09",
+              "blocked": 3899,
+              "mom_change": -266,
+              "mom_pct_change": -6.4,
+              "previous_year_blocked": 3078
+            },
+            {
+              "month": "2026-10",
+              "blocked": 3867,
+              "mom_change": -32,
+              "mom_pct_change": -0.8,
+              "previous_year_blocked": 2979
+            },
+            {
+              "month": "2026-11",
+              "blocked": 3898,
+              "mom_change": 31,
+              "mom_pct_change": 0.8,
+              "previous_year_blocked": 3065
+            },
+            {
+              "month": "2026-12",
+              "blocked": 4109,
+              "mom_change": 211,
+              "mom_pct_change": 5.4,
+              "previous_year_blocked": 3236
+            }
+          ],
+          "total": 52751,
+          "peak_month": "2026-03",
+          "low_month": "2026-10",
+          "median": 4397.5,
+          "spike_factor": 1.5,
+          "spike_months": []
+        },
+        "source": {
+          "function": "monthly_series",
+          "params": {
+            "year": 2026,
+            "product": "EDR",
+            "attack_type": null,
+            "spike_factor": 1.5
+          }
+        },
+        "caveats": []
+      }
+    }
+  ],
+  "replies": [
+    "{\n  \"findings\": [\n    {\n      \"statement\": \"credential_theft attacks increased by 80.4% year-over-year to 11663 blocked in 2026, the largest increase among all attack types.\",\n      \"values\": {\"pct_change\": 80.4, \"current\": 11663, \"previous\": 6464},\n      \"source\": {\n        \"function\": \"attack_type_changes\",\n        \"params\": {\"year\": 2026, \"product\": \"EDR\"},\n        \"key_paths\": {\"pct_change\": \"value.rows.0.pct_change\", \"current\": \"value.rows.0.current\", \"previous\": \"value.rows.0.previous\"}\n      },\n      \"caveats\": [],\n      \"data_gap\": false\n    },\n    {\n      \"statement\": \"ransomware is the only attack type to decline, with a 9.2% decrease year-over-year.\",\n      \"values\": {\"pct_change\": -9.2, \"current\": 1940, \"previous\": 2137},\n      \"source\": {\n        \"function\": \"attack_type_changes\",\n        \"params\": {\"year\": 2026, \"product\": \"EDR\"},\n        \"key_paths\": {\"pct_change\": \"value.rows.2.pct_change\", \"current\": \"value.rows.2.current\", \"previous\": \"value.rows.2.previous\"}\n      },\n      \"caveats\": [],\n      \"data_gap\": false\n    },\n    {\n      \"statement\": \"LummaStealer is a new malware family in 2026, now rank 1 with 10544 detections and 23.1% share of all malware.\",\n      \"values\": {\"family\": \"LummaStealer\", \"rank\": 1, \"volume\": 10544, \"share_pct\": 23.1},\n      \"source\": {\n        \"function\": \"top_malware\",\n        \"params\": {\"year\": 2026, \"product\": \"EDR\", \"n\": 15},\n        \"key_paths\": {\"family\": \"value.rows.0.family\", \"rank\": \"value.rows.0.rank\", \"volume\": \"value.rows.0.volume\", \"share_pct\": \"value.rows.0.share_pct\"}\n      },\n      \"caveats\": [\"Some vendor malware names have no common family mapping; see unmapped_malware().\"],\n      \"data_gap\": false\n    },\n    {\n      \"statement\": \"Brazil (BR) jumped to rank 2 in attacks, with 8901 detections and a dramatic +389.9% increase year-over-year.\",\n      \"values\": {\"country\": \"BR\", \"volume\": 8901, \"pct_change\": 389.9, \"previous_rank\": 10},\n      \"source\": {\n        \"function\": \"top_countries\",\n        \"params\": {\"year\": 2026, \"product\": \"EDR\", \"n\": 15},\n        \"key_paths\": {\"country\": \"value.rows.1.country\", \"volume\": \"value.rows.1.volume\", \"pct_change\": \"value.rows.1.pct_change\", \"previous_rank\": \"value.rows.1.previous_rank\"}\n      },\n      \"caveats\": [\"Based on IP geolocation of the attacking infrastructure, not attribution of the attacker. VPNs, proxies and compromised hosts are common.\"],\n      \"data_gap\": false\n    },\n    {\n      \"statement\": \"The Energy sector became the largest target with 20350 attacks, up 39.9% year-over-year.\",\n      \"values\": {\"sector\": \"Energy\", \"volume\": 20350, \"pct_change\": 39.9},\n      \"source\": {\n        \"function\": \"sector_breakdown\",\n        \"params\": {\"year\": 2026, \"product\": \"EDR\"},\n        \"key_paths\": {\"sector\": \"value.rows.0.sector\", \"volume\": \"value.rows.0.volume\", \"pct_change\": \"value.rows.0.pct_change\"}\n      },\n      \"caveats\": [],\n      \"data_gap\": false\n    },\n    {\n      \"statement\": \"March 2026 was the peak month with 4941 blocked attacks, while October 2026 was the lowest at 3867.\",\n      \"values\": {\"peak_month\": \"2026-03\", \"low_month\": \"2026-10\", \"peak_blocked\": 4941, \"low_blocked\": 3867},\n      \"source\": {\n        \"function\": \"monthly_series\",\n        \"params\": {\"year\": 2026, \"product\": \"EDR\"},\n        \"key_paths\": {\"peak_month\": \"value.peak_month\", \"low_month\": \"value.low_month\"}\n      },\n      \"caveats\": [],\n      \"data_gap\": false\n    },\n    {\n      \"statement\": \"Win32/Kryptik.gen is a new unmapped malware family with 3204 detections, showing no previous year data.\",\n      \"values\": {\"vendor_name\": \"Win32/Kryptik.gen\", \"detections\": 3204},\n      \"source\": {\n        \"function\": \"unmapped_malware\",\n        \"params\": {\"year\": 2026, \"product\": \"EDR\"},\n        \"key_paths\": {\"vendor_name\": \"value.rows.0.vendor_name\", \"detections\": \"value.rows.0.detections\"}\n      },\n      \"caveats\": [],\n      \"data_gap\": false\n    }\n  ]\n}",
+    "{\n  \"findings\": [\n    {\n      \"statement\": \"credential_theft attacks increased by 80.4% year-over-year to 11663 blocked in 2026, the largest increase among all attack types.\",\n      \"values\": {\"pct_change\": 80.4, \"current\": 11663, \"previous\": 6464},\n      \"source\": {\n        \"function\": \"attack_type_changes\",\n        \"params\": {\"year\": 2026, \"product\": \"EDR\"},\n        \"key_paths\": {\"pct_change\": \"value.rows.0.pct_change\", \"current\": \"value.rows.0.current\", \"previous\": \"value.rows.0.previous\"}\n      },\n      \"caveats\": [],\n      \"data_gap\": false\n    },\n    {\n      \"statement\": \"ransomware is the only attack type to decline, with a 9.2% decrease year-over-year.\",\n      \"values\": {\"pct_change\": -9.2, \"current\": 1940, \"previous\": 2137},\n      \"source\": {\n        \"function\": \"attack_type_changes\",\n        \"params\": {\"year\": 2026, \"product\": \"EDR\"},\n        \"key_paths\": {\"pct_change\": \"value.rows.2.pct_change\", \"current\": \"value.rows.2.current\", \"previous\": \"value.rows.2.previous\"}\n      },\n      \"caveats\": [],\n      \"data_gap\": false\n    },\n    {\n      \"statement\": \"LummaStealer is a new malware family in 2026, now rank 1 with 10544 detections and 23.1% share of all malware.\",\n      \"values\": {\"family\": \"LummaStealer\", \"rank\": 1, \"volume\": 10544, \"share_pct\": 23.1},\n      \"source\": {\n        \"function\": \"top_malware\",\n        \"params\": {\"year\": 2026, \"product\": \"EDR\", \"n\": 15},\n        \"key_paths\": {\"family\": \"value.rows.0.family\", \"rank\": \"value.rows.0.rank\", \"volume\": \"value.rows.0.volume\", \"share_pct\": \"value.rows.0.share_pct\"}\n      },\n      \"caveats\": [\"Some vendor malware names have no common family mapping; see unmapped_malware().\"],\n      \"data_gap\": false\n    },\n    {\n      \"statement\": \"Brazil (BR) jumped to rank 2 in attacks, with 8901 detections and a dramatic +389.9% increase year-over-year.\",\n      \"values\": {\"country\": \"BR\", \"volume\": 8901, \"pct_change\": 389.9, \"previous_rank\": 10},\n      \"source\": {\n        \"function\": \"top_countries\",\n        \"params\": {\"year\": 2026, \"product\": \"EDR\", \"n\": 15},\n        \"key_paths\": {\"country\": \"value.rows.1.country\", \"volume\": \"value.rows.1.volume\", \"pct_change\": \"value.rows.1.pct_change\", \"previous_rank\": \"value.rows.1.previous_rank\"}\n      },\n      \"caveats\": [\"Based on IP geolocation of the attacking infrastructure, not attribution of the attacker. VPNs, proxies and compromised hosts are common.\"],\n      \"data_gap\": false\n    },\n    {\n      \"statement\": \"The Energy sector became the largest target with 20350 attacks, up 39.9% year-over-year.\",\n      \"values\": {\"sector\": \"Energy\", \"volume\": 20350, \"pct_change\": 39.9},\n      \"source\": {\n        \"function\": \"sector_breakdown\",\n        \"params\": {\"year\": 2026, \"product\": \"EDR\"},\n        \"key_paths\": {\"sector\": \"value.rows.0.sector\", \"volume\": \"value.rows.0.volume\", \"pct_change\": \"value.rows.0.pct_change\"}\n      },\n      \"caveats\": [],\n      \"data_gap\": false\n    },\n    {\n      \"statement\": \"March was the peak month and October was the lowest month for 2026.\",\n      \"values\": {\"peak_month\": \"2026-03\", \"low_month\": \"2026-10\"},\n      \"source\": {\n        \"function\": \"monthly_series\",\n        \"params\": {\"year\": 2026, \"product\": \"EDR\"},\n        \"key_paths\": {\"peak_month\": \"value.peak_month\", \"low_month\": \"value.low_month\"}\n      },\n      \"caveats\": [],\n      \"data_gap\": false\n    },\n    {\n      \"statement\": \"Win32/Kryptik.gen is a new unmapped malware family with 3204 detections, showing no previous year data.\",\n      \"values\": {\"vendor_name\": \"Win32/Kryptik.gen\", \"detections\": 3204},\n      \"source\": {\n        \"function\": \"unmapped_malware\",\n        \"params\": {\"year\": 2026, \"product\": \"EDR\"},\n        \"key_paths\": {\"vendor_name\": \"value.rows.0.vendor_name\", \"detections\": \"value.rows.0.detections\"}\n      },\n      \"caveats\": [],\n      \"data_gap\": false\n    }\n  ]\n}"
+  ]
+}

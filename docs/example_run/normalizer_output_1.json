@@ -1,0 +1,48 @@
+{
+  "findings": [
+    {
+      "finding_id": "F-001",
+      "attack_techniques": [
+        {
+          "technique_id": "T1110",
+          "confidence": 0.6,
+          "rationale": "Statement mentions 'credential_theft' which corresponds to Brute Force or similar credential access techniques."
+        }
+      ],
+      "sector": "unspecified",
+      "severity": "medium",
+      "related_findings": [
+        "F-020"
+      ],
+      "confidence": 0.85
+    },
+    {
+      "finding_id": "F-002",
+      "attack_techniques": [
+        {
+          "technique_id": "T1486",
+          "confidence": 0.7,
+          "rationale": "Statement explicitly mentions 'ransomware', which maps to Data Encrypted for Impact."
+        }
+      ],
+      "sector": "unspecified",
+      "severity": "critical",
+      "related_findings": [
+        "F-021",
+        "F-023"
+      ],
+      "confidence": 0.82
+    },
+    {
+      "finding_id": "F-003",
+      "attack_techniques": [],
+      "sector": "unspecified",
+      "severity": "unspecified",
+      "related_findings": [
+        "F-007",
+        "F-008"
+      ],
+      "confidence": 0.95
+    }
+  ]
+}

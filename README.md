@@ -273,6 +273,12 @@ This section is for whoever takes over the project.
   every change.
 - No wrong number has reached a report: every number goes through
   `verify.py`.
+- **A complete example run is in [`docs/example_run/`](docs/example_run/)**
+  (`qwen3.5:9b`, 75%): the report (`report.md`), every agent's output, every
+  draft and its verification result, and the score. Look at it first to see
+  what a run produces without waiting 2 hours. It is a copy: `runs/` stays out
+  of git, so that runs on real data can never be pushed by accident (rule
+  10). `checkpoints.db` was left out (it only serves to resume a paused run).
 - Model comparison on 2026-11-22 (same data, same scoring, judge
   `qwen3.5:9b`, 8 GB GPU):
 

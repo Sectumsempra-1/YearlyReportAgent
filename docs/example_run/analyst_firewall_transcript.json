@@ -1,0 +1,693 @@
+{
+  "tool_calls": [
+    {
+      "tool": "list_products",
+      "args": {},
+      "result": {
+        "value": [
+          {
+            "product": "EDR",
+            "category": "Endpoint",
+            "owner": "Endpoint Security Team",
+            "description": "Endpoint detection and response",
+            "attack_types": [
+              "credential_theft",
+              "malware_execution",
+              "ransomware"
+            ],
+            "years_loaded": [
+              2025,
+              2026
+            ]
+          },
+          {
+            "product": "Email Gateway",
+            "category": "Email",
+            "owner": "Messaging Security Team",
+            "description": "Secure email gateway: phishing, malicious attachments, BEC",
+            "attack_types": [
+              "bec",
+              "malware_attachment",
+              "phishing"
+            ],
+            "years_loaded": [
+              2025,
+              2026
+            ]
+          },
+          {
+            "product": "Firewall",
+            "category": "Network",
+            "owner": "Network Security Team",
+            "description": "Next-generation firewall: intrusion prevention, malware and C2 blocking",
+            "attack_types": [
+              "brute_force",
+              "c2_traffic",
+              "intrusion_attempt",
+              "malware_download"
+            ],
+            "years_loaded": [
+              2025,
+              2026
+            ]
+          }
+        ],
+        "source": {
+          "function": "list_products",
+          "params": {}
+        },
+        "caveats": []
+      }
+    },
+    {
+      "tool": "product_summary",
+      "args": {
+        "year": 2026,
+        "product": "Firewall"
+      },
+      "result": {
+        "value": {
+          "brute_force": {
+            "blocked": 2539855,
+            "detected_only": 0,
+            "block_rate_pct": null,
+            "yoy_blocked": {
+              "current": 2539855,
+              "previous": 3591554,
+              "change": -1051699,
+              "pct_change": -29.3
+            },
+            "by_severity": {
+              "low": 0,
+              "medium": 2539855,
+              "high": 0,
+              "critical": 0
+            }
+          },
+          "c2_traffic": {
+            "blocked": 65913,
+            "detected_only": 0,
+            "block_rate_pct": null,
+            "yoy_blocked": {
+              "current": 65913,
+              "previous": 59990,
+              "change": 5923,
+              "pct_change": 9.9
+            },
+            "by_severity": {
+              "low": 0,
+              "medium": 0,
+              "high": 0,
+              "critical": 65913
+            }
+          },
+          "intrusion_attempt": {
+            "blocked": 1641250,
+            "detected_only": 0,
+            "block_rate_pct": null,
+            "yoy_blocked": {
+              "current": 1641250,
+              "previous": 1441408,
+              "change": 199842,
+              "pct_change": 13.9
+            },
+            "by_severity": {
+              "low": 0,
+              "medium": 0,
+              "high": 1641250,
+              "critical": 0
+            }
+          },
+          "malware_download": {
+            "blocked": 223501,
+            "detected_only": 0,
+            "block_rate_pct": null,
+            "yoy_blocked": {
+              "current": 223501,
+              "previous": 180156,
+              "change": 43345,
+              "pct_change": 24.1
+            },
+            "by_severity": {
+              "low": 0,
+              "medium": 0,
+              "high": 223501,
+              "critical": 0
+            }
+          }
+        },
+        "source": {
+          "function": "product_summary",
+          "params": {
+            "year": 2026,
+            "product": "Firewall"
+          }
+        },
+        "caveats": [
+          "This product reports only blocked events, so a block rate cannot be calculated."
+        ]
+      }
+    },
+    {
+      "tool": "attack_type_changes",
+      "args": {
+        "year": 2026,
+        "product": "Firewall"
+      },
+      "result": {
+        "value": {
+          "rows": [
+            {
+              "rank": 1,
+              "attack_type": "malware_download",
+              "current": 223501,
+              "previous": 180156,
+              "change": 43345,
+              "pct_change": 24.1
+            },
+            {
+              "rank": 2,
+              "attack_type": "intrusion_attempt",
+              "current": 1641250,
+              "previous": 1441408,
+              "change": 199842,
+              "pct_change": 13.9
+            },
+            {
+              "rank": 3,
+              "attack_type": "c2_traffic",
+              "current": 65913,
+              "previous": 59990,
+              "change": 5923,
+              "pct_change": 9.9
+            },
+            {
+              "rank": 4,
+              "attack_type": "brute_force",
+              "current": 2539855,
+              "previous": 3591554,
+              "change": -1051699,
+              "pct_change": -29.3
+            }
+          ]
+        },
+        "source": {
+          "function": "attack_type_changes",
+          "params": {
+            "year": 2026,
+            "product": "Firewall"
+          }
+        },
+        "caveats": []
+      }
+    },
+    {
+      "tool": "top_malware",
+      "args": {
+        "year": 2026,
+        "product": "Firewall"
+      },
+      "result": {
+        "value": {
+          "total": 289414,
+          "rows": [
+            {
+              "rank": 1,
+              "family": "LummaStealer",
+              "volume": 74700,
+              "share_pct": 25.8,
+              "previous_volume": 0,
+              "pct_change": null,
+              "previous_rank": null,
+              "new_this_year": true
+            },
+            {
+              "rank": 2,
+              "family": "AgentTesla",
+              "volume": 55191,
+              "share_pct": 19.1,
+              "previous_volume": 60350,
+              "pct_change": -8.5,
+              "previous_rank": 1,
+              "new_this_year": false
+            },
+            {
+              "rank": 3,
+              "family": "FormBook",
+              "volume": 43594,
+              "share_pct": 15.1,
+              "previous_volume": 48135,
+              "pct_change": -9.4,
+              "previous_rank": 2,
+              "new_this_year": false
+            },
+            {
+              "rank": 4,
+              "family": "Remcos",
+              "volume": 40148,
+              "share_pct": 13.9,
+              "previous_volume": 35659,
+              "pct_change": 12.6,
+              "previous_rank": 5,
+              "new_this_year": false
+            },
+            {
+              "rank": 5,
+              "family": "RedLine",
+              "volume": 35060,
+              "share_pct": 12.1,
+              "previous_volume": 35854,
+              "pct_change": -2.2,
+              "previous_rank": 4,
+              "new_this_year": false
+            },
+            {
+              "rank": 6,
+              "family": "Emotet",
+              "volume": 23198,
+              "share_pct": 8.0,
+              "previous_volume": 35919,
+              "pct_change": -35.4,
+              "previous_rank": 3,
+              "new_this_year": false
+            },
+            {
+              "rank": 7,
+              "family": "Qakbot",
+              "volume": 17523,
+              "share_pct": 6.1,
+              "previous_volume": 24229,
+              "pct_change": -27.7,
+              "previous_rank": 6,
+              "new_this_year": false
+            }
+          ]
+        },
+        "source": {
+          "function": "top_malware",
+          "params": {
+            "year": 2026,
+            "n": 10,
+            "product": "Firewall"
+          }
+        },
+        "caveats": []
+      }
+    },
+    {
+      "tool": "unmapped_malware",
+      "args": {
+        "year": 2026,
+        "product": "Firewall"
+      },
+      "result": {
+        "value": {
+          "rows": []
+        },
+        "source": {
+          "function": "unmapped_malware",
+          "params": {
+            "year": 2026,
+            "product": "Firewall"
+          }
+        },
+        "caveats": []
+      }
+    },
+    {
+      "tool": "top_countries",
+      "args": {
+        "year": 2026,
+        "product": "Firewall"
+      },
+      "result": {
+        "value": {
+          "total": 4470519,
+          "rows": [
+            {
+              "rank": 1,
+              "country": "CN",
+              "volume": 895100,
+              "share_pct": 20.0,
+              "previous_volume": 1154823,
+              "pct_change": -22.5,
+              "previous_rank": 1,
+              "new_this_year": false
+            },
+            {
+              "rank": 2,
+              "country": "BR",
+              "volume": 668293,
+              "share_pct": 14.9,
+              "previous_volume": 214440,
+              "pct_change": 211.6,
+              "previous_rank": 10,
+              "new_this_year": false
+            },
+            {
+              "rank": 3,
+              "country": "RU",
+              "volume": 667942,
+              "share_pct": 14.9,
+              "previous_volume": 949267,
+              "pct_change": -29.6,
+              "previous_rank": 2,
+              "new_this_year": false
+            },
+            {
+              "rank": 4,
+              "country": "US",
+              "volume": 534415,
+              "share_pct": 12.0,
+              "previous_volume": 738051,
+              "pct_change": -27.6,
+              "previous_rank": 3,
+              "new_this_year": false
+            },
+            {
+              "rank": 5,
+              "country": "NL",
+              "volume": 362213,
+              "share_pct": 8.1,
+              "previous_volume": 475305,
+              "pct_change": -23.8,
+              "previous_rank": 4,
+              "new_this_year": false
+            },
+            {
+              "rank": 6,
+              "country": "IR",
+              "volume": 314927,
+              "share_pct": 7.0,
+              "previous_volume": 368741,
+              "pct_change": -14.6,
+              "previous_rank": 6,
+              "new_this_year": false
+            },
+            {
+              "rank": 7,
+              "country": "DE",
+              "volume": 313625,
+              "share_pct": 7.0,
+              "previous_volume": 420288,
+              "pct_change": -25.4,
+              "previous_rank": 5,
+              "new_this_year": false
+            },
+            {
+              "rank": 8,
+              "country": "VN",
+              "volume": 267573,
+              "share_pct": 6.0,
+              "previous_volume": 318253,
+              "pct_change": -15.9,
+              "previous_rank": 8,
+              "new_this_year": false
+            },
+            {
+              "rank": 9,
+              "country": "IN",
+              "volume": 223703,
+              "share_pct": 5.0,
+              "previous_volume": 315044,
+              "pct_change": -29.0,
+              "previous_rank": 9,
+              "new_this_year": false
+            },
+            {
+              "rank": 10,
+              "country": "TR",
+              "volume": 222728,
+              "share_pct": 5.0,
+              "previous_volume": 318896,
+              "pct_change": -30.2,
+              "previous_rank": 7,
+              "new_this_year": false
+            }
+          ]
+        },
+        "source": {
+          "function": "top_countries",
+          "params": {
+            "year": 2026,
+            "n": 10,
+            "product": "Firewall"
+          }
+        },
+        "caveats": [
+          "Based on IP geolocation of the attacking infrastructure, not attribution of the attacker. VPNs, proxies and compromised hosts are common."
+        ]
+      }
+    },
+    {
+      "tool": "monthly_series",
+      "args": {
+        "year": 2026,
+        "product": "Firewall"
+      },
+      "result": {
+        "value": {
+          "months": [
+            {
+              "month": "2026-01",
+              "blocked": 373249,
+              "mom_change": null,
+              "mom_pct_change": null,
+              "previous_year_blocked": 442300
+            },
+            {
+              "month": "2026-02",
+              "blocked": 394507,
+              "mom_change": 21258,
+              "mom_pct_change": 5.7,
+              "previous_year_blocked": 468018
+            },
+            {
+              "month": "2026-03",
+              "blocked": 407487,
+              "mom_change": 12980,
+              "mom_pct_change": 3.3,
+              "previous_year_blocked": 498341
+            },
+            {
+              "month": "2026-04",
+              "blocked": 416576,
+              "mom_change": 9089,
+              "mom_pct_change": 2.2,
+              "previous_year_blocked": 487000
+            },
+            {
+              "month": "2026-05",
+              "blocked": 414073,
+              "mom_change": -2503,
+              "mom_pct_change": -0.6,
+              "previous_year_blocked": 487026
+            },
+            {
+              "month": "2026-06",
+              "blocked": 396147,
+              "mom_change": -17926,
+              "mom_pct_change": -4.3,
+              "previous_year_blocked": 460048
+            },
+            {
+              "month": "2026-07",
+              "blocked": 377482,
+              "mom_change": -18665,
+              "mom_pct_change": -4.7,
+              "previous_year_blocked": 426378
+            },
+            {
+              "month": "2026-08",
+              "blocked": 345540,
+              "mom_change": -31942,
+              "mom_pct_change": -8.5,
+              "previous_year_blocked": 410922
+            },
+            {
+              "month": "2026-09",
+              "blocked": 331612,
+              "mom_change": -13928,
+              "mom_pct_change": -4.0,
+              "previous_year_blocked": 402748
+            },
+            {
+              "month": "2026-10",
+              "blocked": 329097,
+              "mom_change": -2515,
+              "mom_pct_change": -0.8,
+              "previous_year_blocked": 386943
+            },
+            {
+              "month": "2026-11",
+              "blocked": 334278,
+              "mom_change": 5181,
+              "mom_pct_change": 1.6,
+              "previous_year_blocked": 397171
+            },
+            {
+              "month": "2026-12",
+              "blocked": 350471,
+              "mom_change": 16193,
+              "mom_pct_change": 4.8,
+              "previous_year_blocked": 406213
+            }
+          ],
+          "total": 4470519,
+          "peak_month": "2026-04",
+          "low_month": "2026-10",
+          "median": 375365.5,
+          "spike_factor": 1.5,
+          "spike_months": []
+        },
+        "source": {
+          "function": "monthly_series",
+          "params": {
+            "year": 2026,
+            "product": "Firewall",
+            "attack_type": null,
+            "spike_factor": 1.5
+          }
+        },
+        "caveats": []
+      }
+    },
+    {
+      "tool": "sector_breakdown",
+      "args": {
+        "year": 2026,
+        "product": "Firewall"
+      },
+      "result": {
+        "value": {
+          "total": 4470519,
+          "rows": [
+            {
+              "rank": 1,
+              "sector": "Energy",
+              "volume": 1519768,
+              "share_pct": 34.0,
+              "previous_volume": 1585660,
+              "pct_change": -4.2,
+              "previous_rank": 1,
+              "new_this_year": false
+            },
+            {
+              "rank": 2,
+              "sector": "Finance",
+              "volume": 851424,
+              "share_pct": 19.0,
+              "previous_volume": 1052597,
+              "pct_change": -19.1,
+              "previous_rank": 2,
+              "new_this_year": false
+            },
+            {
+              "rank": 3,
+              "sector": "Government",
+              "volume": 756521,
+              "share_pct": 16.9,
+              "previous_volume": 944933,
+              "pct_change": -19.9,
+              "previous_rank": 3,
+              "new_this_year": false
+            },
+            {
+              "rank": 4,
+              "sector": "Manufacturing",
+              "volume": 496014,
+              "share_pct": 11.1,
+              "previous_volume": 636352,
+              "pct_change": -22.1,
+              "previous_rank": 4,
+              "new_this_year": false
+            },
+            {
+              "rank": 5,
+              "sector": "Healthcare",
+              "volume": 446869,
+              "share_pct": 10.0,
+              "previous_volume": 528935,
+              "pct_change": -15.5,
+              "previous_rank": 5,
+              "new_this_year": false
+            },
+            {
+              "rank": 6,
+              "sector": "Telecom",
+              "volume": 399923,
+              "share_pct": 8.9,
+              "previous_volume": 524631,
+              "pct_change": -23.8,
+              "previous_rank": 6,
+              "new_this_year": false
+            }
+          ]
+        },
+        "source": {
+          "function": "sector_breakdown",
+          "params": {
+            "year": 2026,
+            "product": "Firewall"
+          }
+        },
+        "caveats": []
+      }
+    },
+    {
+      "tool": "severity_breakdown",
+      "args": {
+        "year": 2026,
+        "product": "Firewall"
+      },
+      "result": {
+        "value": {
+          "total": 4470519,
+          "rows": [
+            {
+              "rank": 1,
+              "severity": "medium",
+              "volume": 2539855,
+              "share_pct": 56.8,
+              "previous_volume": 3591554,
+              "pct_change": -29.3,
+              "previous_rank": 1,
+              "new_this_year": false
+            },
+            {
+              "rank": 2,
+              "severity": "high",
+              "volume": 1864751,
+              "share_pct": 41.7,
+              "previous_volume": 1621564,
+              "pct_change": 15.0,
+              "previous_rank": 2,
+              "new_this_year": false
+            },
+            {
+              "rank": 3,
+              "severity": "critical",
+              "volume": 65913,
+              "share_pct": 1.5,
+              "previous_volume": 59990,
+              "pct_change": 9.9,
+              "previous_rank": 3,
+              "new_this_year": false
+            }
+          ]
+        },
+        "source": {
+          "function": "severity_breakdown",
+          "params": {
+            "year": 2026,
+            "product": "Firewall"
+          }
+        },
+        "caveats": []
+      }
+    }
+  ],
+  "replies": [
+    "```json\n{\n  \"findings\": [\n    {\n      \"statement\": \"Brute force attacks decreased significantly, dropping by 29.3% compared to the previous year.\",\n      \"values\": {\"current\": 2539855, \"previous\": 3591554, \"change\": -1051699, \"pct_change\": -29.3},\n      \"source\": {\n        \"function\": \"product_summary\",\n        \"params\": {\"year\": 2026, \"product\": \"Firewall\"},\n        \"key_paths\": {\"current\": \"value.brute_force.yoy_blocked.current\", \"previous\": \"value.brute_force.yoy_blocked.previous\", \"change\": \"value.brute_force.yoy_blocked.change\", \"pct_change\": \"value.brute_force.yoy_blocked.pct_change\"}\n      },\n      \"caveats\": [\"This product reports only blocked events, so a block rate cannot be calculated.\"]\n    },\n    {\n      \"statement\": \"Malware download attacks increased by 24.1%, the largest year-over-year change among all attack types.\",\n      \"values\": {\"current\": 223501, \"previous\": 180156, \"change\": 43345, \"pct_change\": 24.1},\n      \"source\": {\n        \"function\": \"attack_type_changes\",\n        \"params\": {\"year\": 2026, \"product\": \"Firewall\"},\n        \"key_paths\": {\"current\": \"value.rows.0.current\", \"previous\": \"value.rows.0.previous\", \"change\": \"value.rows.0.change\", \"pct_change\": \"value.rows.0.pct_change\"}\n      },\n      \"caveats\": []\n    },\n    {\n      \"statement\": \"LummaStealer is a new malware family detected in 2026, accounting for 25.8% of all malware detections.\",\n      \"values\": {\"family\": \"LummaStealer\", \"volume\": 74700, \"share_pct\": 25.8, \"previous_volume\": 0},\n      \"source\": {\n        \"function\": \"top_malware\",\n        \"params\": {\"year\": 2026, \"product\": \"Firewall\"},\n        \"key_paths\": {\"family\": \"value.rows.0.family\", \"volume\": \"value.rows.0.volume\", \"share_pct\": \"value.rows.0.share_pct\", \"previous_volume\": \"value.rows.0.previous_volume\"}\n      },\n      \"caveats\": []\n    },\n    {\n      \"statement\": \"Brazil emerged as the second-largest source country of attacks with a 211.6% increase from the previous year.\",\n      \"values\": {\"country\": \"BR\", \"volume\": 668293, \"share_pct\": 14.9, \"previous_volume\": 214440, \"pct_change\": 211.6},\n      \"source\": {\n        \"function\": \"top_countries\",\n        \"params\": {\"year\": 2026, \"product\": \"Firewall\"},\n        \"key_paths\": {\"country\": \"value.rows.1.country\", \"volume\": \"value.rows.1.volume\", \"share_pct\": \"value.rows.1.share_pct\", \"previous_volume\": \"value.rows.1.previous_volume\", \"pct_change\": \"value.rows.1.pct_change\"}\n      },\n      \"caveats\": [\"Based on IP geolocation of the attacking infrastructure, not attribution of the attacker. VPNs, proxies and compromised hosts are common.\"]\n    },\n    {\n      \"statement\": \"The Energy sector remained the top client sector with attacks targeting 34.0% of all events in 2026.\",\n      \"values\": {\"sector\": \"Energy\", \"volume\": 1519768, \"share_pct\": 34.0},\n      \"source\": {\n        \"function\": \"sector_breakdown\",\n        \"params\": {\"year\": 2026, \"product\": \"Firewall\"},\n        \"key_paths\": {\"sector\": \"value.rows.0.sector\", \"volume\": \"value.rows.0.volume\", \"share_pct\": \"value.rows.0.share_pct\"}\n      },\n      \"caveats\": []\n    },\n    {\n      \"statement\": \"High severity attacks increased by 15.0%, offsetting the overall decline in brute force attack volume.\",\n      \"values\": {\"severity\": \"high\", \"volume\": 1864751, \"share_pct\": 41.7, \"previous_volume\": 1621564, \"pct_change\": 15.0},\n      \"source\": {\n        \"function\": \"severity_breakdown\",\n        \"params\": {\"year\": 2026, \"product\": \"Firewall\"},\n        \"key_paths\": {\"severity\": \"value.rows.1.severity\", \"volume\": \"value.rows.1.volume\", \"share_pct\": \"value.rows.1.share_pct\", \"previous_volume\": \"value.rows.1.previous_volume\", \"pct_change\": \"value.rows.1.pct_change\"}\n      },\n      \"caveats\": []\n    },\n    {\n      \"statement\": \"China remained the top source country of attacks in 2026, accounting for 20.0% of all attack volume.\",\n      \"values\": {\"country\": \"CN\", \"volume\": 895100, \"share_pct\": 20.0},\n      \"source\": {\n        \"function\": \"top_countries\",\n        \"params\": {\"year\": 2026, \"product\": \"Firewall\"},\n        \"key_paths\": {\"country\": \"value.rows.0.country\", \"volume\": \"value.rows.0.volume\", \"share_pct\": \"value.rows.0.share_pct\"}\n      },\n      \"caveats\": [\"Based on IP geolocation of the attacking infrastructure, not attribution of the attacker. VPNs, proxies and compromised hosts are common.\"]\n    }\n  ]\n}\n```"
+  ]
+}

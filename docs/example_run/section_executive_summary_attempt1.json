@@ -1,0 +1,13 @@
+{
+  "id": "executive_summary",
+  "title": "Executive summary",
+  "markdown": "**Credential theft incidents surged significantly while high severity attacks rose, marking a shift from traditional ransomware threats to more acute credential-focused risks targeting the energy sector.**\n\n### Headline numbers\n\n- Credential theft incidents increased by 80.4% [F-001] to 11,663 [F-001] attacks in 2026.\n- Ransomware attacks fell by 9.2% [F-002] to 1,940 [F-002], the only attack type to decline.\n- LummaStealer detections reached 117,831 [F-025], representing 25.6% [F-025] of all malware traffic with potential overcounting due to product summation.\n- High severity incidents increased by 16.4% [F-023] and account for 37.3% [F-023] of all blocked attacks in 2026, though totals may be summed across products.\n- The Energy sector absorbed 1,890,700 [F-022] blocked attacks with a 34.0% [F-022] share of total volume and potential overcounting issues across products.\n- Brazil rose to rank 3 [F-024] in aggregate data covering all products with a 246.4% [F-024] increase based on IP geolocation not attacker attribution.\n\n### Credential Theft Emerges as Primary Risk\n\nIncidents of credential theft rose sharply compared to last year, indicating a critical shift in attacker tactics that requires immediate monitoring.\n\n### New Malware Dominates the Threat Landscape\n\nA new malware family became the leading threat detected, while other attack types showed varying levels of decline or growth.\n\n### Energy Sector Faces Intensified Geographic Attacks\n\nThe energy sector absorbed the highest volume of attack traffic while new sources like Brazil emerged as major contributors to malicious traffic.\n\n### Top recommendations\n\n- Monitor the Energy sector as it remained the most targeted industry with 1,890,700 [F-022] blocked attacks representing a 34.0% [F-022] share of total volume, where totals may be summed across products.\n- Prioritize defenses against high severity incidents as they increased 16.4% [F-023] to account for 2,071,373 [F-023] blocked attacks in 2026 and now make up 37.3% [F-023] of all blocked attacks.\n- Defend against LummaStealer malware as it emerged as the most prevalent malware family in 2026 with 117,831 [F-025] detections accounting for a 25.6% [F-025] share.",
+  "finding_ids_used": [
+    "F-001",
+    "F-002",
+    "F-025",
+    "F-023",
+    "F-022",
+    "F-024"
+  ]
+}

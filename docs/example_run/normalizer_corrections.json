@@ -1,0 +1,56 @@
+[
+  {
+    "finding_id": "F-001",
+    "kind": "severity",
+    "value": "medium",
+    "reason": "'medium' does not appear in the data the finding cites"
+  },
+  {
+    "finding_id": "F-002",
+    "kind": "severity",
+    "value": "critical",
+    "reason": "'critical' does not appear in the data the finding cites"
+  },
+  {
+    "finding_id": "F-011",
+    "kind": "severity",
+    "value": "medium",
+    "reason": "'medium' does not appear in the data the finding cites"
+  },
+  {
+    "finding_id": "F-012",
+    "kind": "severity",
+    "value": "medium",
+    "reason": "'medium' does not appear in the data the finding cites"
+  },
+  {
+    "finding_id": "F-013",
+    "kind": "severity",
+    "value": "medium",
+    "reason": "'medium' does not appear in the data the finding cites"
+  },
+  {
+    "finding_id": "F-019",
+    "kind": "severity",
+    "value": "low",
+    "reason": "'low' does not appear in the data the finding cites"
+  },
+  {
+    "finding_id": "F-020",
+    "kind": "severity",
+    "value": "high",
+    "reason": "'high' does not appear in the data the finding cites"
+  },
+  {
+    "finding_id": "F-021",
+    "kind": "severity",
+    "value": "high",
+    "reason": "'high' does not appear in the data the finding cites"
+  },
+  {
+    "finding_id": "F-024",
+    "kind": "related_finding",
+    "value": "F-024",
+    "reason": "the finding itself"
+  }
+]

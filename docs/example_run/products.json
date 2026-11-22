@@ -1,0 +1,55 @@
+{
+  "value": [
+    {
+      "product": "EDR",
+      "category": "Endpoint",
+      "owner": "Endpoint Security Team",
+      "description": "Endpoint detection and response",
+      "attack_types": [
+        "credential_theft",
+        "malware_execution",
+        "ransomware"
+      ],
+      "years_loaded": [
+        2025,
+        2026
+      ]
+    },
+    {
+      "product": "Email Gateway",
+      "category": "Email",
+      "owner": "Messaging Security Team",
+      "description": "Secure email gateway: phishing, malicious attachments, BEC",
+      "attack_types": [
+        "bec",
+        "malware_attachment",
+        "phishing"
+      ],
+      "years_loaded": [
+        2025,
+        2026
+      ]
+    },
+    {
+      "product": "Firewall",
+      "category": "Network",
+      "owner": "Network Security Team",
+      "description": "Next-generation firewall: intrusion prevention, malware and C2 blocking",
+      "attack_types": [
+        "brute_force",
+        "c2_traffic",
+        "intrusion_attempt",
+        "malware_download"
+      ],
+      "years_loaded": [
+        2025,
+        2026
+      ]
+    }
+  ],
+  "source": {
+    "function": "list_products",
+    "params": {}
+  },
+  "caveats": []
+}

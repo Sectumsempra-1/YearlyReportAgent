@@ -1,0 +1,30 @@
+[
+  {
+    "finding": {
+      "statement": "Three new malware families were detected in 2026: LummaStealer, UNMAPPED:Win32/Kryptik.gen, and Akira.",
+      "values": {
+        "new_families_count": 3
+      },
+      "source": {
+        "function": "top_malware",
+        "params": {
+          "year": 2026,
+          "n": 15,
+          "product": null
+        },
+        "key_paths": {
+          "new_families_count": "value.rows.0.new_this_year"
+        }
+      },
+      "caveats": [
+        "Summed across products. One attack can be seen by more than one product (e.g. email gateway and EDR), so this may overcount attacks.",
+        "Some vendor malware names have no common family mapping; see unmapped_malware()."
+      ],
+      "data_gap": false,
+      "product": "ALL"
+    },
+    "problems": [
+      "new_families_count: finding says 3 but value.rows.0.new_this_year is True"
+    ]
+  }
+]

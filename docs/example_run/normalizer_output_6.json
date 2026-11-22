@@ -1,0 +1,36 @@
+{
+  "findings": [
+    {
+      "finding_id": "F-016",
+      "attack_techniques": [],
+      "sector": "unspecified",
+      "severity": "unspecified",
+      "related_findings": [
+        "F-024"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "finding_id": "F-017",
+      "attack_techniques": [],
+      "sector": "unspecified",
+      "severity": "unspecified",
+      "related_findings": [
+        "F-016",
+        "F-024"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "finding_id": "F-018",
+      "attack_techniques": [],
+      "sector": "unspecified",
+      "severity": "unspecified",
+      "related_findings": [
+        "F-005",
+        "F-011"
+      ],
+      "confidence": 0.95
+    }
+  ]
+}

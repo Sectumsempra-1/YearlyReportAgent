@@ -1,0 +1,35 @@
+[
+  {
+    "finding": {
+      "statement": "Brazil (BR) jumped to rank 2 in attacks, with 8901 detections and a dramatic +389.9% increase year-over-year.",
+      "values": {
+        "country": "BR",
+        "volume": 8901,
+        "pct_change": 389.9,
+        "previous_rank": 10
+      },
+      "source": {
+        "function": "top_countries",
+        "params": {
+          "year": 2026,
+          "product": "EDR",
+          "n": 15
+        },
+        "key_paths": {
+          "country": "value.rows.1.country",
+          "volume": "value.rows.1.volume",
+          "pct_change": "value.rows.1.pct_change",
+          "previous_rank": "value.rows.1.previous_rank"
+        }
+      },
+      "caveats": [
+        "Based on IP geolocation of the attacking infrastructure, not attribution of the attacker. VPNs, proxies and compromised hosts are common."
+      ],
+      "data_gap": false,
+      "product": "EDR"
+    },
+    "problems": [
+      "statement: '2' is not one of the finding's values"
+    ]
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "section_id": "trends",
+  "passed": false,
+  "errors": [
+    {
+      "sentence": "The email gateway blocked 185,566 attacks in 2026-03 [F-007], with an increase of 106,670 from the previous month and a change of 135.2% [F-007].",
+      "problem": "the number 185,566 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "The email gateway blocked 185,566 attacks in 2026-03 [F-007], with an increase of 106,670 from the previous month and a change of 135.2% [F-007].",
+      "problem": "the number 106,670 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "Brute force attacks declined 29.3% year-over-year to 2,539,855 blocks [F-019].",
+      "problem": "the number 29.3% has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "Brute force attacks declined 29.3% year-over-year to 2,539,855 blocks [F-019].",
+      "problem": "the number 2,539,855 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "Phishing attacks surged by 83.2% to 849,597 blocks [F-021], representing the largest increase among all attack types.",
+      "problem": "the number 83.2% has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    },
+    {
+      "sentence": "Phishing attacks surged by 83.2% to 849,597 blocks [F-021], representing the largest increase among all attack types.",
+      "problem": "the number 849,597 has no finding tag directly after it",
+      "expected": "a tag like [F-001] right after the number"
+    }
+  ]
+}
