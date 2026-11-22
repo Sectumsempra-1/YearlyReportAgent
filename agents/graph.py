@@ -110,8 +110,11 @@ def summary_payload(state: ReportState) -> dict:
     payload = _loop_payload(state, EXEC_SUMMARY_ID, SECTION_TITLES[EXEC_SUMMARY_ID],
                             "Thesis, headline numbers, one paragraph per theme, top recommendations.", used)
     rejections = sum(1 for a in state.get("approvals", []) if a.step == "report" and a.decision == "reject")
-    return {**payload, "verified_sections": verified, "feedback": state.get("report_feedback", ""),
-            "round": rejections + 1}
+    payload = {**payload, "verified_sections": verified, "feedback": state.get("report_feedback", ""),
+               "round": rejections + 1}
+    if rejections and EXEC_SUMMARY_ID in state.get("sections", {}):
+        payload["draft"] = state["sections"][EXEC_SUMMARY_ID]   # the rejected summary, for the rewrite
+    return payload
 
 
 def route_after_sections(state: ReportState):

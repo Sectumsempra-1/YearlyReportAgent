@@ -113,3 +113,15 @@ def stub_verifier(state: dict) -> dict:
     """The former verifier stub: every draft passes."""
     from agents.state import VerificationResult
     return {"verification": VerificationResult(section_id=state["section_id"], passed=True)}
+
+
+def stub_exec_summary(state: dict) -> dict:
+    """The former executive summary stub: fixed Markdown quoting the first finding."""
+    from agents.state import EXEC_SUMMARY_ID, SECTION_TITLES, Section
+    finding = state["findings"][0]
+    key, value = next(iter(finding.values.items()), ("", ""))
+    markdown = f"STUB executive summary. {state['outline'].thesis} {key}: {value} [{finding.id}]."
+    if state.get("feedback"):
+        markdown += f" Revised after review: {state['feedback']}"
+    return {"draft": Section(id=EXEC_SUMMARY_ID, title=SECTION_TITLES[EXEC_SUMMARY_ID],
+                             markdown=markdown, finding_ids_used=[finding.id])}

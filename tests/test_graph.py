@@ -15,7 +15,8 @@ from agents import graph as graph_module
 from agents.graph import MAX_ATTEMPTS, build_graph, build_loop, checkpoint_serializer, decide_after_verify
 from agents.state import OUTLINE_SECTIONS, VerificationError, VerificationResult
 from tests.fakes import (
-    stub_analyst, stub_normalizer, stub_section_writer, stub_synthesizer, stub_verifier,
+    stub_analyst, stub_exec_summary, stub_normalizer, stub_section_writer, stub_synthesizer,
+    stub_verifier,
 )
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -39,6 +40,7 @@ def db(real_db, monkeypatch):
     monkeypatch.setitem(graph_module.DEFAULT_NODES, "synthesizer", stub_synthesizer)
     monkeypatch.setitem(graph_module.DEFAULT_NODES, "section_writer", stub_section_writer)
     monkeypatch.setitem(graph_module.DEFAULT_NODES, "verifier", stub_verifier)
+    monkeypatch.setitem(graph_module.DEFAULT_NODES, "exec_summary", stub_exec_summary)
 
 
 def failing_verifier(fail_until: dict[str, int]):

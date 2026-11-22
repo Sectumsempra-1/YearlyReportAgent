@@ -348,9 +348,13 @@ needs about +100%, "declined" needs a negative change, "the top" needs rank 1.
   rewrite counts toward its 4 attempts. The executive summary is checked
   against the verified sections in its own verifier.
 - **Wording check:** runs only when the code checks pass. It sees each cited
-  finding's values, direction and what its values measure. An issue is kept
-  only if its sentence appears in the section. It runs without reasoning and
-  in JSON mode, so it is fast and returns valid JSON.
+  finding's values, direction and what its values measure, but not the
+  finding's statement (so it does not copy the analyst's wording). It runs
+  without reasoning and in JSON mode, twice; an issue is kept only if both
+  runs report it (same sentence and words), the model marks it as a
+  contradiction, and its sentence and contradicting words appear in the
+  section. A server error is retried once; a run that still fails is
+  skipped. Everything dropped is saved with the reason.
 
 ## 10. Runs and traceability
 

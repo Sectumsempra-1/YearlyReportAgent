@@ -6,7 +6,8 @@ check only the words around them.
 
 You receive the section's text and the findings it cites. For each finding
 you get its values, its direction of change (`up`, `down`, `flat` or `new`)
-and what its values measure.
+and what its values measure. Judge the words against these, not against
+other wording.
 
 # What to flag
 
@@ -40,15 +41,25 @@ Flag a sentence only when its words clearly contradict the finding it cites:
 
 # Output
 
-Reply with only this JSON object and no other text. `sentence` must be copied
-exactly from the section. `problem` is one short sentence naming the words
-and the value that contradict each other. Use an empty list when nothing
-contradicts the data.
+Reply with only this JSON object and no other text. List only real
+contradictions; do not list sentences you checked and found correct. Use an
+empty list when nothing contradicts the data.
+
+- `sentence`: copied exactly from the section.
+- `words`: the exact words in that sentence that contradict the data, copied
+  exactly (for example `doubled` or `fell by -`).
+- `contradiction`: `true`. If you find you are listing something that is not
+  a contradiction, leave it out instead.
+- `problem`: one short sentence naming those words and the value they
+  contradict.
+- `expected`: wording that would match the data.
 
 ```json
 {
   "issues": [
     {"sentence": "<copied exactly from the section>",
+     "words": "<the contradicting words, copied exactly>",
+     "contradiction": true,
      "problem": "<which words contradict which value>",
      "expected": "<wording that would match the data>"}
   ]

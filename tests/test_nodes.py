@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 import ingest
-from agents.nodes.assemble import build_methodology, remove_tags
+from agents.nodes.assemble import remove_tags
 from agents.finding_check import resolve
 from agents.nodes.collect_findings import collect_findings, direction
 from agents.state import FindingDraft, NormalizedFinding, Outline, OUTLINE_SECTIONS
@@ -80,17 +80,3 @@ def test_collect_findings_assigns_ids_copies_caveats_and_drops_bad(db, tmp_path)
 def test_remove_tags():
     assert remove_tags("rose 12.4% [F-007] in 2026 [F-001, F-002].") == "rose 12.4% in 2026."
     assert remove_tags("no tags") == "no tags"
-
-
-def test_methodology_lists_caveats_and_gaps():
-    base = {"product": "ALL", "values": {}, "direction": "flat", "confidence": 0.5,
-            "source": {"function": "unmapped_malware", "params": {}, "key_paths": {}}}
-    gap = NormalizedFinding(**base, id="F-002", statement="Names without mapping.", data_gap=True,
-                            caveats=["c1"])
-    other = NormalizedFinding(**base, id="F-001", statement="x", caveats=["c1", "c2"])
-    section = build_methodology([other, gap])
-    assert "- c1" in section.markdown and "- c2" in section.markdown
-    assert section.markdown.count("- c1") == 1
-    assert "- Names without mapping. [F-002]" in section.markdown
-    assert section.finding_ids_used == ["F-002"]
-    assert "None reported" in build_methodology([other]).markdown

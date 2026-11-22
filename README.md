@@ -1,110 +1,230 @@
 # Yearly security report PoC
 
-A multi-agent system that generates a yearly report on our security products:
-attacks blocked, top malware, attack source countries, and trends. It runs on
-open-source components and a self-hosted model, using dummy data.
+A multi-agent system that writes a yearly report on our security products:
+attacks blocked per product, top malware families, attack source countries,
+and trends. Agents analyse aggregated data through read-only queries; plain
+code checks every number before it reaches the report. Everything runs on
+open-source components and a self-hosted model. This proof of concept uses
+dummy data.
 
-- Design: [`docs/SPEC.md`](docs/SPEC.md)
+- Design: [`docs/SPEC.md`](docs/SPEC.md) (the source of truth)
 - Project rules: [`CLAUDE.md`](CLAUDE.md)
-- Dummy product data: `data/`
+- Dummy product data: `data/` (do not edit)
+
+## How it works
+
+```
+data/exports/*.csv -> ingest.py (validation) -> data/report.db (SQLite)
+  -> product analysts + cross-product analyst   (read-only tools from report_tools.py)
+  -> normalizer (MITRE ATT&CK) -> synthesizer (outline)
+  -> [you approve the outline]
+  -> section writers, in parallel (no tools) -> verifier (up to 4 attempts each)
+  -> executive summary -> verifier
+  -> [you approve the report]
+  -> report.md (with finding tags) and report_clean.md
+```
+
+Models never calculate. Every number comes from a query, is tagged with the
+finding it came from (`rose 12.4% [F-007]`), and `verify.py` re-runs the
+query to check it. Caveats from the queries and gaps in the data are stated
+in the report, never dropped.
+
+> **Status:** every step is real except the cross-product analyst, which
+> still returns fixed fake findings (marked `STUB`), so findings that compare
+> all products together are placeholders for now.
+
+## Requirements
+
+- Python 3.11 or newer (tested on 3.14)
+- [Ollama](https://ollama.com) with a model that supports tool calls. The
+  default is `qwen3.5:9b`. `python scripts/check_llm.py` tells you whether a
+  model works.
+- A GPU helps a lot. On an 8 GB GPU, expect a full run to take an hour or more
+  (an estimate from timing the steps separately).
+- Internet access only for setup (packages, model, ATT&CK dataset). The
+  pipeline itself makes no external calls.
 
 ## Setup
 
-Requires Python 3.11 or newer (tested on 3.14).
+All commands are run from the project folder. On Windows, the commands
+below work in PowerShell; on Linux or macOS use `source .venv/bin/activate`
+and `cp` instead of `copy`.
 
-```bash
-python -m venv .venv
-.venv\Scripts\activate          # Windows; on Linux/macOS: source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env            # then set LLM_MODEL to a model you have pulled in Ollama
-```
-
-Download the MITRE ATT&CK dataset the normalizer checks technique IDs
-against (a pinned version, about 55 MB, saved to `data/reference/attack/`,
-which is gitignored). This is a one-time setup step; the pipeline itself never
-downloads anything and stops with a clear error if the file is missing:
-
-```bash
-python scripts/fetch_attack.py
-```
-
-**Ollama context size.** The agents need a larger context than Ollama's
-default of 4096 tokens: with the default, tool results overflow it, Ollama
-silently drops the oldest messages, and the agents loop and return empty
-answers. Set it once for your user and restart Ollama (quit it from the tray
-and start it again):
+### 1. Python environment
 
 ```powershell
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### 2. Configuration
+
+```powershell
+copy .env.example .env
+```
+
+Edit `.env` if needed:
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `LLM_BASE_URL` | `http://localhost:11434/v1` | OpenAI-compatible endpoint (Ollama now, vLLM later). Required. |
+| `LLM_MODEL` | `qwen3.5:9b` | Model name as the server knows it. Required. |
+| `LLM_API_KEY` | `not-needed` | Ollama ignores it. |
+| `LLM_REASONING_EFFORT` | `low` | How much a reasoning model thinks: `none`, `low`, `medium`, `high`. Leave empty if the server does not support it. The normalizer and the wording check always use `none`. |
+| `LLM_TEMPERATURE` | unset | Unset uses the model's own sampling. Do not set 0 for reasoning models: they can repeat themselves endlessly. |
+| `LLM_MAX_TOKENS` | `8000` | Longest reply, reasoning included. |
+| `REPORT_DB` | `data/report.db` | SQLite database (relative paths are from the project folder). |
+| `LANGSMITH_TRACING`, `LANGCHAIN_TRACING_V2` | `false` | Tracing stays off (no external calls). |
+
+### 3. Ollama
+
+Pull the model and raise Ollama's context size once. With Ollama's default
+of 4096 tokens, tool results overflow the context, Ollama silently drops the
+oldest messages, and the agents loop and return empty answers.
+
+```powershell
+ollama pull qwen3.5:9b
 [Environment]::SetEnvironmentVariable('OLLAMA_CONTEXT_LENGTH', '32768', 'User')
 ```
 
-`ollama ps` shows the context in use (`CONTEXT` column) once a model is loaded.
+Then quit Ollama from the system tray and start it again. Once a model is
+loaded, `ollama ps` shows the context in use (`CONTEXT` column).
 
-Check that the model is reachable and supports tool calls:
+Check that the model answers and makes tool calls:
 
-```bash
-python scripts/check_llm.py                   # uses LLM_MODEL from .env
+```powershell
+python scripts/check_llm.py                   # the model in .env
 python scripts/check_llm.py --model qwen3:8b  # try another model
 ```
 
-It prints PASS or FAIL for a test message and a test tool call, and exits
-with 0 only if both pass.
+It prints PASS or FAIL for each check and exits with 0 only if both pass.
 
-## Run
+### 4. MITRE ATT&CK dataset
 
-Load the product deliveries into `data/report.db` (set `REPORT_DB` to use
-another path):
+The normalizer checks technique IDs against MITRE's Enterprise ATT&CK
+dataset (pinned version, about 55 MB, saved to `data/reference/attack/`,
+gitignored). The pipeline never downloads it and stops with a clear error if
+it is missing.
 
-```bash
-python ingest.py                     # loads data/exports
+```powershell
+python scripts/fetch_attack.py
+```
+
+### 5. Load the data
+
+```powershell
+python ingest.py                     # loads data/exports into data/report.db
 python ingest.py data/exports_bad    # the broken delivery: must be rejected
 ```
 
-Each file is printed as `LOADED`, `SKIPPED` (identical file already loaded) or
-`REJECTED` (with its errors). A file with any error loads nothing.
-Rejections are also appended to `ingest_errors.log`. The exit code is 0 if
-nothing was rejected, 1 if a file was rejected, and 2 on a usage or reference
-data error.
+Each file is reported as `LOADED`, `SKIPPED` (identical file already loaded)
+or `REJECTED` with its errors. A file with any error loads nothing, and a
+second file for a product and year that is already loaded is rejected.
+Rejections are also appended to `ingest_errors.log`. Exit code: 0 nothing
+rejected, 1 a file was rejected, 2 usage or reference-data error.
 
-Print a demo of every query function in `report_tools.py` for 2026 (needs
-the database from `ingest.py`):
+To see what the agents' queries return:
 
-```bash
-python report_tools.py
+```powershell
+python report_tools.py               # a demo of every query for 2026
 ```
 
-Run the report pipeline:
+## Run the pipeline
 
-```bash
+```powershell
 python run_report.py --year 2026
 ```
 
-The pipeline pauses twice for approval: after the outline and before the
-report is published. At each pause, answer `a` (approve), `r` (reject with a
-comment, which sends the outline or the executive summary back to be
-rewritten) or `b` (abort). Each section gets up to 4 attempts at passing
-verification; if one still fails, the run stops and lists the failures.
+The run prints its folder (`runs/<run_id>/`) and then works through the
+analysis. It pauses twice for you:
 
-Verification (`verify.py`, plain code) checks that every number in a section
-is followed by a finding tag, matches that finding's source when the query is
-re-run, and that tags only point to the section's own findings; the same
-value must be quoted the same way in every section. A small LLM check then
-looks for wording that contradicts the data ("rose" for a fall, "the top"
-for rank 2). Every error goes back to the section's writer for the next
-attempt.
+1. **Outline.** You see the thesis, the signature metric, the ranked themes,
+   and each section with the statements of its findings, plus the findings
+   no section uses and the data gaps.
+2. **Report.** You see the executive summary and the list of verified
+   sections.
 
-Every run writes all of its outputs to `runs/<run_id>/` (findings, outline
-versions, each section attempt and its verification result, approvals,
-`report.md` with finding tags and `report_clean.md` without). The exit code
-is 0 when the report is written, 1 when a section failed verification and 3
-when the run was aborted.
+At each pause, answer:
 
-> **Status:** the product analysts, normalizer, synthesizer, section
-> writers and verifier are real. The cross-product analyst and the executive
-> summary are still stubs that return fixed fake data (marked `STUB`).
+- `a` to approve,
+- `r` to reject with a comment: the outline goes back to the synthesizer, or
+  the executive summary back to its writer, with your comment,
+- `b` to abort.
 
-Run the tests:
+Each section, and the executive summary, gets up to 4 attempts to pass
+verification. Every error goes back to its writer for the next attempt. If a
+section still fails, the run stops and lists the failures.
 
-```bash
+**Exit code:** 0 report written, 1 a section failed verification, 3 aborted.
+
+### What verification checks
+
+`verify.py` (plain code) checks every section:
+
+- every number is followed directly by a finding tag, e.g. `12.4% [F-007]`
+  (years, ATT&CK IDs and list numbers are not counted as numbers)
+- the number matches the finding when its query is re-run, at the precision
+  shown
+- tags only point to findings assigned to that section
+- each recommendation is a bullet with at least one tag
+- the same value is quoted the same way in every section
+
+A short LLM check then looks for wording that contradicts the data ("rose"
+for a fall, "doubled" for a small change, "the top" for rank 2).
+
+### Outputs
+
+Everything a run produces is in `runs/<run_id>/`, so every sentence can be
+traced to its finding and the query behind it:
+
+| File | Contents |
+|---|---|
+| `report.md` | The report, with finding tags |
+| `report_clean.md` | The same report without tags |
+| `products.json` | The products the run analysed |
+| `analyst_<product>.json` | Each analyst's findings; `_dropped.json` lists findings that failed the code check and why; `_transcript.json` every tool call and result |
+| `findings.json`, `normalized.json` | All findings, then with ATT&CK techniques, sector, severity and links |
+| `review.json` | Low-confidence ATT&CK mappings and findings, for a human to check |
+| `normalizer_corrections.json` | Technique IDs, sectors and severities the code rejected or reset |
+| `outline_<n>.json` | Each outline version |
+| `section_<id>_attempt<n>.json`, `verify_<id>_attempt<n>.json` | Each draft and its verification result |
+| `consistency_<n>.json` | Cross-section consistency checks |
+| `approvals.json` | Your decisions and comments |
+| `failures.json` | Only if a run failed: which sections and why |
+| `checkpoints.db` | LangGraph state, so the approval pauses can resume |
+
+## Tests
+
+```powershell
 pytest
+```
+
+The tests never call a real model; model nodes are tested with a scripted
+fake model.
+
+## Troubleshooting
+
+| Problem | Cause and fix |
+|---|---|
+| Agents repeat the same tool calls, or reply with nothing | Ollama's context is too small. Set `OLLAMA_CONTEXT_LENGTH` (step 3) and restart Ollama. |
+| `Request timed out` | A request took over 15 minutes. Check that `LLM_REASONING_EFFORT` is `low` or `none` and `LLM_TEMPERATURE` is unset; try a smaller model. |
+| `invalid output after one retry` | The model returned unusable JSON twice. Re-run; if it repeats, try another model with `scripts/check_llm.py`. |
+| `MITRE ATT&CK data not found` | Run `python scripts/fetch_attack.py`. |
+| `Database not found` | Run `python ingest.py`. |
+| `Missing environment variable(s)` | Copy `.env.example` to `.env` (step 2). |
+
+## Project layout
+
+```
+docs/SPEC.md          design
+data/                 product deliveries and reference data (do not edit)
+ingest.py             validation and loading
+report_tools.py       read-only queries used by the agents
+verify.py             number and tag checks
+text_numbers.py       finding and matching numbers in text
+run_report.py         command-line entry point
+agents/               graph, state, model client, tools, nodes, prompts
+scripts/              check_llm.py, fetch_attack.py
+tests/
 ```

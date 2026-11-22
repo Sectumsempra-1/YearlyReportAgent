@@ -52,21 +52,26 @@ def finding_for_writer(f) -> dict:
             "sector": f.sector, "severity": f.severity}
 
 
+def rewrite_lines(state: dict) -> list[str]:
+    """After a failed verification: the previous draft and the error list, for the next attempt."""
+    verification = state.get("verification")
+    if verification is None or verification.passed or state.get("draft") is None:
+        return []
+    lines = ["", "Your previous draft failed verification:", state["draft"].markdown, "", "Problems to fix:"]
+    for e in verification.errors:
+        line = f"- {e.problem} (in: {e.sentence!r})"
+        if e.expected:
+            line += f"; expected: {e.expected}"
+        lines.append(line)
+    return lines
+
+
 def writer_message(state: dict) -> str:
     compact = {"ensure_ascii": False, "separators": (",", ":")}
     parts = [f"Section: {state['title']}", f"Goal: {state['goal']}", "",
              "Findings for this section:", json.dumps([finding_for_writer(f) for f in state["findings"]],
                                                       **compact)]
-    verification = state.get("verification")
-    if verification is not None and not verification.passed and state.get("draft") is not None:
-        parts += ["", "Your previous draft failed verification:", state["draft"].markdown, "",
-                  "Problems to fix:"]
-        for e in verification.errors:
-            line = f"- {e.problem} (in: {e.sentence!r})"
-            if e.expected:
-                line += f"; expected: {e.expected}"
-            parts.append(line)
-    return "\n".join(parts)
+    return "\n".join(parts + rewrite_lines(state))
 
 
 def make_section_writer(llm=None, prompt_name: str = "section_writer"):
