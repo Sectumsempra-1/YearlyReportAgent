@@ -139,7 +139,12 @@ python run_report.py --year 2026
 ```
 
 The run prints its folder (`runs/<run_id>/`) and then works through the
-analysis. It pauses twice for you:
+analysis. **It prints nothing more until the outline is ready, about 30
+minutes later**; it is not stuck. To watch progress, look at the files
+appearing in the run folder: `analyst_*.json` (within about 25 minutes), then
+`normalized.json`, then `outline_1.json`. After the outline,
+`section_*_attempt*.json` files appear as sections are written. It pauses
+twice for you:
 
 1. **Outline.** You see the thesis, the signature metric, the ranked themes,
    and each section with the statements of its findings, plus the findings
@@ -368,6 +373,8 @@ These cost time once; they are already handled, but don't undo them:
 
 | Problem | Cause and fix |
 |---|---|
+| `.venv\Scripts\activate` fails: "running scripts is disabled on this system" | Windows blocks PowerShell scripts by default. Run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` once, or skip activation and call `.venv\Scripts\python` directly. |
+| `pytest eval` fails: "file or directory not found" | The evaluation kit is not in git; see [Evaluation](#evaluation). |
 | Agents repeat the same tool calls, or reply with nothing | Ollama's context is too small. Set `OLLAMA_CONTEXT_LENGTH` (step 3) and restart Ollama. |
 | `Request timed out` | A request took over 15 minutes. Keep `LLM_MAX_PARALLEL=1` for Ollama. Check that `LLM_REASONING_EFFORT` is `low` or `none` and `LLM_TEMPERATURE` is unset; try a smaller model. |
 | `invalid output after one retry` | The model returned unusable JSON twice. Re-run; if it repeats, try another model with `scripts/check_llm.py`. |
