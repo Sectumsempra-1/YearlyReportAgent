@@ -393,3 +393,9 @@ its finding, and from the finding to the exact query that produced it.
 **2026-11-22:** verification details: tag position, re-run sources,
 cross-section conflicts routed back to the later section, wording check
 inputs (9.1).
+
+**2026-11-23:** robustness after the first full runs: model calls take
+turns (`LLM_MAX_PARALLEL`, default 1); each analyst finding is validated on
+its own, so an invalid one is dropped and logged instead of failing the run
+(7.1); the wording check ignores an issue whose words only state a direction
+that matches the cited findings (9.1).

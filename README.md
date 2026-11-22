@@ -249,13 +249,26 @@ This section is for whoever takes over the project.
 ### Where things stand
 
 - Every step in the SPEC is built and the pipeline runs end to end.
-- 552 tests pass (533 in `tests/`, 19 in `eval/`). Run them before and after
+- 559 tests pass (540 in `tests/`, 19 in `eval/`). Run them before and after
   every change.
-- First complete run: `qwen3.5:9b`, 2 h 07 min, 5 section rewrites,
-  **18 of 24 points (75%)**. Run folder: `runs/20261122T101150Z/` on the
-  original machine (`runs/` is not in git).
 - No wrong number has reached a report: every number goes through
   `verify.py`.
+- Model comparison on 2026-11-22 (same data, same scoring, judge
+  `qwen3.5:9b`, 8 GB GPU):
+
+  | Model | Result | Score | Time | Rewrites |
+  |---|---|---|---|---|
+  | `qwen3.5:9b` (run 1) | report written | 18/24 (75%) | 2 h 07 min | 5 |
+  | `qwen3.5:9b` (run 2) | report written | 17/24 (71%) | 1 h 36 min | 2 |
+  | `granite4.2:8b` | report written | 9/24 (38%) | 1 h 05 min | 12 |
+  | `qwen3:8b` | a section failed verification | - | 1 h 22 min | 9 |
+  | `gpt-oss:20b` | 2 sections failed verification | - | 19 min | 10 |
+
+  **Use `qwen3.5:9b`.** It is the only model that is both reliable and
+  good. `qwen3:8b` failed because of a false alarm in the wording check
+  (since fixed: see the SPEC change log, 2026-11-23); it is worth testing
+  again. `gpt-oss:20b` is by far the fastest but kept writing numbers
+  without their finding tags, even after 4 attempts.
 
 ### What the report still misses
 
@@ -284,13 +297,12 @@ must stay out of it (rule 8).
 
 ### Suggested next steps
 
-1. **Compare models** with `scripts/compare_models.py` (see Evaluation) to
-   learn whether the misses come from the model's size or from the design.
-   A comparison of `qwen3.5:9b`, `qwen3:8b`, `granite4.2:8b` and
-   `gpt-oss:20b` was started on 2026-11-22; its table is in
-   `runs/compare_<timestamp>.json`.
-2. **Run the same model more than once.** Its answers vary, so one score can
-   be luck. Judge a change by two or three runs, not one.
+1. **Look at `gpt-oss:20b` more closely.** It ran in 19 minutes instead of
+   about 2 hours. If its writers can be made to tag every number (a general
+   prompt or retry-feedback change, not one aimed at the answer key), it
+   would make the project much faster to work on.
+2. **Run the same model more than once.** Its answers vary (75% then 71%),
+   so one score can be luck. Judge a change by two or three runs, not one.
 3. **Speed and reliability:** fewer rewrites, shorter prompts, a faster
    setup. These are safe to work on at any time.
 4. **Report quality:** prompt changes must stay general (rule 8). Whoever has

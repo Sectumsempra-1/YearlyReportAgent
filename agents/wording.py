@@ -9,13 +9,15 @@ for rank 2, "blocked" for a count of all actions, and so on.
 The check runs RUNS times and keeps only issues that every run reports. Code
 also keeps an issue only if the model marks it as a contradiction, states a
 problem, and quotes a sentence that is in the section and contradicting words
-that are in that sentence. Everything else is dropped (and saved with the
+that are in that sentence, and if those words are not just a direction word
+("fell") that matches the cited findings' direction. Everything else is dropped (and saved with the
 reason), so noise cannot send a section back for a rewrite.
 """
 
 import inspect
 import json
 import logging
+import re
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import Field
@@ -75,8 +77,33 @@ def wording_message(section: Section, findings: list) -> str:
             + json.dumps(cited, ensure_ascii=False, separators=(",", ":")))
 
 
-def why_dropped(issue: WordingIssue, text: str) -> str:
-    """Why an issue is not kept, or "" to keep it."""
+# Words that only say which way a value moved. If the flagged words are only
+# these, and every finding cited in the sentence moved that way, the words agree
+# with the data: a weaker model flagged "dropped" for a fall as a contradiction.
+DIRECTION_WORDS = {
+    "up": {"rose", "rise", "rises", "rising", "risen", "increase", "increased", "increases",
+           "increasing", "grew", "grow", "grows", "growing", "growth", "climbed", "climb",
+           "jumped", "surged", "surge", "higher", "up", "gained", "gain"},
+    "down": {"fell", "fall", "falls", "falling", "fallen", "decline", "declined", "declines",
+             "declining", "decrease", "decreased", "decreases", "decreasing", "dropped", "drop",
+             "drops", "dropping", "lower", "down", "shrank", "shrunk", "reduced", "reduction"},
+}
+TAG_RE = re.compile(r"\[(F-\d{3})\]")
+
+
+def direction_agrees(issue: WordingIssue, directions: dict[str, str]) -> bool:
+    """True if the flagged words are only direction words that match every cited finding."""
+    words = set(re.findall(r"[a-z]+", issue.words.lower()))
+    cited = {directions.get(fid) for fid in TAG_RE.findall(issue.sentence)}
+    if not words or not cited or None in cited or len(cited) != 1:
+        return False
+    return words <= DIRECTION_WORDS.get(cited.pop(), set())
+
+
+def why_dropped(issue: WordingIssue, text: str, directions: dict[str, str] | None = None) -> str:
+    """Why an issue is not kept, or "" to keep it.
+
+    directions maps finding ID -> direction ("up", "down", ...) for the cited findings."""
     if not issue.contradiction:
         return "the model marked it as not a contradiction"
     if not issue.problem.strip():
@@ -87,6 +114,8 @@ def why_dropped(issue: WordingIssue, text: str) -> str:
     words = _normalize(issue.words)
     if not words or words not in sentence:
         return "its contradicting words are not in the sentence"
+    if directions and direction_agrees(issue, directions):
+        return "its words only state a direction, and it matches the cited findings' direction"
     return ""
 
 
@@ -120,6 +149,7 @@ def check_wording(llm, section: Section, findings: list, runs: int = RUNS
     # no-reasoning call occasionally returned broken JSON twice in a row.
     model = llm.bind(response_format={"type": "json_object"})
     text = _normalize(section.markdown)
+    directions = {f.id: f.direction for f in findings}
     dropped: list[dict] = []
     per_run: list[dict[tuple, WordingIssue]] = []
     failures: list[str] = []
@@ -129,7 +159,7 @@ def check_wording(llm, section: Section, findings: list, runs: int = RUNS
             continue
         valid = {}
         for issue in output.issues:
-            reason = why_dropped(issue, text)
+            reason = why_dropped(issue, text, directions)
             if reason:
                 dropped.append({**issue.model_dump(), "dropped_because": reason})
                 log.info("wording check: dropped an issue (%s): %r", reason, issue.sentence)

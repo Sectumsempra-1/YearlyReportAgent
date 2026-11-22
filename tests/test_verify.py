@@ -47,8 +47,8 @@ def db(known_db, monkeypatch):
     monkeypatch.setenv("REPORT_DB", str(known_db))
 
 
-def finding(fid, function, params, key_paths, values, product="Firewall", data_gap=False):
-    return Finding(id=fid, product=product, statement="s", values=values, direction="up",
+def finding(fid, function, params, key_paths, values, product="Firewall", data_gap=False, direction="up"):
+    return Finding(id=fid, product=product, statement="s", values=values, direction=direction,
                    data_gap=data_gap, source={"function": function, "params": params, "key_paths": key_paths})
 
 
@@ -58,7 +58,7 @@ F1 = finding("F-001", "compare_years", {"year": 2026, "product": "Firewall", "at
 F2 = finding("F-002", "compare_years", {"year": 2026, "product": "Firewall", "attack_type": "brute_force"},
              CMP, {"cur": 12345, "prev": 10000, "chg": 2345, "pct": 23.5})
 F3 = finding("F-003", "compare_years", {"year": 2026, "product": "EDR", "attack_type": "ransomware"},
-             CMP, {"cur": 30, "prev": 40, "chg": -10, "pct": -25.0}, product="EDR")
+             CMP, {"cur": 30, "prev": 40, "chg": -10, "pct": -25.0}, product="EDR", direction="down")
 F4 = finding("F-004", "top_countries", {"year": 2026, "n": 2},
              {"share": "value.rows.0.share_pct", "vol": "value.rows.0.volume", "total": "value.total"},
              {"share": 98.0, "vol": 12345, "total": 12600}, product="ALL")

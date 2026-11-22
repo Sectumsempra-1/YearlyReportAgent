@@ -55,11 +55,11 @@ def test_wording_check_runs_when_code_checks_pass():
 
 def test_wording_issue_fails_the_section():
     llm = FakeChatModel([{"issues": [{"sentence": "Intrusion attempts rose 12.5% [F-001], from 200 [F-001] "
-                                                  "to 225 [F-001].", "words": "rose",
+                                                  "to 225 [F-001].", "words": "Intrusion attempts",
                                       "problem": "'rose' is fine but 'doubled' is not", "expected": "rose"}]}])
     result = make_verifier(llm, wording_runs=1)(loop_state(GOOD))["verification"]
     assert not result.passed
-    assert result.errors[0].problem == "wording: 'rose': 'rose' is fine but 'doubled' is not"
+    assert result.errors[0].problem == "wording: 'Intrusion attempts': 'rose' is fine but 'doubled' is not"
     assert result.errors[0].expected == "rose"
 
 
@@ -74,7 +74,7 @@ def test_invented_quotes_are_dropped_and_saved(tmp_path):
 def test_wording_quote_matching_ignores_spacing_and_bold():
     text = "Intrusion attempts **rose** 12.5% [F-001]\nthis year."
     llm = FakeChatModel([{"issues": [{"sentence": "Intrusion attempts rose 12.5% [F-001] this year.",
-                                      "words": "rose", "problem": "p"}]}])
+                                      "words": "Intrusion attempts", "problem": "p"}]}])
     assert not make_verifier(llm, wording_runs=1)(loop_state(text))["verification"].passed
 
 
@@ -147,10 +147,10 @@ def test_wording_errors_also_reach_the_writer(tmp_path):
 
 def test_long_wording_problems_are_shortened():
     from agents.wording import MAX_PROBLEM_CHARS
-    llm = FakeChatModel([{"issues": [{"sentence": GOOD, "words": "rose", "problem": "word " * 200,
+    llm = FakeChatModel([{"issues": [{"sentence": GOOD, "words": "Intrusion attempts", "problem": "word " * 200,
                                       "expected": "x"}]}])
     [e] = make_verifier(llm, wording_runs=1)(loop_state(GOOD))["verification"].errors
-    assert len(e.problem) <= len("wording: 'rose': ") + MAX_PROBLEM_CHARS and e.problem.endswith("…")
+    assert len(e.problem) <= len("wording: 'Intrusion attempts': ") + MAX_PROBLEM_CHARS and e.problem.endswith("…")
 
 
 def test_wording_check_uses_json_mode():
@@ -174,6 +174,27 @@ def test_wording_noise_is_dropped_with_the_reason(tmp_path, issue, reason):
     assert saved["dropped_because"] == reason
 
 
+@pytest.mark.parametrize("words, kept", [
+    ("rose", False), ("**Rose**", False), ("increased", False),   # agree with F-001 (up): dropped
+    ("fell", True), ("rose sharply", True), ("doubled", True),   # contradict, or say more: kept
+])
+def test_direction_words_that_match_the_finding_are_dropped(tmp_path, words, kept):
+    text = f"Intrusion attempts {words} 12.5% [F-001] this year."
+    llm = FakeChatModel([{"issues": [{"sentence": text, "words": words, "problem": "p"}]}])
+    result = make_verifier(llm, wording_runs=1)(loop_state(text, run_dir=str(tmp_path)))["verification"]
+    assert result.passed is not kept
+    if not kept:
+        [saved] = json.loads((tmp_path / "wording_dropped_trends_attempt1.json").read_text())
+        assert saved["dropped_because"].startswith("its words only state a direction")
+
+
+def test_direction_word_is_kept_when_a_cited_finding_moved_the_other_way():
+    from tests.test_verify import F3
+    text = "Intrusion attempts rose 12.5% [F-001] and ransomware rose 25.0% [F-003]."
+    llm = FakeChatModel([{"issues": [{"sentence": text, "words": "rose", "problem": "p"}]}])
+    assert not make_verifier(llm, wording_runs=1)(loop_state(text, findings=(F1, F3)))["verification"].passed
+
+
 def test_wording_check_does_not_see_finding_statements():
     llm = FakeChatModel([{"issues": []}])
     make_verifier(llm, wording_runs=1)(loop_state(GOOD))
@@ -182,12 +203,12 @@ def test_wording_check_does_not_see_finding_statements():
 
 
 def test_wording_issue_must_be_reported_by_every_run(tmp_path):
-    real = {"sentence": GOOD, "words": "rose", "problem": "real"}
+    real = {"sentence": GOOD, "words": "Intrusion attempts", "problem": "real"}
     noise = {"sentence": GOOD, "words": "from 200", "problem": "noise"}
     llm = FakeChatModel([{"issues": [real, noise]}, {"issues": [{**real, "problem": "real, said again"}]}])
     result = make_verifier(llm, wording_runs=2)(loop_state(GOOD, run_dir=str(tmp_path)))["verification"]
     assert len(llm.calls) == 2
-    assert [e.problem for e in result.errors] == ["wording: 'rose': real"]
+    assert [e.problem for e in result.errors] == ["wording: 'Intrusion attempts': real"]
     [saved] = json.loads((tmp_path / "wording_dropped_trends_attempt1.json").read_text())
     assert saved["words"] == "from 200" and saved["dropped_because"].startswith("reported in run 1 only")
 
@@ -209,17 +230,17 @@ class FlakyModel(FakeChatModel):
 
 
 def test_server_error_is_retried():
-    real = {"sentence": GOOD, "words": "rose", "problem": "real"}
+    real = {"sentence": GOOD, "words": "Intrusion attempts", "problem": "real"}
     llm = FlakyModel(["error", {"issues": [real]}, {"issues": [real]}])
     result = make_verifier(llm, wording_runs=2)(loop_state(GOOD))["verification"]
-    assert len(llm.calls) == 3 and [e.problem for e in result.errors] == ["wording: 'rose': real"]
+    assert len(llm.calls) == 3 and [e.problem for e in result.errors] == ["wording: 'Intrusion attempts': real"]
 
 
 def test_run_that_fails_twice_is_skipped_and_the_other_decides():
-    real = {"sentence": GOOD, "words": "rose", "problem": "real"}
+    real = {"sentence": GOOD, "words": "Intrusion attempts", "problem": "real"}
     llm = FlakyModel(["error", "error", {"issues": [real]}])
     result = make_verifier(llm, wording_runs=2)(loop_state(GOOD))["verification"]
-    assert [e.problem for e in result.errors] == ["wording: 'rose': real"]
+    assert [e.problem for e in result.errors] == ["wording: 'Intrusion attempts': real"]
 
 
 def test_all_runs_failing_is_an_error():
