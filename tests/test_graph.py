@@ -361,3 +361,15 @@ def test_section_that_stays_inconsistent_fails_after_four_attempts(tmp_path):
     assert list(failures) == ["trends"] and failures["trends"]["attempts"] == MAX_ATTEMPTS
     assert "differently from the product_performance section" in failures["trends"]["errors"][0]["problem"]
     assert files(run_dir, "section_executive_summary*.json") == []
+
+
+def test_run_report_cli_error_exit_code(tmp_path, monkeypatch):
+    def broken(state):
+        raise RuntimeError("model server unreachable")
+    monkeypatch.setitem(graph_module.DEFAULT_NODES, "analyst", broken)
+    out = io.StringIO()
+    assert run_report.main(["--year", "2026"], input_fn=scripted(), out=out, runs_root=tmp_path) == 4
+    text = out.getvalue()
+    assert "Status: error" in text and "RuntimeError: model server unreachable" in text
+    run_dir = next(tmp_path.iterdir())
+    assert "model server unreachable" in (run_dir / "error.txt").read_text(encoding="utf-8")

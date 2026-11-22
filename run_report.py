@@ -7,12 +7,14 @@ Creates runs/<run_id>/, runs the graph, and pauses twice for approval from
 the command line: after the outline and before publishing. At each pause:
 [a]pprove, [r]eject with a comment, or a[b]ort.
 
-Exit code: 0 report written, 1 a section failed verification, 3 aborted.
+Exit code: 0 report written, 1 a section failed verification, 3 aborted,
+4 the run stopped on an error (the message is printed and saved to error.txt).
 """
 
 import argparse
 import sqlite3
 import sys
+import traceback
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -23,7 +25,7 @@ from agents.graph import build_graph, checkpoint_serializer
 from agents.runs import RUNS_ROOT, create_run_dir
 
 PROJECT_ROOT = Path(__file__).resolve().parent
-EXIT_CODES = {"completed": 0, "failed": 1, "aborted": 3}
+EXIT_CODES = {"completed": 0, "failed": 1, "aborted": 3, "error": 4}
 
 
 def ask_approval(input_fn=input, out=sys.stdout) -> dict:
@@ -72,6 +74,11 @@ def main(argv=None, input_fn=input, out=sys.stdout, runs_root: Path = RUNS_ROOT)
     try:
         checkpointer = SqliteSaver(conn, serde=checkpoint_serializer())
         state = run(args.year, build_graph(checkpointer=checkpointer), run_id, run_dir, input_fn, out)
+    except Exception as exc:   # e.g. the model server is down, or a model gave unusable output twice
+        message = f"{type(exc).__name__}: {exc}"
+        (run_dir / "error.txt").write_text(traceback.format_exc(), encoding="utf-8")
+        print(f"\nStatus: error\n{message}\nDetails: {run_dir / 'error.txt'}", file=out)
+        return EXIT_CODES["error"]
     finally:
         conn.close()
 

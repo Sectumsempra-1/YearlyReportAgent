@@ -156,7 +156,9 @@ Each section, and the executive summary, gets up to 4 attempts to pass
 verification. Every error goes back to its writer for the next attempt. If a
 section still fails, the run stops and lists the failures.
 
-**Exit code:** 0 report written, 1 a section failed verification, 3 aborted.
+**Exit code:** 0 report written, 1 a section failed verification, 3 aborted, 4
+the run stopped on an error (printed, with the details in `error.txt` in the run
+folder).
 
 ### What verification checks
 
@@ -194,6 +196,40 @@ traced to its finding and the query behind it:
 | `failures.json` | Only if a run failed: which sections and why |
 | `checkpoints.db` | LangGraph state, so the approval pauses can resume |
 
+## Evaluation
+
+`eval/` holds the evaluation material: the answer key with the patterns
+planted in the dummy data, and the scorer. The agents never see it (rule 8).
+It is gitignored and never committed, so that neither coding agents nor
+people tuning prompts can see what the agents are tested on. To evaluate,
+copy the evaluation kit into `eval/` (`answer_key.md`, `score.py`,
+`judge_prompt.md`, `test_score.py`).
+
+Score a finished run against the answer key:
+
+```powershell
+python eval/score.py runs/<run_id>            # keyword, value and LLM-judge checks
+python eval/score.py runs/<run_id> --no-llm   # keyword and value checks only
+python eval/score.py runs/<run_id> --json     # also write score.json to the run folder
+```
+
+For each pattern it prints whether the report found it, stated it correctly
+and, where one applies, gave its caveat, then a total. Expected values are
+computed from the database, not copied from the answer key. The LLM judge is
+used only where a pattern needs interpretation; set `EVAL_JUDGE_MODEL` to
+judge every run with the same model.
+
+Compare models: run the whole pipeline once per model, approving both pauses
+automatically, and print score, run time and verification retries:
+
+```powershell
+$env:EVAL_MODELS = "qwen3.5:9b,qwen3:8b"
+python scripts/compare_models.py --year 2026
+```
+
+The table is also saved to `runs/compare_<timestamp>.json`, and each run's
+score to its run folder. Each model takes a full run (an hour or more here).
+
 ## Tests
 
 ```powershell
@@ -201,7 +237,7 @@ pytest
 ```
 
 The tests never call a real model; model nodes are tested with a scripted
-fake model.
+fake model. The scorer's tests are in `eval/`: `pytest eval`.
 
 ## Troubleshooting
 
@@ -225,6 +261,7 @@ verify.py             number and tag checks
 text_numbers.py       finding and matching numbers in text
 run_report.py         command-line entry point
 agents/               graph, state, model client, tools, nodes, prompts
-scripts/              check_llm.py, fetch_attack.py
+scripts/              check_llm.py, fetch_attack.py, compare_models.py
+eval/                 evaluation only: answer key, scorer (score.py) and its tests
 tests/
 ```

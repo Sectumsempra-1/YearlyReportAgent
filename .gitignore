@@ -15,3 +15,7 @@ __pycache__/
 
 # MITRE ATT&CK bundle, downloaded by scripts/fetch_attack.py
 data/reference/attack/
+
+# Evaluation material (answer key, scorer): never committed, so agents and
+# contributors cannot see the patterns they are tested on (rule 8)
+eval/
