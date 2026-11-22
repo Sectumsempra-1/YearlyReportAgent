@@ -7,6 +7,7 @@ take precedence over `.env`.
 """
 
 import os
+import threading
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -34,6 +35,31 @@ DEFAULT_MAX_TOKENS = 8000
 TRACING_VARS = ("LANGSMITH_TRACING", "LANGCHAIN_TRACING_V2")
 
 
+# Requests sent to the server at the same time. Ollama on one GPU works on one
+# request at a time and queues the rest, and a queued request's wait counts
+# against its timeout: with 5 section writers in parallel the last ones timed
+# out before they started. Waiting here instead keeps the timeout for the work.
+# Raise it for a server that batches requests (vLLM).
+DEFAULT_MAX_PARALLEL = 1
+_slots: dict[int, threading.Semaphore] = {}
+_slots_lock = threading.Lock()
+
+
+def _slot(limit: int) -> threading.Semaphore:
+    with _slots_lock:
+        return _slots.setdefault(limit, threading.Semaphore(limit))
+
+
+class LimitedChatOpenAI(ChatOpenAI):
+    """ChatOpenAI that sends at most max_parallel requests at once (per process)."""
+
+    max_parallel: int = DEFAULT_MAX_PARALLEL
+
+    def _generate(self, *args, **kwargs):
+        with _slot(self.max_parallel):
+            return super()._generate(*args, **kwargs)
+
+
 class LLMConfigError(RuntimeError):
     """Raised when the model configuration is missing or invalid."""
 
@@ -58,7 +84,7 @@ def _env_number(name: str, cast, minimum):
 
 def get_llm(reasoning_effort: str | None = None) -> ChatOpenAI:
     """Return a chat model client built from LLM_BASE_URL, LLM_MODEL, LLM_API_KEY,
-    LLM_REASONING_EFFORT, LLM_TEMPERATURE and LLM_MAX_TOKENS.
+    LLM_REASONING_EFFORT, LLM_TEMPERATURE, LLM_MAX_TOKENS and LLM_MAX_PARALLEL.
 
     LLM_BASE_URL is required: without it the client would fall back to
     OpenAI's commercial API, which rule 7 forbids. Base URL and key are passed
@@ -99,13 +125,15 @@ def get_llm(reasoning_effort: str | None = None) -> ChatOpenAI:
     if temperature is not None:
         extra["temperature"] = temperature
     max_tokens = _env_number("LLM_MAX_TOKENS", int, 1) or DEFAULT_MAX_TOKENS
+    max_parallel = _env_number("LLM_MAX_PARALLEL", int, 1) or DEFAULT_MAX_PARALLEL
 
-    return ChatOpenAI(
+    return LimitedChatOpenAI(
         model=model,
         base_url=base_url,
         api_key=api_key,
         timeout=TIMEOUT_SECONDS,
         max_retries=MAX_RETRIES,
         max_tokens=max_tokens,
+        max_parallel=max_parallel,
         **extra,
     )

@@ -125,3 +125,20 @@ def stub_exec_summary(state: dict) -> dict:
         markdown += f" Revised after review: {state['feedback']}"
     return {"draft": Section(id=EXEC_SUMMARY_ID, title=SECTION_TITLES[EXEC_SUMMARY_ID],
                              markdown=markdown, finding_ids_used=[finding.id])}
+
+
+def stub_cross_product_analyst(payload: dict) -> dict:
+    """The former cross-product analyst stub: fixed findings, for graph tests."""
+    year = payload["year"]
+    drafts = [
+        FindingDraft(product="ALL", statement="STUB: the top source country accounts for a share of attack volume.",
+                     values={"share_pct": 20.0},
+                     source=Source(function="top_countries", params={"year": year, "n": 10, "product": None},
+                                   key_paths={"share_pct": "value.rows.0.share_pct"})),
+        FindingDraft(product="ALL", statement="STUB: some malware names have no family mapping.",
+                     values={"detections": 100},
+                     source=Source(function="unmapped_malware", params={"year": year, "product": None},
+                                   key_paths={"detections": "value.rows.0.detections"}), data_gap=True),
+    ]
+    save(payload["run_dir"], "analyst_cross_product.json", drafts)
+    return {"drafts": drafts}

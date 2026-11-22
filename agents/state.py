@@ -16,6 +16,7 @@ from ingest import SECTORS, SEVERITIES
 
 FINDING_ID = r"^F-\d{3,}$"
 TECHNIQUE_ID = r"^T\d{4}(\.\d{3})?$"
+NUMBER_TEXT = re.compile(r"-?\d+(\.\d+)?")   # a plain number written as text, e.g. "1.5"
 
 FunctionName = Literal[tuple(f.__name__ for f in report_tools.TOOLS)]  # type: ignore[valid-type]
 Direction = Literal["up", "down", "flat", "new"]
@@ -63,8 +64,25 @@ class FindingOutput(Model):
     caveats: list[str] = Field(default=[], description="The cited result's caveats, copied")
     data_gap: bool = False
 
+    @field_validator("values")
+    @classmethod
+    def _numbers_written_as_text(cls, values):
+        """A number the model wrote as text ("1.5") is the number 1.5. Other text stays text."""
+        out = {}
+        for key, value in values.items():
+            if isinstance(value, str) and NUMBER_TEXT.fullmatch(value.strip()):
+                text = value.strip()
+                value = float(text) if "." in text else int(text)
+            out[key] = value
+        return out
+
     @model_validator(mode="after")
     def _values_match_key_paths(self):
+        extra = set(self.source.key_paths) - set(self.values)
+        if extra and set(self.values) <= set(self.source.key_paths):
+            # A path for a value the finding does not use (e.g. a rank) is harmless: drop it.
+            self.source = self.source.model_copy(
+                update={"key_paths": {k: v for k, v in self.source.key_paths.items() if k in self.values}})
         if set(self.values) != set(self.source.key_paths):
             raise ValueError(
                 f"values and source.key_paths must have the same keys: "
@@ -73,8 +91,9 @@ class FindingOutput(Model):
 
 
 class AnalystOutput(Model):
-    """The analyst model's final answer."""
-    findings: list[FindingOutput]
+    """The analyst model's final answer. Each finding is checked on its own
+    (FindingOutput), so one broken finding does not cost the others."""
+    findings: list[dict[str, Any]]
 
 
 class FindingDraft(FindingOutput):

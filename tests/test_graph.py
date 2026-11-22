@@ -15,7 +15,7 @@ from agents import graph as graph_module
 from agents.graph import MAX_ATTEMPTS, build_graph, build_loop, checkpoint_serializer, decide_after_verify
 from agents.state import OUTLINE_SECTIONS, VerificationError, VerificationResult
 from tests.fakes import (
-    stub_analyst, stub_exec_summary, stub_normalizer, stub_section_writer, stub_synthesizer,
+    stub_analyst, stub_cross_product_analyst, stub_exec_summary, stub_normalizer, stub_section_writer, stub_synthesizer,
     stub_verifier,
 )
 
@@ -36,6 +36,7 @@ def db(real_db, monkeypatch):
     monkeypatch.setenv("LANGGRAPH_STRICT_MSGPACK", "true")  # checkpoints must restore our models
     # graph tests never call a model: the real analyst is replaced by a stub
     monkeypatch.setitem(graph_module.DEFAULT_NODES, "analyst", stub_analyst)
+    monkeypatch.setitem(graph_module.DEFAULT_NODES, "cross_product_analyst", stub_cross_product_analyst)
     monkeypatch.setitem(graph_module.DEFAULT_NODES, "normalizer", stub_normalizer)
     monkeypatch.setitem(graph_module.DEFAULT_NODES, "synthesizer", stub_synthesizer)
     monkeypatch.setitem(graph_module.DEFAULT_NODES, "section_writer", stub_section_writer)

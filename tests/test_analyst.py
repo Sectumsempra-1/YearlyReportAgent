@@ -262,7 +262,7 @@ def test_analyst_node(tmp_path):
 
 
 def test_system_prompt_is_filled_in(tmp_path):
-    llm = FakeChatModel([GOOD])
+    llm = FakeChatModel([GOOD, GOOD])
     make_analyst(llm)({"year": 2026, "product": "EDR", "run_dir": str(tmp_path)})
     system = llm.calls[0][0].content
     assert 'product="EDR"' in system and "year=2026" in system and "compared with 2025" in system
@@ -270,14 +270,14 @@ def test_system_prompt_is_filled_in(tmp_path):
 
 
 def test_unknown_tool_is_reported_to_the_model(tmp_path):
-    llm = FakeChatModel([[("run_sql", {"query": "x"})], GOOD])
+    llm = FakeChatModel([[("run_sql", {"query": "x"})], GOOD, GOOD])
     make_analyst(llm)({"year": 2026, "product": "EDR", "run_dir": str(tmp_path)})
     [tool_message] = [m for m in llm.calls[1] if isinstance(m, ToolMessage)]
     assert "Unknown tool 'run_sql'" in tool_message.content
 
 
 def test_bad_tool_arguments_are_reported_to_the_model(tmp_path):
-    llm = FakeChatModel([[("attacks_blocked", {"year": 2026, "product": "Nope"})], GOOD])
+    llm = FakeChatModel([[("attacks_blocked", {"year": 2026, "product": "Nope"})], GOOD, GOOD])
     make_analyst(llm)({"year": 2026, "product": "EDR", "run_dir": str(tmp_path)})
     [tool_message] = [m for m in llm.calls[1] if isinstance(m, ToolMessage)]
     assert "unknown product 'Nope'" in tool_message.content
@@ -323,8 +323,37 @@ def test_invalid_output_fails_but_keeps_the_transcript(tmp_path):
 def test_model_cannot_set_code_only_fields(tmp_path):
     f = as_output(scripted_findings()[0])
     llm = FakeChatModel([{"findings": [{**f, "id": "F-001"}]}, {"findings": [{**f, "id": "F-001"}]}])
-    with pytest.raises(StructuredOutputError, match="id"):
-        make_analyst(llm)({"year": 2026, "product": "EDR", "run_dir": str(tmp_path)})
+    out = make_analyst(llm)({"year": 2026, "product": "EDR", "run_dir": str(tmp_path)})
+    assert out["drafts"] == []
+    dropped = json.loads((tmp_path / "analyst_edr_dropped.json").read_text(encoding="utf-8"))
+    assert "id: Extra inputs are not permitted" in dropped[0]["problems"]
+
+
+def test_one_invalid_finding_does_not_cost_the_others(tmp_path):
+    good = as_output(scripted_findings()[0])
+    bad = {**good, "values": {"other": 1}}            # a value with no key path
+    llm = FakeChatModel([{"findings": [good, bad]}, {"findings": [good, bad]}])
+    out = make_analyst(llm)({"year": 2026, "product": "EDR", "run_dir": str(tmp_path)})
+    assert len(out["drafts"]) == 1
+    retry_prompt = llm.calls[1][-1].content
+    assert retry_prompt.startswith("1 of your findings could not be used") and "same keys" in retry_prompt
+    dropped = json.loads((tmp_path / "analyst_edr_dropped.json").read_text(encoding="utf-8"))
+    assert dropped[0]["finding"]["values"] == {"other": 1}
+
+
+def test_corrected_answer_is_used(tmp_path):
+    good = as_output(scripted_findings()[0])
+    bad = {**good, "values": {"other": 1}}
+    llm = FakeChatModel([{"findings": [good, bad]}, {"findings": [good, good]}])
+    out = make_analyst(llm)({"year": 2026, "product": "EDR", "run_dir": str(tmp_path)})
+    assert len(out["drafts"]) == 2
+
+
+def test_unusable_correction_keeps_the_valid_findings(tmp_path):
+    good = as_output(scripted_findings()[0])
+    llm = FakeChatModel([{"findings": [good, {"statement": "x"}]}, "not json"])
+    out = make_analyst(llm)({"year": 2026, "product": "EDR", "run_dir": str(tmp_path)})
+    assert len(out["drafts"]) == 1
 
 
 # --- the prompt -----------------------------------------------------------------------------------------------
@@ -345,3 +374,30 @@ def test_prompt_placeholders_are_all_filled():
     assert "$" not in text
     with pytest.raises(KeyError):
         load_prompt("analyst", product="P")
+
+
+
+def test_no_findings_sends_the_analyst_back_to_explore(tmp_path):
+    cy = rt.compare_years(2026, product="EDR")
+    real = as_output(finding("compare_years", {"year": 2026, "product": "EDR"}, {"pct": "value.pct_change"},
+                             {"pct": cy["value"]["pct_change"]}))
+    llm = FakeChatModel([[("list_products", {})], GOOD,                       # gave up after one call
+                         [("compare_years", {"year": 2026, "product": "EDR"})], {"findings": [real]}])
+    out = make_analyst(llm)({"year": 2026, "product": "EDR", "run_dir": str(tmp_path)})
+    assert len(out["drafts"]) == 1
+    nudge = [m for m in llm.calls[2] if isinstance(m, HumanMessage)][-1].content
+    assert nudge.startswith("You reported no findings.")
+    transcript = json.loads((tmp_path / "analyst_edr_transcript.json").read_text(encoding="utf-8"))
+    assert [c["tool"] for c in transcript["tool_calls"]] == ["list_products", "compare_years"]
+
+
+def test_no_findings_twice_is_accepted(tmp_path):
+    llm = FakeChatModel([GOOD, GOOD])
+    assert make_analyst(llm)({"year": 2026, "product": "EDR", "run_dir": str(tmp_path)})["drafts"] == []
+    assert len(llm.calls) == 2
+
+
+def test_retry_after_broken_json_uses_json_mode(tmp_path):
+    llm = FakeChatModel(['{"findings": [ broken', GOOD, GOOD])
+    make_analyst(llm)({"year": 2026, "product": "EDR", "run_dir": str(tmp_path)})
+    assert llm.bound_kwargs == {"response_format": {"type": "json_object"}}

@@ -14,3 +14,9 @@ def no_real_model(monkeypatch):
         raise AssertionError("a test tried to call a real model; pass a fake model or a stub node")
 
     monkeypatch.setattr(agents.llm, "get_llm", refuse)
+
+
+@pytest.fixture(autouse=True)
+def run_in_tmp(tmp_path_factory, monkeypatch):
+    """Every test runs in a temporary folder, so a stray relative path cannot write into the project."""
+    monkeypatch.chdir(tmp_path_factory.mktemp("cwd"))

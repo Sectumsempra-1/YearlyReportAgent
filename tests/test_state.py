@@ -39,6 +39,12 @@ def test_values_and_key_paths_must_match():
         FindingDraft(**{**DRAFT, "values": {"other": 1}})
 
 
+def test_unused_key_paths_are_dropped():
+    source = {**SOURCE, "key_paths": {"pct_change": "value.pct_change", "rank": "value.rows.0.rank"}}
+    f = FindingDraft(**{**DRAFT, "source": source})
+    assert f.source.key_paths == {"pct_change": "value.pct_change"}
+
+
 def test_source_function_must_be_a_tool():
     with pytest.raises(ValidationError):
         Source(**{**SOURCE, "function": "run_sql"})
@@ -127,3 +133,12 @@ def test_merge_reducer():
     b = Section(id="b", title="B", markdown="y")
     assert merge({"a": a}, {"b": b}) == {"a": a, "b": b}
     assert merge(None, {"b": b}) == {"b": b}
+
+
+@pytest.mark.parametrize("raw, expected", [
+    ("83.2", 83.2), ("-9.2", -9.2), ("11663", 11663), (" 42 ", 42), (12.5, 12.5), (None, None),
+    ("2026-03", "2026-03"), ("LummaStealer", "LummaStealer"), ("1,234", "1,234"), ("12%", "12%"),
+])
+def test_numbers_written_as_text_become_numbers(raw, expected):
+    f = FindingDraft(**{**DRAFT, "values": {"pct_change": raw}})
+    assert f.values["pct_change"] == expected and type(f.values["pct_change"]) is type(expected)

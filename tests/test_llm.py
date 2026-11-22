@@ -10,7 +10,7 @@ from agents.llm import DEFAULT_API_KEY, LLMConfigError, get_llm
 def clean_env(monkeypatch, tmp_path):
     """Isolate each test from the real environment and the real .env file."""
     monkeypatch.setattr(llm_module, "ENV_FILE", tmp_path / "missing.env")
-    for name in ("LLM_BASE_URL", "LLM_MODEL", "LLM_API_KEY", "LLM_REASONING_EFFORT", "LLM_TEMPERATURE", "LLM_MAX_TOKENS", "OPENAI_BASE_URL",
+    for name in ("LLM_BASE_URL", "LLM_MODEL", "LLM_API_KEY", "LLM_REASONING_EFFORT", "LLM_TEMPERATURE", "LLM_MAX_TOKENS", "LLM_MAX_PARALLEL", "OPENAI_BASE_URL",
                  "OPENAI_API_BASE", "OPENAI_API_KEY", *llm_module.TRACING_VARS):
         monkeypatch.delenv(name, raising=False)
 
@@ -133,3 +133,43 @@ def test_invalid_numeric_settings(monkeypatch, name, value):
     set_config(monkeypatch, LLM_BASE_URL="http://localhost:11434/v1", LLM_MODEL="m", **{name: value})
     with pytest.raises(LLMConfigError, match=name):
         get_llm()
+
+
+def test_max_parallel_default_and_env(monkeypatch):
+    set_config(monkeypatch, LLM_BASE_URL="http://x/v1", LLM_MODEL="m")
+    assert get_llm().max_parallel == llm_module.DEFAULT_MAX_PARALLEL == 1
+    monkeypatch.setenv("LLM_MAX_PARALLEL", "4")
+    assert get_llm().max_parallel == 4
+    monkeypatch.setenv("LLM_MAX_PARALLEL", "0")
+    with pytest.raises(LLMConfigError, match="LLM_MAX_PARALLEL"):
+        get_llm()
+
+
+def test_requests_wait_for_a_free_slot(monkeypatch):
+    """With max_parallel=1, two threads never send at the same time."""
+    import threading
+    import time
+
+    from langchain_openai import ChatOpenAI
+
+    running, most = [0], [0]
+    lock = threading.Lock()
+
+    def fake_generate(self, *args, **kwargs):
+        with lock:
+            running[0] += 1
+            most[0] = max(most[0], running[0])
+        time.sleep(0.05)
+        with lock:
+            running[0] -= 1
+        return "ok"
+
+    monkeypatch.setattr(ChatOpenAI, "_generate", fake_generate)
+    set_config(monkeypatch, LLM_BASE_URL="http://x/v1", LLM_MODEL="m")
+    client = get_llm()
+    threads = [threading.Thread(target=client._generate, args=([],)) for _ in range(4)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert most[0] == 1

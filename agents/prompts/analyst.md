@@ -55,8 +55,9 @@ Each finding comes from exactly one tool call. Give:
   `value.<attack_type>.blocked`.
 
 Each value gets a short name, and `values` and `key_paths` use exactly the
-same names. Copy each value from the result without changing it. Copy `null`
-as `null`.
+same names. Copy each value from the result without changing it: numbers as
+plain JSON numbers without quotes (`1.5`, not `"1.5"`), text in quotes, and
+`null` as `null`.
 
 ## 5. Keep the caveats
 
@@ -97,7 +98,7 @@ other text:
   "findings": [
     {
       "statement": "One or two sentences about what the values show.",
-      "values": {"<name>": "<value copied from the result>"},
+      "values": {"<name>": 0.0, "<other name>": "<text value>"},
       "source": {
         "function": "<tool name>",
         "params": {"<argument>": "<as passed>"},

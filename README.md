@@ -74,6 +74,7 @@ Edit `.env` if needed:
 | `LLM_REASONING_EFFORT` | `low` | How much a reasoning model thinks: `none`, `low`, `medium`, `high`. Leave empty if the server does not support it. The normalizer and the wording check always use `none`. |
 | `LLM_TEMPERATURE` | unset | Unset uses the model's own sampling. Do not set 0 for reasoning models: they can repeat themselves endlessly. |
 | `LLM_MAX_TOKENS` | `8000` | Longest reply, reasoning included. |
+| `LLM_MAX_PARALLEL` | `1` | Requests sent to the server at the same time. Agents still run in parallel, but their model calls take turns. Ollama on one GPU works on one request at a time, and a request waiting in its queue can time out before it starts. Raise this for vLLM. |
 | `REPORT_DB` | `data/report.db` | SQLite database (relative paths are from the project folder). |
 | `LANGSMITH_TRACING`, `LANGCHAIN_TRACING_V2` | `false` | Tracing stays off (no external calls). |
 
@@ -244,7 +245,7 @@ fake model. The scorer's tests are in `eval/`: `pytest eval`.
 | Problem | Cause and fix |
 |---|---|
 | Agents repeat the same tool calls, or reply with nothing | Ollama's context is too small. Set `OLLAMA_CONTEXT_LENGTH` (step 3) and restart Ollama. |
-| `Request timed out` | A request took over 15 minutes. Check that `LLM_REASONING_EFFORT` is `low` or `none` and `LLM_TEMPERATURE` is unset; try a smaller model. |
+| `Request timed out` | A request took over 15 minutes. Keep `LLM_MAX_PARALLEL=1` for Ollama. Check that `LLM_REASONING_EFFORT` is `low` or `none` and `LLM_TEMPERATURE` is unset; try a smaller model. |
 | `invalid output after one retry` | The model returned unusable JSON twice. Re-run; if it repeats, try another model with `scripts/check_llm.py`. |
 | `MITRE ATT&CK data not found` | Run `python scripts/fetch_attack.py`. |
 | `Database not found` | Run `python ingest.py`. |
