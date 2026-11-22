@@ -29,9 +29,10 @@ finding it came from (`rose 12.4% [F-007]`), and `verify.py` re-runs the
 query to check it. Caveats from the queries and gaps in the data are stated
 in the report, never dropped.
 
-> **Status:** every step is real except the cross-product analyst, which
-> still returns fixed fake findings (marked `STUB`), so findings that compare
-> all products together are placeholders for now.
+> **Status (2026-11-22):** every step is built and runs end to end. The first
+> complete run with `qwen3.5:9b` took 2 h 07 min and scored 18 of 24 points
+> (75%) against the answer key. See [Handover](#handover) for what works,
+> what doesn't yet, and what to do next.
 
 ## Requirements
 
@@ -39,8 +40,8 @@ in the report, never dropped.
 - [Ollama](https://ollama.com) with a model that supports tool calls. The
   default is `qwen3.5:9b`. `python scripts/check_llm.py` tells you whether a
   model works.
-- A GPU helps a lot. On an 8 GB GPU, expect a full run to take an hour or more
-  (an estimate from timing the steps separately).
+- A GPU helps a lot. On an 8 GB GPU (RTX 3060 Ti) a full run takes about
+  2 hours with `qwen3.5:9b`.
 - Internet access only for setup (packages, model, ATT&CK dataset). The
   pipeline itself makes no external calls.
 
@@ -202,9 +203,10 @@ traced to its finding and the query behind it:
 `eval/` holds the evaluation material: the answer key with the patterns
 planted in the dummy data, and the scorer. The agents never see it (rule 8).
 It is gitignored and never committed, so that neither coding agents nor
-people tuning prompts can see what the agents are tested on. To evaluate,
-copy the evaluation kit into `eval/` (`answer_key.md`, `score.py`,
-`judge_prompt.md`, `test_score.py`).
+people tuning prompts can see what the agents are tested on. A fresh clone
+therefore has no `eval/` folder: get the evaluation kit (`answer_key.md`,
+`score.py`, `judge_prompt.md`, `test_score.py`) from the project owner
+outside git and copy it into `eval/`. Everything else works without it.
 
 Score a finished run against the answer key:
 
@@ -229,7 +231,7 @@ python scripts/compare_models.py --year 2026
 ```
 
 The table is also saved to `runs/compare_<timestamp>.json`, and each run's
-score to its run folder. Each model takes a full run (an hour or more here).
+score to its run folder. Each model takes a full run (about 2 hours here).
 
 ## Tests
 
@@ -239,6 +241,116 @@ pytest
 
 The tests never call a real model; model nodes are tested with a scripted
 fake model. The scorer's tests are in `eval/`: `pytest eval`.
+
+## Handover
+
+This section is for whoever takes over the project.
+
+### Where things stand
+
+- Every step in the SPEC is built and the pipeline runs end to end.
+- 552 tests pass (533 in `tests/`, 19 in `eval/`). Run them before and after
+  every change.
+- First complete run: `qwen3.5:9b`, 2 h 07 min, 5 section rewrites,
+  **18 of 24 points (75%)**. Run folder: `runs/20261122T101150Z/` on the
+  original machine (`runs/` is not in git).
+- No wrong number has reached a report: every number goes through
+  `verify.py`.
+
+### What the report still misses
+
+The model finds most facts, but often states them one by one instead of
+**connecting** them (explaining what causes a change, or which findings
+belong together), and it sometimes misses a finding altogether. The details
+are in the run's `score.json`. They are deliberately not written here,
+because this README is in git and the patterns the agents are tested on
+must stay out of it (rule 8).
+
+### Known problems
+
+- **Slow.** About 2 hours per run, because Ollama on one 8 GB GPU answers one
+  request at a time and 22% of the model runs on the CPU at a 32k context.
+  A bigger GPU or vLLM (`LLM_MAX_PARALLEL` > 1) would help the most.
+- **Rewrites.** Sections often need 2 or 3 attempts to pass verification.
+  The `verify_<id>_attempt<n>.json` files show why.
+- **Duplicate findings.** Analysts sometimes report the same fact twice
+  (once per product analyst and once in the cross-product analyst). It does
+  no harm, but it clutters the outline.
+- **Weak recommendations.** The synthesizer's recommendations are generic.
+- **"Blocked" vs "all actions".** Analysts sometimes call a count "blocked"
+  when it covers all actions. The wording check does not catch this.
+- **ATT&CK mapping.** The normalizer sometimes leaves ransomware findings
+  without a technique (they then show up in `review.json`).
+
+### Suggested next steps
+
+1. **Compare models** with `scripts/compare_models.py` (see Evaluation) to
+   learn whether the misses come from the model's size or from the design.
+   A comparison of `qwen3.5:9b`, `qwen3:8b`, `granite4.2:8b` and
+   `gpt-oss:20b` was started on 2026-11-22; its table is in
+   `runs/compare_<timestamp>.json`.
+2. **Run the same model more than once.** Its answers vary, so one score can
+   be luck. Judge a change by two or three runs, not one.
+3. **Speed and reliability:** fewer rewrites, shorter prompts, a faster
+   setup. These are safe to work on at any time.
+4. **Report quality:** prompt changes must stay general (rule 8). Whoever has
+   read `eval/answer_key.md` should not write prompt changes alone: have
+   someone else review them, and check that the score improves on the
+   patterns the report already found too, not only on the missed ones.
+
+### How to work on it
+
+- Read `CLAUDE.md` (the hard rules) and `docs/SPEC.md` (the design) first.
+  When you change behavior, add an entry to the SPEC's change log
+  (section 12) and update this README.
+- **Prompts** are in `agents/prompts/*.md`. `tests/test_prompts.py` fails if
+  a prompt names anything from the data (products, malware, countries,
+  months, years, percentages, distinctive numbers). Keep that test passing;
+  don't weaken it. `cross_product_analyst.md` must match `analyst.md` from
+  section 2 on (a test checks this), so change both together.
+- **A new query** goes in `report_tools.py` (standard library only,
+  read-only), its docstring describes the result for the model, and it is
+  added to `TOOLS`. `agents/tools.py` wraps it automatically.
+- **A new node** is a module in `agents/nodes/`, wired in `agents/graph.py`
+  (`DEFAULT_NODES`). Give it a stub in `tests/fakes.py` so graph tests stay
+  fast.
+- **Try one change cheaply** before a full 2-hour run: most nodes can be run
+  alone on the files of an earlier run folder (look at their tests for the
+  input they need).
+
+### Reading a run
+
+When a run stops or the report looks wrong, the run folder tells you why
+(see [Outputs](#outputs)). Start here:
+
+| Question | File |
+|---|---|
+| Why did the run stop? | `error.txt` (exit code 4) or `failures.json` (exit code 1) |
+| What did an analyst look at? | `analyst_<product>_transcript.json` |
+| Why is a finding missing? | `analyst_<product>_dropped.json` |
+| Why was a section rewritten? | `verify_<id>_attempt<n>.json` |
+| Did the wording check ignore a problem? | `wording_dropped_<id>_attempt<n>.json` |
+| What did the score count? | `score.json` (only with the evaluation kit) |
+
+### Lessons learned
+
+These cost time once; they are already handled, but don't undo them:
+
+- **Ollama's default context (4096) is too small.** Agents loop and reply
+  with nothing. Set `OLLAMA_CONTEXT_LENGTH=32768` (setup step 3).
+- **Don't force `LLM_TEMPERATURE=0`** with reasoning models: they repeat
+  themselves until they run out of tokens.
+- **Keep reasoning effort low.** Full thinking was about 10 times slower
+  with no better answers.
+- **Keep `LLM_MAX_PARALLEL=1` on Ollama.** Otherwise requests wait in
+  Ollama's queue, and the wait counts toward the 15-minute timeout.
+- **Small models make small format mistakes**: numbers written as text,
+  extra fields, broken JSON. The code fixes harmless ones and drops broken
+  findings one at a time (logged in `_dropped.json`), rather than failing
+  the run.
+- **Windows:** `.gitattributes` keeps `data/` files byte-for-byte (ingestion
+  checks file hashes). Downloads use Python, not `curl`, because of
+  certificate-check errors.
 
 ## Troubleshooting
 
@@ -261,8 +373,18 @@ report_tools.py       read-only queries used by the agents
 verify.py             number and tag checks
 text_numbers.py       finding and matching numbers in text
 run_report.py         command-line entry point
-agents/               graph, state, model client, tools, nodes, prompts
+agents/
+  graph.py            the LangGraph graph: fan-out, retry loop, approval pauses
+  state.py            Pydantic data contracts between nodes
+  llm.py              model client from environment variables
+  tools.py            report_tools functions as model tools
+  structured.py       JSON parsing with one retry
+  finding_check.py    checks each analyst finding against its tool call
+  wording.py          the LLM wording check
+  attack.py           ATT&CK technique lookup
+  nodes/              one module per node
+  prompts/            one system prompt per agent
 scripts/              check_llm.py, fetch_attack.py, compare_models.py
-eval/                 evaluation only: answer key, scorer (score.py) and its tests
-tests/
+eval/                 evaluation only, not in git: answer key, scorer and its tests
+tests/                one test file per module; fakes.py has the fake model and stub nodes
 ```
