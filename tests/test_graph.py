@@ -14,7 +14,9 @@ import run_report
 from agents import graph as graph_module
 from agents.graph import MAX_ATTEMPTS, build_graph, build_loop, checkpoint_serializer, decide_after_verify
 from agents.state import OUTLINE_SECTIONS, VerificationError, VerificationResult
-from tests.fakes import stub_analyst, stub_normalizer, stub_section_writer, stub_synthesizer
+from tests.fakes import (
+    stub_analyst, stub_normalizer, stub_section_writer, stub_synthesizer, stub_verifier,
+)
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -36,6 +38,7 @@ def db(real_db, monkeypatch):
     monkeypatch.setitem(graph_module.DEFAULT_NODES, "normalizer", stub_normalizer)
     monkeypatch.setitem(graph_module.DEFAULT_NODES, "synthesizer", stub_synthesizer)
     monkeypatch.setitem(graph_module.DEFAULT_NODES, "section_writer", stub_section_writer)
+    monkeypatch.setitem(graph_module.DEFAULT_NODES, "verifier", stub_verifier)
 
 
 def failing_verifier(fail_until: dict[str, int]):
@@ -297,3 +300,62 @@ def test_writers_run_in_parallel_with_only_their_findings(tmp_path):
     assert set(seen) == set(OUTLINE_SECTIONS)
     for section in state["outline"].sections:
         assert seen[section.id] == section.finding_ids
+
+
+# --- consistency across sections, with the real code checks ------------------------------------------------
+
+def shared_outline_synthesizer(state):
+    """Every section uses the same percentage finding, so all of them quote it."""
+    from agents.state import Outline, SECTION_TITLES
+    pct = next(f for f in state["normalized"] if "pct_change" in f.values)
+    outline = Outline(
+        thesis="t", signature_metric={"finding_id": pct.id, "value_key": "pct_change"},
+        themes=[{"title": f"t{n}", "summary": "s", "finding_ids": [pct.id]} for n in range(3)],
+        sections=[{"id": sid, "title": SECTION_TITLES[sid], "goal": "g", "finding_ids": [pct.id]}
+                  for sid in OUTLINE_SECTIONS])
+    return {"outline": outline}
+
+
+def consistency_writer(rounded_attempts: int):
+    """Quotes the real pct_change; trends rounds it to a whole number on its first attempts."""
+    from agents.finding_check import FUNCTIONS, resolve
+    from agents.state import Section
+
+    def writer(state):
+        f = next(x for x in state["findings"] if "pct_change" in x.values)
+        value = resolve(FUNCTIONS[f.source.function](**f.source.params), f.source.key_paths["pct_change"])
+        shown = f"{value:.0f}" if state["section_id"] == "trends" and state["attempt"] <= rounded_attempts \
+            else f"{value}"
+        prefix = "- Act on it: " if state["section_id"] == "recommendations" else ""
+        md = f"{prefix}Blocked attacks changed {shown}% [{f.id}]."
+        return {"draft": Section(id=state["section_id"], title=state["title"], markdown=md,
+                                 finding_ids_used=[f.id])}
+    return writer
+
+
+def test_inconsistent_section_is_rewritten(tmp_path):
+    from agents.nodes.verifier import make_verifier
+    state, run_dir = run_pipeline(
+        tmp_path, ["approve", "approve"], synthesizer=shared_outline_synthesizer,
+        section_writer=consistency_writer(rounded_attempts=1), exec_summary=consistency_writer(0),
+        verifier=make_verifier(wording=False))
+    assert state["status"] == "completed"
+    assert state["attempts"]["trends"] == 2 and state["attempts"]["product_performance"] == 1
+    first = json.loads((run_dir / "consistency_1.json").read_text())
+    assert list(first["rewrite"]) == ["trends"]
+    assert "differently from the product_performance section" in first["rewrite"]["trends"][0]["problem"]
+    assert json.loads((run_dir / "consistency_2.json").read_text()) == {"rewrite": {}, "failed": {}}
+    assert (run_dir / "section_trends_attempt2.json").exists()
+
+
+def test_section_that_stays_inconsistent_fails_after_four_attempts(tmp_path):
+    from agents.nodes.verifier import make_verifier
+    state, run_dir = run_pipeline(
+        tmp_path, ["approve"], synthesizer=shared_outline_synthesizer,
+        section_writer=consistency_writer(rounded_attempts=99), verifier=make_verifier(wording=False))
+    assert state["status"] == "failed"
+    assert state["attempts"]["trends"] == MAX_ATTEMPTS
+    failures = json.loads((run_dir / "failures.json").read_text())
+    assert list(failures) == ["trends"] and failures["trends"]["attempts"] == MAX_ATTEMPTS
+    assert "differently from the product_performance section" in failures["trends"]["errors"][0]["problem"]
+    assert files(run_dir, "section_executive_summary*.json") == []

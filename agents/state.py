@@ -38,6 +38,7 @@ SECTION_TITLES = {
 }
 OUTLINE_SECTIONS = ("product_performance", "top_malware", "source_countries", "trends", "recommendations")
 REPORT_ORDER = tuple(SECTION_TITLES)
+MAX_ATTEMPTS = 4  # per section: first write + up to 3 rewrites (SPEC 7.5)
 
 
 class Model(BaseModel):
@@ -227,6 +228,7 @@ class ReportState(TypedDict, total=False):
     sections: Annotated[dict[str, Section], merge]         # section id -> verified section
     attempts: Annotated[dict[str, int], merge]             # section id -> attempts used
     failed: Annotated[dict[str, list[VerificationError]], merge]  # section id -> last errors
+    conflicts: dict[str, list[VerificationError]]          # sections to rewrite for consistency
     report_feedback: str
     # control
     approvals: Annotated[list[Approval], operator.add]

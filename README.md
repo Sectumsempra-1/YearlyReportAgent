@@ -85,15 +85,23 @@ comment, which sends the outline or the executive summary back to be
 rewritten) or `b` (abort). Each section gets up to 4 attempts at passing
 verification; if one still fails, the run stops and lists the failures.
 
+Verification (`verify.py`, plain code) checks that every number in a section
+is followed by a finding tag, matches that finding's source when the query is
+re-run, and that tags only point to the section's own findings; the same
+value must be quoted the same way in every section. A small LLM check then
+looks for wording that contradicts the data ("rose" for a fall, "the top"
+for rank 2). Every error goes back to the section's writer for the next
+attempt.
+
 Every run writes all of its outputs to `runs/<run_id>/` (findings, outline
 versions, each section attempt and its verification result, approvals,
 `report.md` with finding tags and `report_clean.md` without). The exit code
 is 0 when the report is written, 1 when a section failed verification and 3
 when the run was aborted.
 
-> **Status:** the analysts, normalizer, synthesizer, section writers,
-> verifier and executive summary are still stubs that return fixed fake data
-> (marked `STUB`). They are replaced with real agents step by step.
+> **Status:** the product analysts, normalizer, synthesizer, section
+> writers and verifier are real. The cross-product analyst and the executive
+> summary are still stubs that return fixed fake data (marked `STUB`).
 
 Run the tests:
 

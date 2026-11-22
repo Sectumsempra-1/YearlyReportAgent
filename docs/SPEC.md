@@ -334,6 +334,24 @@ needs about +100%, "declined" needs a negative change, "the top" needs rank 1.
 - **Recommendations:** one Markdown bullet per recommendation; each bullet
   must contain at least one finding tag.
 
+*Added 2026-11-22, when verify.py was built:*
+
+- **Tag position:** the tag must follow the number directly; only spaces or
+  a closing bracket may come between them. Numbered-list markers (`1.`) at
+  the start of a line are not numbers.
+- **Re-run, not stored values:** each number is compared with a fresh re-run
+  of the finding's source call, so a stale stored value is caught.
+- **Where conflicts are fixed:** sections are verified in parallel, so the
+  cross-section check runs once all of them have passed. The earliest
+  section in report order is the reference; a later section that quotes the
+  same value differently goes back to its writer with the error, and that
+  rewrite counts toward its 4 attempts. The executive summary is checked
+  against the verified sections in its own verifier.
+- **Wording check:** runs only when the code checks pass. It sees each cited
+  finding's values, direction and what its values measure. An issue is kept
+  only if its sentence appears in the section. It runs without reasoning and
+  in JSON mode, so it is fast and returns valid JSON.
+
 ## 10. Runs and traceability
 
 Each run has an ID (timestamp-based) and a folder `runs/<run_id>/` containing
@@ -367,3 +385,7 @@ its finding, and from the finding to the exact query that produced it.
 
 **2026-11-14:** section writing and verification get 4 attempts in total
 (was 3) (7.5).
+
+**2026-11-22:** verification details: tag position, re-run sources,
+cross-section conflicts routed back to the later section, wording check
+inputs (9.1).

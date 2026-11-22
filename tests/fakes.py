@@ -19,9 +19,14 @@ class FakeChatModel:
         self.replies = list(replies)
         self.calls: list[list] = []
         self.bound_tools = None
+        self.bound_kwargs = {}
 
     def bind_tools(self, tools):
         self.bound_tools = tools
+        return self
+
+    def bind(self, **kwargs):
+        self.bound_kwargs = kwargs
         return self
 
     def invoke(self, messages):
@@ -102,3 +107,9 @@ def stub_section_writer(state: dict) -> dict:
     markdown = f"STUB {state['title']} (attempt {state['attempt']}). {key}: {value} [{finding.id}]."
     return {"draft": Section(id=state["section_id"], title=state["title"], markdown=markdown,
                              finding_ids_used=[finding.id])}
+
+
+def stub_verifier(state: dict) -> dict:
+    """The former verifier stub: every draft passes."""
+    from agents.state import VerificationResult
+    return {"verification": VerificationResult(section_id=state["section_id"], passed=True)}
